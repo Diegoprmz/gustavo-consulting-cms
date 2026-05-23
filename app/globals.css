@@ -3,6 +3,7 @@
 @theme {
   --color-navy: #243A4D;
   --color-olive: #6A8F7B;
+  --color-olive-light: #8aaa96;
   --color-charcoal: #333333;
   --color-pearl: #F5F5F5;
   --font-serif: var(--font-playfair), Georgia, serif;
@@ -10,13 +11,26 @@
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
+  0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-html {
-  scroll-behavior: smooth;
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50%       { opacity: 0.8;  transform: scale(1.1); }
 }
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0);  opacity: 0.6; }
+  50%       { transform: translateY(8px); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+html { scroll-behavior: smooth; }
 
 body {
   color: #333333;
@@ -25,20 +39,69 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Marquee */
 .marquee-track {
   display: flex;
-  animation: marquee 12s linear infinite;
+  animation: marquee 14s linear infinite;
 }
+.marquee-track:hover { animation-play-state: paused; }
 
-.marquee-track:hover {
-  animation-play-state: paused;
-}
-
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-
+/* 3-D book flip */
+.preserve-3d { transform-style: preserve-3d; }
 .backface-hidden {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+/* Shimmer CTA button */
+.btn-shimmer {
+  background: linear-gradient(
+    120deg,
+    #243A4D 0%,
+    #243A4D 38%,
+    #6A8F7B 50%,
+    #243A4D 62%,
+    #243A4D 100%
+  );
+  background-size: 200% auto;
+  transition: background-position 0.55s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-shimmer:hover {
+  background-position: right center;
+  transform: scale(1.04);
+  box-shadow: 0 8px 28px rgba(106, 143, 123, 0.38);
+}
+
+/* Olive pill label */
+.label-olive {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #6A8F7B;
+}
+.label-olive::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1.5px;
+  background: #6A8F7B;
+  flex-shrink: 0;
+}
+
+/* Olive card left accent */
+.olive-card-border {
+  border-left: 3px solid #6A8F7B;
+  padding-left: 20px;
+}
+
+/* Section divider bar */
+.olive-divider {
+  width: 48px;
+  height: 3px;
+  background: #6A8F7B;
+  border-radius: 2px;
 }

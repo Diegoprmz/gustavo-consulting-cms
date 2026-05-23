@@ -1,3 +1,4 @@
+import Navbar from '@/components/sections/Navbar';
 import Hero from '@/components/sections/Hero';
 import Experiencia from '@/components/sections/Experiencia';
 import Trayectoria from '@/components/sections/Trayectoria';
@@ -13,19 +14,22 @@ import Footer from '@/components/sections/Footer';
 
 export default function Home() {
   return (
-    <main>
-      <Hero />
-      <Experiencia />
-      <Trayectoria />
-      <Clientes />
-      <Libro />
-      <Colaboracion />
-      <Concepto />
-      <ElProblema />
-      <ElEnfoque />
-      <Articulos />
-      <Conversemos />
-      <Footer />
-    </main>
+    <>
+      <Navbar />
+      <main>
+        <Hero />
+        <Experiencia />
+        <Trayectoria />
+        <Clientes />
+        <Libro />
+        <Colaboracion />
+        <Concepto />
+        <ElProblema />
+        <ElEnfoque />
+        <Articulos />
+        <Conversemos />
+        <Footer />
+      </main>
+    </>
   );
 }
