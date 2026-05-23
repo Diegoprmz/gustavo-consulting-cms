@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="60" viewBox="0 0 120 60">
+  <rect width="120" height="60" fill="transparent"/>
+  <rect x="8" y="8" width="104" height="44" rx="4" fill="#C8102E"/>
+  <text x="60" y="37" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="22" fill="white" font-weight="900" letter-spacing="4">ADO</text>
+</svg>
