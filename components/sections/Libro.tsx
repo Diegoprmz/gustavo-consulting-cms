@@ -161,7 +161,6 @@ export default function Libro() {
               style={{
                 border: '1.5px solid rgba(255,255,255,0.5)',
                 padding: '14px 30px',
-                borderRadius: '8px',
                 fontSize: '13px',
                 letterSpacing: '0.08em',
                 textDecoration: 'none',

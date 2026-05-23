@@ -84,11 +84,11 @@ export default function Hero() {
               variants={itemVariants}
               className="font-sans"
               style={{
-                fontSize: 'clamp(10px, 1.0vw, 12px)',
+                fontSize: 'clamp(11px, 1.0vw, 12px)',
                 fontWeight: 600,
                 letterSpacing: '0.26em',
                 textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.55)',
+                color: 'rgba(255,255,255,0.80)',
                 lineHeight: 2,
                 marginBottom: '44px',
               }}
@@ -181,7 +181,7 @@ export default function Hero() {
               ].map(({ n, label }) => (
                 <div key={label}>
                   <p className="font-serif" style={{ fontSize: 'clamp(22px, 2.5vw, 32px)', fontWeight: 700, color: '#C9A84C', lineHeight: 1 }}>{n}</p>
-                  <p className="font-sans" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em', marginTop: '5px', textTransform: 'uppercase' }}>{label}</p>
+                  <p className="font-sans" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.08em', marginTop: '5px', textTransform: 'uppercase' }}>{label}</p>
                 </div>
               ))}
             </motion.div>
@@ -215,13 +215,12 @@ export default function Hero() {
             }}
           >
             <Image
-              src="/assets/gustavo_americana_SBG.png"
+              src="/assets/gustavo-25.jpeg"
               alt="Gustavo Martínez Pellón — Consultor Estratégico Internacional"
               fill
-              className="object-cover object-top"
+              className="object-cover object-center"
               priority
               sizes="54vw"
-              style={{ filter: 'drop-shadow(-8px 0 32px rgba(36,58,77,0.4))' }}
             />
           </motion.div>
 
@@ -259,7 +258,7 @@ export default function Hero() {
             }}
           />
           <Image
-            src="/assets/gustavo_americana_SBG.png"
+            src="/assets/gustavo-25.jpeg"
             alt="Gustavo Martínez Pellón"
             fill
             className="object-cover object-top"
@@ -291,7 +290,7 @@ export default function Hero() {
           <motion.p
             variants={itemVariants}
             className="font-sans"
-            style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: '28px' }}
+            style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', lineHeight: 1.9, marginBottom: '28px' }}
           >
             Consejero Corporativo · Consultor · Profesor Ejecutivo
           </motion.p>

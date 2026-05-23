@@ -143,7 +143,6 @@ export default function Clientes() {
               className="btn-shimmer font-sans font-semibold text-white"
               style={{
                 padding: '15px 36px',
-                borderRadius: '8px',
                 fontSize: '12px',
                 letterSpacing: '0.1em',
                 textDecoration: 'none',

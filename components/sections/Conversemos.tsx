@@ -60,14 +60,14 @@ function FormField({
 const inputStyle = {
   width: '100%',
   backgroundColor: '#ffffff',
-  border: '1px solid #243A4D',
-  borderRadius: '6px',
+  border: '1px solid rgba(36,58,77,0.35)',
+  borderRadius: '0',
   padding: '14px 16px',
-  fontFamily: 'var(--font-inter), Arial, sans-serif',
-  fontSize: '14px',
+  fontFamily: 'var(--font-source-sans), Arial, sans-serif',
+  fontSize: '15px',
   color: '#333333',
   outline: 'none',
-  transition: 'border-color 0.2s, box-shadow 0.2s',
+  transition: 'border-color 0.22s ease, box-shadow 0.22s ease',
 };
 
 const inputFocusStyle = {
@@ -290,7 +290,6 @@ export default function Conversemos() {
               style={{
                 backgroundColor: status === 'sending' ? '#6B7280' : '#243A4D',
                 padding: '16px 32px',
-                borderRadius: '6px',
                 fontSize: '14px',
                 letterSpacing: '0.04em',
                 border: 'none',

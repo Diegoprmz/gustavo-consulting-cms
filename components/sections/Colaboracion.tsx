@@ -116,7 +116,6 @@ export default function Colaboracion() {
               style={{
                 border: '1.5px solid rgba(255,255,255,0.35)',
                 padding: '15px 36px',
-                borderRadius: '8px',
                 fontSize: '13px',
                 letterSpacing: '0.1em',
                 textDecoration: 'none',

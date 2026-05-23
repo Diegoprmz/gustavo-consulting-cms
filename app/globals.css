@@ -119,9 +119,9 @@ body {
 /* ─── Shimmer CTA button (conic-gradient rotating) ───── */
 .btn-shimmer {
   position: relative;
+  isolation: isolate;
   background: #243A4D;
   transition: transform 0.22s ease, box-shadow 0.22s ease;
-  overflow: hidden;
 }
 .btn-shimmer::before {
   content: '';
@@ -136,7 +136,7 @@ body {
   );
   animation: shimmer-rotate 3s linear infinite;
   border-radius: inherit;
-  z-index: 0;
+  z-index: -2;
 }
 .btn-shimmer::after {
   content: '';
@@ -144,11 +144,7 @@ body {
   inset: 2px;
   background: #243A4D;
   border-radius: inherit;
-  z-index: 1;
-}
-.btn-shimmer > * {
-  position: relative;
-  z-index: 2;
+  z-index: -1;
 }
 .btn-shimmer:hover {
   transform: scale(1.04);
@@ -364,4 +360,42 @@ body {
 /* ─── WhatsApp float animation ───────────────────────── */
 .whatsapp-float {
   animation: floatUp 3s ease-in-out infinite;
+}
+
+/* ─── Focus rings (a11y) ─────────────────────────────── */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #6A8F7B;
+  outline-offset: 3px;
+}
+
+/* ─── cursor-pointer on interactive elements ─────────── */
+a, button, [role="button"], label[for] {
+  cursor: pointer;
+}
+
+/* ─── prefers-reduced-motion ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track,
+  .marquee-track-slow {
+    animation: none !important;
+  }
+  .whatsapp-float {
+    animation: none !important;
+  }
+  .gold-shimmer {
+    animation: none !important;
+    -webkit-text-fill-color: #C9A84C;
+  }
 }
