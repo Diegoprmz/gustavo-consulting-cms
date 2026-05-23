@@ -2,6 +2,7 @@ import Navbar from '@/components/sections/Navbar';
 import Hero from '@/components/sections/Hero';
 import Experiencia from '@/components/sections/Experiencia';
 import Trayectoria from '@/components/sections/Trayectoria';
+import Universidades from '@/components/sections/Universidades';
 import Clientes from '@/components/sections/Clientes';
 import Libro from '@/components/sections/Libro';
 import Colaboracion from '@/components/sections/Colaboracion';
@@ -20,6 +21,7 @@ export default function Home() {
         <Hero />
         <Experiencia />
         <Trayectoria />
+        <Universidades />
         <Clientes />
         <Libro />
         <Colaboracion />
@@ -28,8 +30,8 @@ export default function Home() {
         <ElEnfoque />
         <Articulos />
         <Conversemos />
-        <Footer />
       </main>
+      <Footer />
     </>
   );
 }

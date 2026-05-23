@@ -1,191 +1,303 @@
 'use client';
 
+import { useRef } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
+
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+const itemVariants: Variants = {
+  hidden:   { opacity: 0, y: 30 },
+  visible:  { opacity: 1, y: 0 },
+};
 
 export default function Hero() {
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const photoY     = useTransform(scrollYProgress, [0, 1], ['0%', '-18%']);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
+  const textY       = useTransform(scrollYProgress, [0, 0.55], ['0%', '-8%']);
+
   return (
     <section
-      className="relative bg-white overflow-hidden flex flex-col items-center justify-center"
-      style={{ minHeight: '100vh', paddingTop: '120px', paddingBottom: '80px' }}
+      ref={heroRef}
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        backgroundColor: '#ffffff',
+        overflow: 'hidden',
+        display: 'flex',
+      }}
     >
-      {/* Faint olive grid pattern */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage:
-            'linear-gradient(rgba(106,143,123,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(106,143,123,0.05) 1px, transparent 1px)',
-          backgroundSize: '52px 52px',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* ── Desktop: split layout ── */}
+      <div className="hidden md:flex w-full" style={{ minHeight: '100vh' }}>
 
-      <div className="relative w-full max-w-[720px] mx-auto px-6 flex flex-col items-center text-center">
-
-        {/* Kicker label */}
+        {/* Left — text column */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          style={{ marginBottom: '24px' }}
+          style={{ opacity: textOpacity, y: textY, width: '46%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '120px 56px 80px 80px', position: 'relative', zIndex: 2 }}
         >
-          <span className="label-olive">Consultoría Estratégica Internacional</span>
-        </motion.div>
-
-        {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
-          className="font-serif font-bold"
-          style={{
-            fontSize: 'clamp(44px, 7.5vw, 80px)',
-            lineHeight: 1.04,
-            color: '#243A4D',
-            letterSpacing: '-0.02em',
-            marginBottom: '20px',
-          }}
-        >
-          Gustavo<br />Martínez
-        </motion.h1>
-
-        {/* Olive divider bar */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ duration: 0.55, ease: 'easeOut', delay: 0.28 }}
-          style={{
-            width: '52px',
-            height: '3px',
-            backgroundColor: '#6A8F7B',
-            borderRadius: '2px',
-            marginBottom: '22px',
-            transformOrigin: 'left center',
-          }}
-        />
-
-        {/* Roles */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut', delay: 0.32 }}
-          className="font-sans font-medium"
-          style={{
-            fontSize: 'clamp(10px, 1.3vw, 13px)',
-            letterSpacing: '0.24em',
-            lineHeight: 1.9,
-            color: '#6B7280',
-            textTransform: 'uppercase',
-            marginBottom: '52px',
-          }}
-        >
-          Consejero Corporativo&nbsp;&nbsp;·&nbsp;&nbsp;Consultor Empresarial&nbsp;&nbsp;·&nbsp;&nbsp;Profesor Ejecutivo
-        </motion.p>
-
-        {/* Photo with olive glow */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.42 }}
-          style={{ position: 'relative', display: 'inline-block' }}
-        >
-          {/* Glow ring behind photo */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              inset: '-40px',
-              background: 'radial-gradient(circle, rgba(106,143,123,0.2) 0%, transparent 65%)',
-              borderRadius: '50%',
-              animation: 'glow-pulse 7s ease-in-out infinite',
-              pointerEvents: 'none',
-            }}
-          />
-
           <motion.div
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            style={{
-              position: 'relative',
-              borderRadius: '14px',
-              overflow: 'hidden',
-              boxShadow: '0 14px 44px rgba(36,58,77,0.14)',
-              maxWidth: '300px',
-              width: '100%',
-              outline: '1.5px solid rgba(106,143,123,0.22)',
-              outlineOffset: '7px',
-            }}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
           >
-            <Image
-              src="/assets/gustavo-navy-CU2edqmZ.jpg"
-              alt="Gustavo Martínez Pellón — Consultor Estratégico Internacional"
-              width={300}
-              height={380}
-              className="block w-full object-cover"
-              priority
+            {/* Name */}
+            <motion.h1
+              variants={itemVariants}
+              className="font-serif"
+              style={{
+                fontSize: 'clamp(64px, 7.5vw, 112px)',
+                lineHeight: 0.92,
+                fontWeight: 700,
+                color: '#243A4D',
+                letterSpacing: '-0.025em',
+                marginBottom: '20px',
+              }}
+            >
+              Gustavo<br />
+              <span style={{ fontWeight: 300, fontStyle: 'italic', color: '#6A8F7B' }}>Martínez</span>
+            </motion.h1>
+
+            {/* Gold rule */}
+            <motion.div
+              variants={itemVariants}
+              style={{
+                width: '64px',
+                height: '2px',
+                background: 'linear-gradient(90deg, #C9A84C 0%, rgba(201,168,76,0.2) 100%)',
+                marginBottom: '28px',
+                borderRadius: '2px',
+              }}
             />
+
+            {/* Roles */}
+            <motion.p
+              variants={itemVariants}
+              className="font-sans"
+              style={{
+                fontSize: 'clamp(10px, 1.05vw, 12px)',
+                fontWeight: 500,
+                letterSpacing: '0.26em',
+                textTransform: 'uppercase',
+                color: '#6B7280',
+                lineHeight: 2,
+                marginBottom: '44px',
+              }}
+            >
+              Consejero Corporativo&nbsp;&nbsp;·&nbsp;&nbsp;Consultor Empresarial
+              <br />
+              Profesor Ejecutivo
+            </motion.p>
+
+            {/* Gold tagline */}
+            <motion.p
+              variants={itemVariants}
+              className="font-serif"
+              style={{
+                fontSize: 'clamp(18px, 1.8vw, 24px)',
+                fontWeight: 400,
+                fontStyle: 'italic',
+                color: '#243A4D',
+                lineHeight: 1.5,
+                maxWidth: '420px',
+                marginBottom: '48px',
+              }}
+            >
+              Conectando{' '}
+              <span style={{ color: '#C9A84C' }}>estrategia</span>{' '}
+              y{' '}
+              <span style={{ color: '#C9A84C' }}>cliente</span>{' '}
+              en decisiones que transforman organizaciones.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              variants={itemVariants}
+              style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}
+            >
+              <motion.a
+                href="/contact"
+                whileHover={{ scale: 1.04, boxShadow: '0 12px 32px rgba(36,58,77,0.22)' }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.22 }}
+                className="btn-shimmer font-sans font-semibold text-white"
+                style={{
+                  padding: '16px 38px',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  letterSpacing: '0.1em',
+                  textDecoration: 'none',
+                  textTransform: 'uppercase',
+                  display: 'inline-block',
+                }}
+              >
+                Agendar conversación
+              </motion.a>
+
+              <motion.a
+                href="#trayectoria"
+                whileHover={{ color: '#243A4D', borderColor: '#243A4D' }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.2 }}
+                className="font-sans font-medium link-slide"
+                style={{
+                  padding: '16px 28px',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  letterSpacing: '0.08em',
+                  textDecoration: 'none',
+                  textTransform: 'uppercase',
+                  border: '1.5px solid rgba(106,143,123,0.5)',
+                  color: '#6A8F7B',
+                  display: 'inline-block',
+                  transition: 'color 0.2s, border-color 0.2s',
+                }}
+              >
+                Conocer más →
+              </motion.a>
+            </motion.div>
+
+            {/* Stats row */}
+            <motion.div
+              variants={itemVariants}
+              style={{
+                display: 'flex',
+                gap: '40px',
+                marginTop: '60px',
+                paddingTop: '36px',
+                borderTop: '1px solid rgba(106,143,123,0.18)',
+              }}
+            >
+              {[
+                { n: '30+', label: 'Años de trayectoria' },
+                { n: '3',   label: 'Perspectivas integradas' },
+                { n: 'LATAM', label: 'Alcance regional' },
+              ].map(({ n, label }) => (
+                <div key={label}>
+                  <p className="font-serif" style={{ fontSize: 'clamp(22px, 2.5vw, 32px)', fontWeight: 700, color: '#C9A84C', lineHeight: 1 }}>{n}</p>
+                  <p className="font-sans" style={{ fontSize: '11px', color: '#6B7280', letterSpacing: '0.08em', marginTop: '5px', textTransform: 'uppercase' }}>{label}</p>
+                </div>
+              ))}
+            </motion.div>
           </motion.div>
         </motion.div>
 
-        {/* CTA buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut', delay: 0.62 }}
-          style={{ marginTop: '40px', display: 'flex', flexWrap: 'wrap', gap: '14px', justifyContent: 'center' }}
-        >
-          <a
-            href="#conversemos"
-            className="btn-shimmer font-sans font-semibold text-white"
+        {/* Right — parallax photo */}
+        <div style={{ width: '54%', position: 'relative', overflow: 'hidden' }}>
+          <motion.div
             style={{
-              padding: '15px 36px',
-              borderRadius: '8px',
-              fontSize: '13px',
-              letterSpacing: '0.08em',
-              textDecoration: 'none',
-              textTransform: 'uppercase',
-              display: 'inline-block',
+              y: photoY,
+              position: 'absolute',
+              inset: 0,
+              bottom: '-20%',
             }}
           >
-            Agendar conversación
-          </a>
+            <Image
+              src="/assets/gustavo_americana_SBG.png"
+              alt="Gustavo Martínez Pellón — Consultor Estratégico Internacional"
+              fill
+              className="object-cover object-top"
+              priority
+              sizes="54vw"
+            />
+          </motion.div>
 
-          <motion.a
-            href="#trayectoria"
-            whileHover={{ borderColor: '#243A4D', color: '#243A4D' }}
-            transition={{ duration: 0.2 }}
-            className="font-sans font-medium"
+          {/* Decorative vertical rule on left edge */}
+          <div
             style={{
-              padding: '15px 32px',
-              borderRadius: '8px',
-              fontSize: '13px',
-              letterSpacing: '0.08em',
-              textDecoration: 'none',
-              textTransform: 'uppercase',
-              border: '1.5px solid rgba(106,143,123,0.55)',
-              color: '#6A8F7B',
-              display: 'inline-block',
+              position: 'absolute',
+              left: 0,
+              top: '20%',
+              bottom: '20%',
+              width: '1px',
+              background: 'linear-gradient(to bottom, transparent, rgba(201,168,76,0.35), transparent)',
+              zIndex: 2,
             }}
-          >
-            Conocer más →
-          </motion.a>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.3, duration: 0.7 }}
-          style={{ marginTop: '60px', animation: 'scroll-bounce 2.2s ease-in-out infinite' }}
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6A8F7B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </motion.div>
-
+          />
+        </div>
       </div>
+
+      {/* ── Mobile: stacked layout ── */}
+      <div className="flex md:hidden flex-col w-full" style={{ minHeight: '100vh' }}>
+        {/* Photo */}
+        <div style={{ position: 'relative', height: '55vh', overflow: 'hidden' }}>
+          <Image
+            src="/assets/gustavo_americana_SBG.png"
+            alt="Gustavo Martínez Pellón"
+            fill
+            className="object-cover object-top"
+            priority
+            sizes="100vw"
+          />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px', background: 'linear-gradient(to bottom, transparent, #ffffff)' }} />
+        </div>
+
+        {/* Text */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{ padding: '32px 24px 60px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+        >
+          <motion.h1
+            variants={itemVariants}
+            className="font-serif"
+            style={{ fontSize: '54px', lineHeight: 0.92, fontWeight: 700, color: '#243A4D', letterSpacing: '-0.02em', marginBottom: '16px' }}
+          >
+            Gustavo<br />
+            <span style={{ fontWeight: 300, fontStyle: 'italic', color: '#6A8F7B' }}>Martínez</span>
+          </motion.h1>
+
+          <motion.div variants={itemVariants} style={{ width: '48px', height: '2px', background: 'linear-gradient(90deg, #C9A84C, rgba(201,168,76,0.2))', marginBottom: '18px', borderRadius: '2px' }} />
+
+          <motion.p
+            variants={itemVariants}
+            className="font-sans"
+            style={{ fontSize: '10px', fontWeight: 500, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6B7280', lineHeight: 1.9, marginBottom: '28px' }}
+          >
+            Consejero Corporativo · Consultor · Profesor Ejecutivo
+          </motion.p>
+
+          <motion.p
+            variants={itemVariants}
+            className="font-serif"
+            style={{ fontSize: '19px', fontStyle: 'italic', color: '#243A4D', lineHeight: 1.5, marginBottom: '32px' }}
+          >
+            Conectando <span style={{ color: '#C9A84C' }}>estrategia</span> y <span style={{ color: '#C9A84C' }}>cliente</span> en decisiones que transforman.
+          </motion.p>
+
+          <motion.div variants={itemVariants} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <a href="/contact" className="btn-shimmer font-sans font-semibold text-white text-center" style={{ padding: '16px', borderRadius: '8px', fontSize: '13px', letterSpacing: '0.1em', textDecoration: 'none', textTransform: 'uppercase', display: 'block' }}>
+              Agendar conversación
+            </a>
+            <a href="#trayectoria" className="font-sans font-medium text-center" style={{ padding: '15px', borderRadius: '8px', fontSize: '13px', letterSpacing: '0.08em', textDecoration: 'none', textTransform: 'uppercase', border: '1.5px solid rgba(106,143,123,0.5)', color: '#6A8F7B', display: 'block' }}>
+              Conocer más →
+            </a>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6, duration: 0.8 }}
+        className="hidden md:block"
+        style={{
+          position: 'absolute',
+          bottom: '36px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          animation: 'scroll-bounce 2.4s ease-in-out infinite',
+          zIndex: 10,
+        }}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </motion.div>
     </section>
   );
 }

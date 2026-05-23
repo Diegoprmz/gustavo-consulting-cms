@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const navLinks = [
   { label: 'Trayectoria',   href: '/about' },
@@ -35,20 +36,19 @@ export default function Footer() {
 
           {/* Branding */}
           <div>
-            <p className="font-serif font-bold text-white" style={{ fontSize: '20px', marginBottom: '6px' }}>
-              Gustavo Martínez
-            </p>
-            <p
-              className="font-sans font-semibold"
-              style={{ fontSize: '10px', color: '#6A8F7B', letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: '18px' }}
-            >
-              Consultoría Estratégica
-            </p>
-            <p className="font-sans" style={{ fontSize: '14px', lineHeight: 1.75, color: 'rgba(255,255,255,0.72)', maxWidth: '280px' }}>
+            <Image
+              src="/assets/gustavo_firma.png"
+              alt="Gustavo Martínez Business Consulting"
+              width={220}
+              height={56}
+              className="object-contain"
+              style={{ maxHeight: '50px', width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.85, marginBottom: '18px' }}
+            />
+            <p className="font-sans" style={{ fontSize: '14px', lineHeight: 1.8, color: 'rgba(255,255,255,0.65)', maxWidth: '280px' }}>
               Asesoría estratégica para empresas que buscan crecimiento sostenible
-              y transformación centrada en el cliente.
+              y transformación centrada en el <span style={{ color: '#C9A84C' }}>cliente</span>.
             </p>
-            <div style={{ marginTop: '24px', width: '36px', height: '2px', backgroundColor: '#6A8F7B' }} />
+            <div style={{ marginTop: '24px', width: '36px', height: '2px', background: 'linear-gradient(90deg, #C9A84C, rgba(201,168,76,0.2))' }} />
           </div>
 
           {/* Navigation */}

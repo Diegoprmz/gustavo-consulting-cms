@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
 const roles = [
@@ -26,28 +27,34 @@ export default function Experiencia() {
       id="experiencia"
       style={{
         backgroundColor: '#243A4D',
-        paddingTop: '100px',
-        paddingBottom: '100px',
-        borderTop: '4px solid #6A8F7B',
+        paddingTop: '110px',
+        paddingBottom: '110px',
+        borderTop: '3px solid rgba(201,168,76,0.4)',
       }}
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
+
         <AnimatedSection>
-          <div style={{ marginBottom: '64px' }}>
-            <span className="label-olive" style={{ marginBottom: '18px', display: 'inline-flex' }}>
+          <div style={{ marginBottom: '72px' }}>
+            <span className="label-olive-light" style={{ marginBottom: '20px', display: 'inline-flex' }}>
               Trayectoria profesional
             </span>
             <h2
               className="font-serif text-white"
               style={{
-                fontSize: 'clamp(28px, 3.5vw, 44px)',
-                lineHeight: 1.2,
+                fontSize: 'clamp(40px, 5vw, 64px)',
+                lineHeight: 0.95,
                 fontWeight: 700,
-                maxWidth: '580px',
-                marginTop: '16px',
+                maxWidth: '640px',
+                marginTop: '20px',
+                letterSpacing: '-0.02em',
               }}
             >
-              Experiencia aplicada en decisiones reales.
+              Experiencia aplicada
+              <br />
+              <span style={{ fontWeight: 300, fontStyle: 'italic', color: '#6A8F7B' }}>
+                en decisiones reales.
+              </span>
             </h2>
           </div>
         </AnimatedSection>
@@ -55,24 +62,29 @@ export default function Experiencia() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-0">
           {roles.map((role, i) => (
             <AnimatedSection key={role.label} delay={i * 0.12}>
-              <div className="relative md:px-8">
+              <motion.div
+                className="relative md:px-8"
+                whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)' }}
+                transition={{ duration: 0.25 }}
+                style={{ borderRadius: '8px', padding: '16px', cursor: 'default' }}
+              >
                 {i > 0 && (
                   <div
                     className="hidden md:block absolute left-0 top-0 h-full"
-                    style={{ width: '1px', backgroundColor: '#6A8F7B', opacity: 0.22 }}
+                    style={{ width: '1px', background: 'linear-gradient(to bottom, transparent, rgba(201,168,76,0.3), transparent)' }}
                   />
                 )}
-                <div style={{ width: '30px', height: '2px', backgroundColor: '#6A8F7B', marginBottom: '18px' }} />
+                <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg, #C9A84C, rgba(201,168,76,0.2))', marginBottom: '20px' }} />
                 <p
                   className="font-sans font-semibold"
-                  style={{ fontSize: '11px', color: '#6A8F7B', letterSpacing: '0.26em', textTransform: 'uppercase', marginBottom: '14px' }}
+                  style={{ fontSize: '11px', color: '#C9A84C', letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: '16px', opacity: 0.9 }}
                 >
                   {role.label}
                 </p>
-                <p className="font-sans text-white" style={{ fontSize: '15px', lineHeight: 1.78, opacity: 0.9 }}>
+                <p className="font-sans text-white" style={{ fontSize: '15px', lineHeight: 1.82, opacity: 0.85 }}>
                   {role.description}
                 </p>
-              </div>
+              </motion.div>
             </AnimatedSection>
           ))}
         </div>

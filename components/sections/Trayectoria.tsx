@@ -28,7 +28,7 @@ export default function Trayectoria() {
               }}
             >
               <Image
-                src="/assets/gustavo-gris-Bw4bzb9A.jpg"
+                src="/assets/gustavo-27.jpeg"
                 alt="Gustavo Martínez Pellón"
                 width={420}
                 height={530}

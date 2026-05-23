@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const links = [
   { label: 'Trayectoria',  href: '/about' },
@@ -41,36 +42,17 @@ export default function Navbar() {
         transition: 'background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease',
       }}
     >
-      {/* Logo */}
-      <a
-        href="#"
-        style={{ textDecoration: 'none' }}
-      >
-        <span
-          className="font-serif"
-          style={{
-            fontSize: '17px',
-            fontWeight: 700,
-            color: scrolled ? '#243A4D' : '#243A4D',
-            letterSpacing: '0.06em',
-          }}
-        >
-          Gustavo Martínez
-        </span>
-        <span
-          className="font-sans"
-          style={{
-            display: 'block',
-            fontSize: '9px',
-            fontWeight: 600,
-            color: '#6A8F7B',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            marginTop: '1px',
-          }}
-        >
-          Consultoría Estratégica
-        </span>
+      {/* Logo — firma manuscrita */}
+      <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+        <Image
+          src="/assets/gustavo_firma.png"
+          alt="Gustavo Martínez Business Consulting"
+          width={200}
+          height={52}
+          className="object-contain"
+          style={{ maxHeight: '44px', width: 'auto' }}
+          priority
+        />
       </a>
 
       {/* Desktop links */}

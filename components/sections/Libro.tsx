@@ -22,7 +22,8 @@ export default function Libro() {
 
   return (
     <section
-      style={{ backgroundColor: '#243A4D', paddingTop: '100px', paddingBottom: '100px' }}
+      id="libro"
+      style={{ backgroundColor: '#243A4D', paddingTop: '110px', paddingBottom: '110px' }}
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
@@ -31,60 +32,45 @@ export default function Libro() {
           <AnimatedSection>
             <div className="flex justify-center md:justify-start">
               <div
-                style={{ perspective: '1200px' }}
+                style={{ perspective: '1400px', cursor: 'default' }}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
               >
                 <motion.div
                   className="relative preserve-3d"
                   animate={{ rotateY: rotation }}
-                  transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  whileHover={{ scale: 1.03 }}
+                  transition={{ duration: 0.65, ease: 'easeInOut' }}
+                  whileHover={{ scale: 1.04, transition: { duration: 0.3 } }}
                   style={{
-                    width: '280px',
-                    height: '392px',
+                    width: '260px',
+                    height: '364px',
                     transformStyle: 'preserve-3d',
-                    cursor: 'default',
-                    boxShadow: '0 15px 50px rgba(0,0,0,0.25)',
+                    boxShadow: '0 30px 70px rgba(0,0,0,0.35)',
                     borderRadius: '4px',
                   }}
                 >
-                  {/* Front face */}
                   <div
                     className="backface-hidden absolute inset-0"
-                    style={{
-                      backfaceVisibility: 'hidden',
-                      WebkitBackfaceVisibility: 'hidden',
-                      borderRadius: '4px',
-                      overflow: 'hidden',
-                    }}
+                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', borderRadius: '4px', overflow: 'hidden' }}
                   >
                     <Image
                       src="/images/libro/portada.png"
                       alt="Customer Centricity — portada"
-                      width={280}
-                      height={392}
+                      width={260}
+                      height={364}
                       className="block w-full h-full object-cover"
                       priority
                     />
                   </div>
-
-                  {/* Back face */}
                   <div
                     className="absolute inset-0"
-                    style={{
-                      backfaceVisibility: 'hidden',
-                      WebkitBackfaceVisibility: 'hidden',
-                      transform: 'rotateY(180deg)',
-                      borderRadius: '4px',
-                      overflow: 'hidden',
-                    }}
+                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)', borderRadius: '4px', overflow: 'hidden' }}
                   >
                     <Image
                       src="/images/libro/portada.png"
                       alt="Customer Centricity — contraportada"
-                      width={280}
-                      height={392}
+                      width={260}
+                      height={364}
                       className="block w-full h-full object-cover"
                     />
                   </div>
@@ -93,84 +79,93 @@ export default function Libro() {
             </div>
           </AnimatedSection>
 
-          {/* Right: Text */}
+          {/* Right: Text with hierarchy */}
           <AnimatedSection delay={0.15}>
-            {/* Label */}
+
+            {/* Section kicker */}
             <p
-              className="font-sans font-semibold mb-4"
-              style={{
-                fontSize: '12px',
-                color: '#6A8F7B',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                opacity: 0.7,
-              }}
+              className="font-sans font-semibold"
+              style={{ fontSize: '11px', color: '#6A8F7B', letterSpacing: '0.28em', textTransform: 'uppercase', opacity: 0.85, marginBottom: '20px' }}
             >
-              PENSAMIENTO ESTRUCTURADO
+              — Libro
             </p>
 
-            {/* Book title */}
-            <p
-              className="font-sans font-bold text-white mb-3"
-              style={{ fontSize: '24px' }}
-            >
-              Libro: Customer Centricity
-            </p>
-
-            {/* Headline */}
+            {/* Gold title */}
             <h2
-              className="font-serif text-white mb-6"
+              className="font-serif gold-shimmer"
               style={{
-                fontSize: 'clamp(28px, 3.2vw, 38px)',
-                lineHeight: 1.3,
+                fontSize: 'clamp(36px, 4.5vw, 58px)',
                 fontWeight: 700,
+                lineHeight: 0.95,
+                letterSpacing: '-0.02em',
+                marginBottom: '8px',
               }}
             >
-              Un enfoque estructurado para integrar al cliente en la estrategia.
+              Customer
             </h2>
+            <h2
+              className="font-serif gold-shimmer"
+              style={{
+                fontSize: 'clamp(36px, 4.5vw, 58px)',
+                fontWeight: 700,
+                lineHeight: 0.95,
+                letterSpacing: '-0.02em',
+                marginBottom: '24px',
+              }}
+            >
+              Centricity
+            </h2>
+
+            {/* Gold divider */}
+            <div className="gold-divider" style={{ marginBottom: '24px' }} />
+
+            {/* Subtitle */}
+            <h3
+              className="font-serif text-white"
+              style={{ fontSize: 'clamp(20px, 2.2vw, 26px)', fontWeight: 400, fontStyle: 'italic', lineHeight: 1.4, marginBottom: '24px' }}
+            >
+              Un enfoque estructurado para integrar al{' '}
+              <span style={{ color: '#C9A84C' }}>cliente</span>{' '}
+              en la estrategia.
+            </h3>
 
             {/* Description */}
             <p
-              className="font-sans text-white mb-4"
-              style={{
-                fontSize: '16px',
-                lineHeight: 1.7,
-                opacity: 0.9,
-              }}
+              className="font-sans text-white"
+              style={{ fontSize: '15px', lineHeight: 1.82, opacity: 0.88, marginBottom: '14px' }}
             >
               Este libro nace de más de treinta años de trabajo con empresas que buscaban
-              crecer, pero que no lograban conectar genuinamente con sus clientes. Es una
-              guía estructurada y práctica para directivos que quieren llevar al cliente
-              al centro de la estrategia, no como discurso, sino como transformación real.
+              crecer, pero que no lograban conectar genuinamente con sus clientes.
+              Es una guía estructurada y práctica para directivos que quieren llevar al
+              <span style={{ color: '#C9A84C', fontStyle: 'italic' }}> cliente al centro de la estrategia</span>,
+              no como discurso, sino como transformación real.
             </p>
             <p
-              className="font-sans text-white mb-8"
-              style={{
-                fontSize: '16px',
-                lineHeight: 1.7,
-                opacity: 0.9,
-              }}
+              className="font-sans text-white"
+              style={{ fontSize: '15px', lineHeight: 1.82, opacity: 0.85, marginBottom: '36px' }}
             >
-              A través de cinco dimensiones — estrategia, cultura, operación, experiencia
-              y métricas — el libro ofrece un marco integrador que permite alinear toda la
-              organización en torno al valor que entrega al cliente.
+              A través de cinco dimensiones —
+              <span style={{ color: '#C9A84C', fontStyle: 'italic' }}> estrategia, cultura, operación, experiencia y métricas</span>{' '}
+              — el libro ofrece un marco integrador que permite alinear toda la organización.
             </p>
 
-            {/* CTA Button */}
+            {/* CTA */}
             <motion.a
               href="https://www.amazon.com.mx/Customer-Centricity-El-foco-cliente/dp/B0FYH6G6JS/"
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ backgroundColor: '#ffffff', color: '#243A4D' }}
-              transition={{ duration: 0.3 }}
-              className="inline-flex items-center gap-2 font-sans font-semibold text-white cursor-pointer"
+              whileHover={{ backgroundColor: '#C9A84C', borderColor: '#C9A84C', color: '#243A4D', scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.25 }}
+              className="inline-flex items-center gap-2 font-sans font-semibold text-white"
               style={{
-                border: '2px solid #ffffff',
-                padding: '14px 28px',
-                borderRadius: '6px',
-                fontSize: '14px',
-                letterSpacing: '0.04em',
+                border: '1.5px solid rgba(255,255,255,0.5)',
+                padding: '14px 30px',
+                borderRadius: '8px',
+                fontSize: '13px',
+                letterSpacing: '0.08em',
                 textDecoration: 'none',
+                textTransform: 'uppercase',
               }}
             >
               VER EN AMAZON

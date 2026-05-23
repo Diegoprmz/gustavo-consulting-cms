@@ -1,78 +1,125 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #243A4D;
-  --color-olive: #6A8F7B;
-  --color-olive-light: #8aaa96;
-  --color-charcoal: #333333;
-  --color-pearl: #F5F5F5;
-  --font-serif: var(--font-playfair), Georgia, serif;
-  --font-sans: var(--font-inter), Arial, sans-serif;
+  --color-navy:       #243A4D;
+  --color-olive:      #6A8F7B;
+  --color-olive-deep: #3D5C4A;
+  --color-gold:       #C9A84C;
+  --color-charcoal:   #333333;
+  --color-pearl:      #F5F5F5;
+  --font-serif: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  var(--font-dm-sans),   'DM Sans', Arial, sans-serif;
 }
 
+/* ─── Keyframes ──────────────────────────────────────── */
 @keyframes marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-
+@keyframes marquee-slow {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.45; transform: scale(1); }
-  50%       { opacity: 0.8;  transform: scale(1.1); }
+  0%, 100% { opacity: 0.4;  transform: scale(1);   }
+  50%       { opacity: 0.75; transform: scale(1.12); }
 }
-
 @keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0);  opacity: 0.6; }
-  50%       { transform: translateY(8px); opacity: 1; }
+  0%, 100% { transform: translateY(0);   opacity: 0.55; }
+  50%       { transform: translateY(9px); opacity: 1;    }
 }
-
 @keyframes shimmer {
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }
 }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes lineGrow {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+@keyframes goldShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
 
+/* ─── Base ──────────────────────────────────────────── */
 html { scroll-behavior: smooth; }
 
 body {
   color: #333333;
   background: #ffffff;
-  font-family: var(--font-inter), Arial, sans-serif;
+  font-family: var(--font-dm-sans), 'DM Sans', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Marquee */
+/* ─── Typography helpers ─────────────────────────────── */
+.font-serif { font-family: var(--font-cormorant), Georgia, serif; }
+.font-sans  { font-family: var(--font-dm-sans), Arial, sans-serif; }
+
+/* Gold keyword highlight */
+.gold {
+  color: #C9A84C;
+  font-style: italic;
+}
+
+/* Gold shimmer text for special headings */
+.gold-shimmer {
+  background: linear-gradient(90deg, #B8963E 0%, #E8C76A 40%, #C9A84C 60%, #B8963E 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 4s linear infinite;
+}
+
+/* ─── Marquee ─────────────────────────────────────────── */
 .marquee-track {
   display: flex;
-  animation: marquee 14s linear infinite;
+  animation: marquee 22s linear infinite;
 }
 .marquee-track:hover { animation-play-state: paused; }
 
-/* 3-D book flip */
-.preserve-3d { transform-style: preserve-3d; }
+.marquee-track-slow {
+  display: flex;
+  animation: marquee-slow 30s linear infinite;
+}
+.marquee-track-slow:hover { animation-play-state: paused; }
+
+/* ─── 3-D book flip ──────────────────────────────────── */
+.preserve-3d     { transform-style: preserve-3d; }
 .backface-hidden {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-/* Shimmer CTA button */
+/* ─── Shimmer CTA button ─────────────────────────────── */
 .btn-shimmer {
   background: linear-gradient(
     120deg,
     #243A4D 0%,
-    #243A4D 38%,
+    #243A4D 35%,
     #6A8F7B 50%,
-    #243A4D 62%,
+    #243A4D 65%,
     #243A4D 100%
   );
   background-size: 200% auto;
-  transition: background-position 0.55s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-position 0.55s ease, transform 0.22s ease, box-shadow 0.22s ease;
 }
 .btn-shimmer:hover {
   background-position: right center;
   transform: scale(1.04);
-  box-shadow: 0 8px 28px rgba(106, 143, 123, 0.38);
+  box-shadow: 0 10px 30px rgba(106,143,123,0.38);
 }
 
-/* Olive pill label */
+/* ─── Olive pill label ───────────────────────────────── */
 .label-olive {
   display: inline-flex;
   align-items: center;
@@ -82,6 +129,7 @@ body {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #6A8F7B;
+  font-family: var(--font-dm-sans), Arial, sans-serif;
 }
 .label-olive::before {
   content: '';
@@ -92,16 +140,134 @@ body {
   flex-shrink: 0;
 }
 
-/* Olive card left accent */
-.olive-card-border {
-  border-left: 3px solid #6A8F7B;
-  padding-left: 20px;
+/* Label variant for dark backgrounds */
+.label-olive-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(106,143,123,0.9);
+  font-family: var(--font-dm-sans), Arial, sans-serif;
+}
+.label-olive-light::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1.5px;
+  background: rgba(106,143,123,0.9);
+  flex-shrink: 0;
 }
 
-/* Section divider bar */
+/* ─── Card hover lift ────────────────────────────────── */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94),
+              box-shadow 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.card-hover:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 22px 48px rgba(36,58,77,0.13);
+}
+
+/* ─── Underline slide on hover ───────────────────────── */
+.link-slide {
+  position: relative;
+  text-decoration: none;
+}
+.link-slide::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.28s ease;
+}
+.link-slide:hover::after { width: 100%; }
+
+/* ─── Olive divider bar ─────────────────────────────── */
 .olive-divider {
   width: 48px;
   height: 3px;
   background: #6A8F7B;
   border-radius: 2px;
+}
+
+/* ─── Gold divider bar ───────────────────────────────── */
+.gold-divider {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, #C9A84C, rgba(201,168,76,0.3));
+  border-radius: 2px;
+}
+
+/* ─── Olive card left accent ─────────────────────────── */
+.olive-card-border {
+  border-left: 3px solid #6A8F7B;
+  padding-left: 20px;
+}
+
+/* ─── Section transitions ────────────────────────────── */
+.section-fade-in {
+  animation: fadeInUp 0.7s ease-out both;
+}
+
+/* ─── Logos grayscale → color on hover ──────────────── */
+.logo-item {
+  filter: grayscale(80%) opacity(0.65);
+  transition: filter 0.35s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+.logo-item:hover {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.07);
+}
+
+/* ─── Number highlight (big numbers) ────────────────── */
+.stat-number {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 700;
+  color: #C9A84C;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Input focus ring in olive ──────────────────────── */
+.input-styled {
+  border: 1px solid rgba(36,58,77,0.3);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-family: var(--font-dm-sans), Arial, sans-serif;
+  font-size: 15px;
+  color: #333333;
+  background: #ffffff;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+.input-styled:focus {
+  border-color: #6A8F7B;
+  box-shadow: 0 0 0 3px rgba(106,143,123,0.14);
+  transform: translateY(-1px);
+}
+.input-styled:hover:not(:focus) {
+  border-color: rgba(36,58,77,0.5);
+}
+.input-styled.error {
+  border-color: #E53E3E;
+  box-shadow: 0 0 0 3px rgba(229,62,62,0.1);
+}
+
+/* ─── Responsive image zoom on hover ────────────────── */
+.img-zoom {
+  overflow: hidden;
+  border-radius: 12px;
+}
+.img-zoom img {
+  transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.img-zoom:hover img {
+  transform: scale(1.04);
 }
