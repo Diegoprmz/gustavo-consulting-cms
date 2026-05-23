@@ -7,8 +7,15 @@
   --color-gold:       #C9A84C;
   --color-charcoal:   #333333;
   --color-pearl:      #F5F5F5;
-  --font-serif: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  --font-sans:  var(--font-dm-sans),   'DM Sans', Arial, sans-serif;
+  --font-serif: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  --font-sans:  var(--font-source-sans), 'Source Sans 3', Arial, sans-serif;
+}
+
+/* ─── @property for shimmer animation ───────────────── */
+@property --shimmer-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
 }
 
 /* ─── Keyframes ──────────────────────────────────────── */
@@ -21,23 +28,24 @@
   100% { transform: translateX(-50%); }
 }
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.4;  transform: scale(1);   }
-  50%       { opacity: 0.75; transform: scale(1.12); }
+  0%, 100% { opacity: 0.35; transform: scale(1);    }
+  50%       { opacity: 0.65; transform: scale(1.14); }
 }
-@keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0);   opacity: 0.55; }
-  50%       { transform: translateY(9px); opacity: 1;    }
+@keyframes scroll-line {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
 }
-@keyframes shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
+@keyframes shimmer-rotate {
+  to { --shimmer-angle: 360deg; }
 }
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(28px); }
+  from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.92); }
+  from { opacity: 0; transform: scale(0.93); }
   to   { opacity: 1; transform: scale(1); }
 }
 @keyframes lineGrow {
@@ -48,6 +56,14 @@
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }
 }
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+@keyframes loading-bar {
+  0%   { width: 0%; }
+  100% { width: 100%; }
+}
 
 /* ─── Base ──────────────────────────────────────────── */
 html { scroll-behavior: smooth; }
@@ -55,14 +71,14 @@ html { scroll-behavior: smooth; }
 body {
   color: #333333;
   background: #ffffff;
-  font-family: var(--font-dm-sans), 'DM Sans', Arial, sans-serif;
+  font-family: var(--font-source-sans), 'Source Sans 3', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* ─── Typography helpers ─────────────────────────────── */
-.font-serif { font-family: var(--font-cormorant), Georgia, serif; }
-.font-sans  { font-family: var(--font-dm-sans), Arial, sans-serif; }
+.font-serif { font-family: var(--font-playfair), 'Playfair Display', Georgia, serif; }
+.font-sans  { font-family: var(--font-source-sans), 'Source Sans 3', Arial, sans-serif; }
 
 /* Gold keyword highlight */
 .gold {
@@ -89,7 +105,7 @@ body {
 
 .marquee-track-slow {
   display: flex;
-  animation: marquee-slow 30s linear infinite;
+  animation: marquee-slow 32s linear infinite;
 }
 .marquee-track-slow:hover { animation-play-state: paused; }
 
@@ -100,23 +116,65 @@ body {
   -webkit-backface-visibility: hidden;
 }
 
-/* ─── Shimmer CTA button ─────────────────────────────── */
+/* ─── Shimmer CTA button (conic-gradient rotating) ───── */
 .btn-shimmer {
-  background: linear-gradient(
-    120deg,
+  position: relative;
+  background: #243A4D;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  overflow: hidden;
+}
+.btn-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(
+    from var(--shimmer-angle),
     #243A4D 0%,
-    #243A4D 35%,
-    #6A8F7B 50%,
-    #243A4D 65%,
-    #243A4D 100%
+    #C9A84C 15%,
+    #6A8F7B 25%,
+    #243A4D 35%
   );
-  background-size: 200% auto;
-  transition: background-position 0.55s ease, transform 0.22s ease, box-shadow 0.22s ease;
+  animation: shimmer-rotate 3s linear infinite;
+  border-radius: inherit;
+  z-index: 0;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: #243A4D;
+  border-radius: inherit;
+  z-index: 1;
+}
+.btn-shimmer > * {
+  position: relative;
+  z-index: 2;
 }
 .btn-shimmer:hover {
-  background-position: right center;
   transform: scale(1.04);
-  box-shadow: 0 10px 30px rgba(106,143,123,0.38);
+  box-shadow: 0 10px 30px rgba(36,58,77,0.38);
+}
+
+/* ─── Editorial underline slide from right ───────────── */
+.editorial-link {
+  position: relative;
+  text-decoration: none;
+}
+.editorial-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.editorial-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* ─── Olive pill label ───────────────────────────────── */
@@ -129,7 +187,7 @@ body {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #6A8F7B;
-  font-family: var(--font-dm-sans), Arial, sans-serif;
+  font-family: var(--font-source-sans), Arial, sans-serif;
 }
 .label-olive::before {
   content: '';
@@ -150,7 +208,7 @@ body {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: rgba(106,143,123,0.9);
-  font-family: var(--font-dm-sans), Arial, sans-serif;
+  font-family: var(--font-source-sans), Arial, sans-serif;
 }
 .label-olive-light::before {
   content: '';
@@ -163,8 +221,8 @@ body {
 
 /* ─── Card hover lift ────────────────────────────────── */
 .card-hover {
-  transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94),
-              box-shadow 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .card-hover:hover {
   transform: translateY(-7px);
@@ -204,6 +262,23 @@ body {
   border-radius: 2px;
 }
 
+/* ─── Gold separator dot ─────────────────────────────── */
+.gold-dot-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 0;
+  background: #F5F5F5;
+}
+.gold-dot-separator::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #C9A84C;
+  box-shadow: 0 0 16px rgba(201,168,76,0.4);
+}
+
 /* ─── Olive card left accent ─────────────────────────── */
 .olive-card-border {
   border-left: 3px solid #6A8F7B;
@@ -227,7 +302,7 @@ body {
 
 /* ─── Number highlight (big numbers) ────────────────── */
 .stat-number {
-  font-family: var(--font-cormorant), Georgia, serif;
+  font-family: var(--font-playfair), Georgia, serif;
   font-weight: 700;
   color: #C9A84C;
   line-height: 1;
@@ -237,9 +312,9 @@ body {
 /* ─── Input focus ring in olive ──────────────────────── */
 .input-styled {
   border: 1px solid rgba(36,58,77,0.3);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 14px 18px;
-  font-family: var(--font-dm-sans), Arial, sans-serif;
+  font-family: var(--font-source-sans), Arial, sans-serif;
   font-size: 15px;
   color: #333333;
   background: #ffffff;
@@ -263,11 +338,30 @@ body {
 /* ─── Responsive image zoom on hover ────────────────── */
 .img-zoom {
   overflow: hidden;
-  border-radius: 12px;
 }
 .img-zoom img {
   transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
 }
 .img-zoom:hover img {
   transform: scale(1.04);
+}
+
+/* ─── Vertical scroll indicator line ────────────────── */
+.scroll-line {
+  width: 1px;
+  height: 56px;
+  background: linear-gradient(to bottom, rgba(201,168,76,0.9), transparent);
+  animation: scroll-line 2s ease-in-out infinite;
+}
+
+/* ─── Loading bar ────────────────────────────────────── */
+.loading-bar {
+  height: 2px;
+  background: linear-gradient(90deg, #C9A84C, #6A8F7B);
+  animation: loading-bar 1.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+/* ─── WhatsApp float animation ───────────────────────── */
+.whatsapp-float {
+  animation: floatUp 3s ease-in-out infinite;
 }

@@ -12,10 +12,13 @@ import ElEnfoque from '@/components/sections/ElEnfoque';
 import Articulos from '@/components/sections/Articulos';
 import Conversemos from '@/components/sections/Conversemos';
 import Footer from '@/components/sections/Footer';
+import LoadingScreen from '@/components/ui/LoadingScreen';
+import WhatsAppButton from '@/components/ui/WhatsAppButton';
 
 export default function Home() {
   return (
     <>
+      <LoadingScreen />
       <Navbar />
       <main>
         <Hero />
@@ -32,6 +35,7 @@ export default function Home() {
         <Conversemos />
       </main>
       <Footer />
+      <WhatsAppButton />
     </>
   );
 }

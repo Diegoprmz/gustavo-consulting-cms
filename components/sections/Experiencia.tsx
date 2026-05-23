@@ -26,25 +26,25 @@ export default function Experiencia() {
     <section
       id="experiencia"
       style={{
-        backgroundColor: '#243A4D',
+        backgroundColor: '#ECECEC',
         paddingTop: '110px',
         paddingBottom: '110px',
-        borderTop: '3px solid rgba(201,168,76,0.4)',
       }}
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
 
         <AnimatedSection>
           <div style={{ marginBottom: '72px' }}>
-            <span className="label-olive-light" style={{ marginBottom: '20px', display: 'inline-flex' }}>
+            <span className="label-olive" style={{ marginBottom: '20px', display: 'inline-flex' }}>
               Trayectoria profesional
             </span>
             <h2
-              className="font-serif text-white"
+              className="font-serif"
               style={{
                 fontSize: 'clamp(40px, 5vw, 64px)',
                 lineHeight: 0.95,
                 fontWeight: 700,
+                color: '#243A4D',
                 maxWidth: '640px',
                 marginTop: '20px',
                 letterSpacing: '-0.02em',
@@ -52,7 +52,7 @@ export default function Experiencia() {
             >
               Experiencia aplicada
               <br />
-              <span style={{ fontWeight: 300, fontStyle: 'italic', color: '#6A8F7B' }}>
+              <span style={{ fontWeight: 400, fontStyle: 'italic', color: '#6A8F7B' }}>
                 en decisiones reales.
               </span>
             </h2>
@@ -64,24 +64,24 @@ export default function Experiencia() {
             <AnimatedSection key={role.label} delay={i * 0.12}>
               <motion.div
                 className="relative md:px-8"
-                whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)' }}
+                whileHover={{ backgroundColor: 'rgba(36,58,77,0.04)', translateY: -4 }}
                 transition={{ duration: 0.25 }}
-                style={{ borderRadius: '8px', padding: '16px', cursor: 'default' }}
+                style={{ padding: '24px 16px', cursor: 'default' }}
               >
                 {i > 0 && (
                   <div
                     className="hidden md:block absolute left-0 top-0 h-full"
-                    style={{ width: '1px', background: 'linear-gradient(to bottom, transparent, rgba(201,168,76,0.3), transparent)' }}
+                    style={{ width: '1px', background: 'linear-gradient(to bottom, transparent, rgba(106,143,123,0.3), transparent)' }}
                   />
                 )}
                 <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg, #C9A84C, rgba(201,168,76,0.2))', marginBottom: '20px' }} />
                 <p
                   className="font-sans font-semibold"
-                  style={{ fontSize: '11px', color: '#C9A84C', letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: '16px', opacity: 0.9 }}
+                  style={{ fontSize: '11px', color: '#C9A84C', letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: '16px' }}
                 >
                   {role.label}
                 </p>
-                <p className="font-sans text-white" style={{ fontSize: '15px', lineHeight: 1.82, opacity: 0.85 }}>
+                <p className="font-sans" style={{ fontSize: '15px', lineHeight: 1.82, color: '#4A5568' }}>
                   {role.description}
                 </p>
               </motion.div>

@@ -13,14 +13,16 @@ const links = [
 ];
 
 export default function Navbar() {
-  const [scrolled,     setScrolled]     = useState(false);
-  const [menuOpen,     setMenuOpen]     = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 48);
+    const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const isDark = !scrolled;
 
   return (
     <header
@@ -39,10 +41,10 @@ export default function Navbar() {
         backdropFilter: scrolled ? 'blur(14px)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(14px)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(106,143,123,0.14)' : 'none',
-        transition: 'background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease',
+        transition: 'background-color 0.4s ease, border-color 0.4s ease',
       }}
     >
-      {/* Logo — firma manuscrita */}
+      {/* Logo */}
       <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
         <Image
           src="/assets/gustavo_firma.png"
@@ -50,7 +52,13 @@ export default function Navbar() {
           width={200}
           height={52}
           className="object-contain"
-          style={{ maxHeight: '44px', width: 'auto' }}
+          style={{
+            maxHeight: '44px',
+            width: 'auto',
+            filter: isDark ? 'brightness(0) invert(1)' : 'none',
+            opacity: isDark ? 0.9 : 1,
+            transition: 'filter 0.4s ease, opacity 0.4s ease',
+          }}
           priority
         />
       </a>
@@ -63,13 +71,14 @@ export default function Navbar() {
             href={l.href}
             whileHover={{ color: '#6A8F7B' }}
             transition={{ duration: 0.2 }}
-            className="font-sans"
+            className="font-sans editorial-link"
             style={{
               fontSize: '13px',
               fontWeight: 500,
-              color: '#243A4D',
+              color: isDark ? 'rgba(255,255,255,0.85)' : '#243A4D',
               textDecoration: 'none',
               letterSpacing: '0.04em',
+              transition: 'color 0.4s ease',
             }}
           >
             {l.label}
@@ -79,17 +88,20 @@ export default function Navbar() {
         {/* CTA */}
         <motion.a
           href="/contact"
-          whileHover={{ backgroundColor: '#6A8F7B', scale: 1.04 }}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.97 }}
           transition={{ duration: 0.25 }}
           className="font-sans font-semibold"
           style={{
-            backgroundColor: '#243A4D',
+            backgroundColor: isDark ? 'rgba(255,255,255,0.12)' : '#243A4D',
             color: '#ffffff',
             padding: '10px 22px',
-            borderRadius: '6px',
             fontSize: '13px',
             letterSpacing: '0.04em',
             textDecoration: 'none',
+            border: isDark ? '1px solid rgba(255,255,255,0.25)' : '1px solid transparent',
+            backdropFilter: isDark ? 'blur(8px)' : 'none',
+            transition: 'background-color 0.4s ease, border-color 0.4s ease',
           }}
         >
           Agendar conversación
@@ -110,9 +122,8 @@ export default function Navbar() {
               display: 'block',
               width: '22px',
               height: '2px',
-              backgroundColor: '#243A4D',
-              borderRadius: '2px',
-              transition: 'transform 0.25s',
+              backgroundColor: isDark ? 'rgba(255,255,255,0.85)' : '#243A4D',
+              transition: 'background-color 0.4s ease',
             }}
           />
         ))}
@@ -131,9 +142,9 @@ export default function Navbar() {
               top: '72px',
               left: 0,
               right: 0,
-              backgroundColor: 'rgba(255,255,255,0.98)',
-              backdropFilter: 'blur(14px)',
-              borderBottom: '1px solid rgba(106,143,123,0.15)',
+              backgroundColor: 'rgba(36,58,77,0.97)',
+              backdropFilter: 'blur(16px)',
+              borderBottom: '1px solid rgba(106,143,123,0.2)',
               padding: '24px 40px',
               display: 'flex',
               flexDirection: 'column',
@@ -145,11 +156,11 @@ export default function Navbar() {
                 key={l.label}
                 href={l.href}
                 onClick={() => setMenuOpen(false)}
-                className="font-sans"
+                className="font-sans editorial-link"
                 style={{
                   fontSize: '16px',
                   fontWeight: 500,
-                  color: '#243A4D',
+                  color: 'rgba(255,255,255,0.85)',
                   textDecoration: 'none',
                 }}
               >
@@ -161,11 +172,11 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
               className="font-sans font-semibold text-white text-center"
               style={{
-                backgroundColor: '#243A4D',
+                backgroundColor: '#C9A84C',
                 padding: '14px',
-                borderRadius: '6px',
                 textDecoration: 'none',
                 fontSize: '14px',
+                letterSpacing: '0.06em',
               }}
             >
               Agendar conversación

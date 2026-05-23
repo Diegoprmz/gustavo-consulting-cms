@@ -20,13 +20,17 @@ export default function ElEnfoque() {
 
         <div style={{ width: '100%', height: '1px', background: 'linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent)', marginBottom: '72px' }} />
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-0">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-0">
           {dimensiones.map((d, i) => (
             <AnimatedSection key={d.num} delay={i * 0.1}>
               <motion.div
                 className="relative"
-                style={{ paddingRight: '24px', cursor: 'default' }}
-                whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: '8px' }}
+                style={{ paddingRight: '16px', cursor: 'default' }}
+                whileHover={{
+                  backgroundColor: '#ffffff',
+                  y: -8,
+                  borderRadius: '4px',
+                }}
                 transition={{ duration: 0.25 }}
               >
                 {i > 0 && (
@@ -35,17 +39,36 @@ export default function ElEnfoque() {
                     style={{ width: '1px', background: 'linear-gradient(to bottom, transparent, rgba(106,143,123,0.2), transparent)' }}
                   />
                 )}
-                <div className="md:px-5">
-                  <p className="font-serif font-bold" style={{ fontSize: '32px', color: d.color, marginBottom: '14px', lineHeight: 1 }}>
+                <motion.div
+                  className="md:px-5"
+                  style={{ padding: '20px 16px', borderBottom: '2px solid transparent', transition: 'border-color 0.25s ease' }}
+                  whileHover={{ borderColor: '#C9A84C' }}
+                >
+                  <motion.p
+                    className="font-serif font-bold"
+                    style={{ fontSize: '30px', lineHeight: 1, marginBottom: '14px' }}
+                    whileHover={{ color: '#243A4D' }}
+                    initial={{ color: d.color }}
+                  >
                     {d.num}
-                  </p>
-                  <p className="font-sans font-semibold text-white" style={{ fontSize: '16px', marginBottom: '10px', letterSpacing: '0.01em' }}>
+                  </motion.p>
+                  <motion.p
+                    className="font-sans font-semibold"
+                    style={{ fontSize: '15px', marginBottom: '10px', letterSpacing: '0.01em' }}
+                    whileHover={{ color: '#243A4D' }}
+                    initial={{ color: '#ffffff' }}
+                  >
                     {d.titulo}
-                  </p>
-                  <p className="font-sans text-white" style={{ fontSize: '13px', lineHeight: 1.7, opacity: 0.72 }}>
+                  </motion.p>
+                  <motion.p
+                    className="font-sans"
+                    style={{ fontSize: '13px', lineHeight: 1.7 }}
+                    whileHover={{ color: '#4A5568', opacity: 1 }}
+                    initial={{ color: '#ffffff', opacity: 0.72 }}
+                  >
                     {d.descripcion}
-                  </p>
-                </div>
+                  </motion.p>
+                </motion.div>
               </motion.div>
             </AnimatedSection>
           ))}
