@@ -119,12 +119,11 @@ export default function Hero() {
             }}
           >
             <Image
-              src="/images/gustavo.svg"
+              src="/assets/gustavo-navy-CU2edqmZ.jpg"
               alt="Gustavo Martínez Pellón — Consultor Estratégico Internacional"
               width={300}
               height={380}
               className="block w-full object-cover"
-              unoptimized
               priority
             />
           </motion.div>

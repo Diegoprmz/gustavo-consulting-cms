@@ -28,12 +28,11 @@ export default function Trayectoria() {
               }}
             >
               <Image
-                src="/images/gustavo.svg"
+                src="/assets/gustavo-gris-Bw4bzb9A.jpg"
                 alt="Gustavo Martínez Pellón"
                 width={420}
                 height={530}
                 className="block w-full object-cover"
-                unoptimized
               />
             </motion.div>
           </AnimatedSection>
@@ -72,7 +71,7 @@ export default function Trayectoria() {
               </p>
 
               <motion.a
-                href="#conversemos"
+                href="/about"
                 whileHover={{ backgroundColor: '#243A4D', color: '#ffffff' }}
                 transition={{ duration: 0.25 }}
                 className="inline-block font-sans font-semibold"

@@ -5,10 +5,37 @@ import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
 const logos = [
-  { name: 'ADO',      src: '/images/logos/ado.svg',     width: 120, height: 60 },
-  { name: 'Alimás',   src: '/images/logos/alimas.svg',  width: 140, height: 60 },
-  { name: 'Ámarmoc',  src: '/images/logos/amarmoc.svg', width: 140, height: 60 },
-  { name: 'The Anglo',src: '/images/logos/anglo.svg',   width: 130, height: 60 },
+  { name: 'ADO',         src: '/images/logos/ADO.webp',          width: 120, height: 60 },
+  { name: 'Alimás',      src: '/images/logos/alimas.webp',        width: 140, height: 60 },
+  { name: 'Ammmec',      src: '/images/logos/ammmec.webp',        width: 140, height: 60 },
+  { name: 'The Anglo',   src: '/images/logos/anglo.webp',         width: 130, height: 60 },
+  { name: 'Asociarse',   src: '/images/logos/asociarse.webp',     width: 140, height: 60 },
+  { name: 'Bühler',      src: '/images/logos/buhler.webp',        width: 130, height: 60 },
+  { name: 'Cana',        src: '/images/logos/cana.webp',          width: 120, height: 60 },
+  { name: 'CB',          src: '/images/logos/CB.webp',            width: 100, height: 60 },
+  { name: 'Cen1',        src: '/images/logos/cen1_edited.webp',   width: 130, height: 60 },
+  { name: 'Cenapyme',    src: '/images/logos/cenapyme.webp',      width: 140, height: 60 },
+  { name: 'Coppel',      src: '/images/logos/coppel.webp',        width: 130, height: 60 },
+  { name: 'Express',     src: '/images/logos/express.webp',       width: 130, height: 60 },
+  { name: 'Fandeli',     src: '/images/logos/fandeli.webp',       width: 130, height: 60 },
+  { name: 'Fonatur',     src: '/images/logos/fonatur.webp',       width: 130, height: 60 },
+  { name: 'Ford',        src: '/images/logos/ford.webp',          width: 100, height: 60 },
+  { name: 'GMDZ',        src: '/images/logos/GMDZ.webp',          width: 120, height: 60 },
+  { name: 'Guerr',       src: '/images/logos/Guerr.webp',         width: 130, height: 60 },
+  { name: 'HSBC',        src: '/images/logos/HSBC.webp',          width: 110, height: 60 },
+  { name: 'ILP',         src: '/images/logos/ilp.webp',           width: 110, height: 60 },
+  { name: 'ITD',         src: '/images/logos/ITD.webp',           width: 110, height: 60 },
+  { name: 'LBA',         src: '/images/logos/LBA.webp',           width: 110, height: 60 },
+  { name: 'Noviagro',    src: '/images/logos/logonoviagro.webp',  width: 140, height: 60 },
+  { name: 'MEGAPRO',     src: '/images/logos/MEGAPRO.webp',       width: 130, height: 60 },
+  { name: 'MHS',         src: '/images/logos/MHS.webp',           width: 110, height: 60 },
+  { name: 'P&B',         src: '/images/logos/P&B.webp',           width: 110, height: 60 },
+  { name: 'PDH',         src: '/images/logos/PDH.webp',           width: 110, height: 60 },
+  { name: 'Poliflex',    src: '/images/logos/poliflex.webp',      width: 130, height: 60 },
+  { name: 'Prendamex',   src: '/images/logos/prendamex.webp',     width: 130, height: 60 },
+  { name: 'SC',          src: '/images/logos/SC.webp',            width: 100, height: 60 },
+  { name: 'TID',         src: '/images/logos/TID.webp',           width: 110, height: 60 },
+  { name: '1-23',        src: '/images/logos/1-23.webp',          width: 120, height: 60 },
 ];
 
 function LogoItem({ logo }: { logo: typeof logos[0] }) {
@@ -26,7 +53,7 @@ function LogoItem({ logo }: { logo: typeof logos[0] }) {
         height={logo.height}
         className="object-contain"
         style={{ maxWidth: '160px', maxHeight: '90px' }}
-        unoptimized
+        unoptimized={false}
       />
     </motion.div>
   );

@@ -3,11 +3,11 @@
 import { motion } from 'framer-motion';
 
 const navLinks = [
-  { label: 'Trayectoria',   href: '#trayectoria' },
-  { label: 'El Libro',      href: '#libro' },
-  { label: 'Artículos',     href: '#articulos' },
-  { label: 'Consultoría',   href: '#colaboracion' },
-  { label: 'Conversemos',   href: '#conversemos' },
+  { label: 'Trayectoria',   href: '/about' },
+  { label: 'Servicios',     href: '/services' },
+  { label: 'Blog',          href: '#articulos' },
+  { label: 'Conferencias',  href: '/speaking' },
+  { label: 'Contacto',      href: '/contact' },
 ];
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
@@ -80,7 +80,7 @@ export default function Footer() {
               contacto@gustavo.consulting
             </motion.a>
             <motion.a
-              href="https://www.linkedin.com/in/gustavo-mart%C3%ADnez-pell%C3%B3n-19a44238"
+              href="https://www.linkedin.com/in/gustavo-martinez-pellon/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ color: '#6A8F7B' }}

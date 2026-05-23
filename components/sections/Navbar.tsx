@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const links = [
-  { label: 'Trayectoria', href: '#trayectoria' },
-  { label: 'El Libro',    href: '#libro' },
-  { label: 'Artículos',   href: '#articulos' },
-  { label: 'Conversemos', href: '#conversemos' },
+  { label: 'Trayectoria',  href: '/about' },
+  { label: 'Servicios',    href: '/services' },
+  { label: 'Blog',         href: '#articulos' },
+  { label: 'Conferencias', href: '/speaking' },
+  { label: 'Contacto',     href: '/contact' },
 ];
 
 export default function Navbar() {
@@ -95,7 +96,7 @@ export default function Navbar() {
 
         {/* CTA */}
         <motion.a
-          href="#conversemos"
+          href="/contact"
           whileHover={{ backgroundColor: '#6A8F7B', scale: 1.04 }}
           transition={{ duration: 0.25 }}
           className="font-sans font-semibold"
@@ -174,7 +175,7 @@ export default function Navbar() {
               </a>
             ))}
             <a
-              href="#conversemos"
+              href="/contact"
               onClick={() => setMenuOpen(false)}
               className="font-sans font-semibold text-white text-center"
               style={{

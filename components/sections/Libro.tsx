@@ -60,12 +60,11 @@ export default function Libro() {
                     }}
                   >
                     <Image
-                      src="/images/book-cover.svg"
+                      src="/images/libro/portada.png"
                       alt="Customer Centricity — portada"
                       width={280}
                       height={392}
                       className="block w-full h-full object-cover"
-                      unoptimized
                       priority
                     />
                   </div>
@@ -82,12 +81,11 @@ export default function Libro() {
                     }}
                   >
                     <Image
-                      src="/images/book-back.svg"
+                      src="/images/libro/portada.png"
                       alt="Customer Centricity — contraportada"
                       width={280}
                       height={392}
                       className="block w-full h-full object-cover"
-                      unoptimized
                     />
                   </div>
                 </motion.div>
@@ -160,7 +158,7 @@ export default function Libro() {
 
             {/* CTA Button */}
             <motion.a
-              href="https://www.amazon.com.mx"
+              href="https://www.amazon.com.mx/Customer-Centricity-El-foco-cliente/dp/B0FYH6G6JS/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ backgroundColor: '#ffffff', color: '#243A4D' }}
