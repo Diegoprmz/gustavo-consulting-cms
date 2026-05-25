@@ -39,7 +39,6 @@ export default function Articulos() {
           <span className="label-olive" style={{ marginBottom: '16px', display: 'inline-flex' }}>
             Artículos
           </span>
-          <div className="olive-divider" style={{ marginTop: '16px', marginBottom: '22px' }} />
           <h2
             className="font-serif"
             style={{ fontSize: 'clamp(28px, 3.2vw, 40px)', color: '#243A4D', fontWeight: 700, lineHeight: 1.2, marginBottom: '10px' }}

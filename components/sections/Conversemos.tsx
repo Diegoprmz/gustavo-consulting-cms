@@ -59,20 +59,22 @@ function FormField({
 
 const inputStyle = {
   width: '100%',
-  backgroundColor: '#ffffff',
-  border: '1px solid rgba(36,58,77,0.35)',
-  borderRadius: '0',
+  backgroundColor: '#F5F5F5',
+  border: '1px solid rgba(36,58,77,0.12)',
+  borderRadius: '8px',
   padding: '14px 16px',
   fontFamily: 'var(--font-source-sans), Arial, sans-serif',
   fontSize: '15px',
   color: '#333333',
   outline: 'none',
-  transition: 'border-color 0.22s ease, box-shadow 0.22s ease',
+  transition: 'border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease',
+  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06)',
 };
 
 const inputFocusStyle = {
   borderColor: '#6A8F7B',
-  boxShadow: '0 0 0 3px rgba(106,143,123,0.15)',
+  boxShadow: '0 0 0 3px rgba(106,143,123,0.15), inset 0 1px 2px rgba(0,0,0,0.04)',
+  transform: 'translateY(-2px)',
 };
 
 function StyledInput({
@@ -210,7 +212,16 @@ export default function Conversemos() {
         </div>
 
         {/* Form */}
-        <div className="max-w-[600px] mx-auto">
+        <div
+          className="max-w-[600px] mx-auto"
+          style={{
+            backgroundColor: '#FAFAFA',
+            borderRadius: '12px',
+            padding: '48px 40px',
+            boxShadow: '0 2px 8px rgba(36,58,77,0.06), inset 0 1px 0 rgba(255,255,255,0.6)',
+            border: '1px solid rgba(36,58,77,0.08)',
+          }}
+        >
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             {/* Desktop: 2-col grid for first 4 fields, full-width for textarea */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
@@ -281,10 +292,10 @@ export default function Conversemos() {
               disabled={status === 'sending'}
               whileHover={
                 status === 'idle'
-                  ? { backgroundColor: '#6A8F7B', scale: 1.05, boxShadow: '0 8px 20px rgba(106,143,123,0.3)' }
+                  ? { backgroundColor: '#2F4A64', boxShadow: '0 8px 24px rgba(36,58,77,0.25), inset 0 1px 0 rgba(255,255,255,0.2)' }
                   : {}
               }
-              whileTap={{ scale: 0.98 }}
+              whileTap={status === 'idle' ? { scale: 0.98, boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.15)' } : {}}
               transition={{ duration: 0.3 }}
               className="w-full font-sans font-semibold text-white cursor-pointer"
               style={{
@@ -293,11 +304,14 @@ export default function Conversemos() {
                 fontSize: '14px',
                 letterSpacing: '0.04em',
                 border: 'none',
+                borderRadius: '8px',
                 marginTop: '8px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
+                boxShadow: '0 4px 12px rgba(36,58,77,0.15), inset 0 1px 0 rgba(255,255,255,0.1)',
+                transition: 'all 0.3s ease',
               }}
             >
               {status === 'sending' ? (

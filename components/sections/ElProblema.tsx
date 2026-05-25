@@ -4,11 +4,7 @@ import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export default function ElProblema() {
   return (
-    <>
-      {/* Gold dot separator between Concepto and ElProblema */}
-      <div className="gold-dot-separator" />
-
-      <section
+    <section
         id="enfoque"
         style={{
           backgroundColor: '#243A4D',
@@ -35,10 +31,10 @@ export default function ElProblema() {
                 marginTop: '16px',
               }}
             >
-              Muchas empresas dicen estar centradas en el{' '}
-              <span style={{ color: '#C9A84C', fontStyle: 'italic' }}>cliente</span>.{' '}
-              <span style={{ fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.7)' }}>
-                Pocas lo están en su estrategia.
+              <span style={{ color: '#C9A84C', fontStyle: 'italic' }}>Customer Centricity</span>
+              {': '}
+              <span style={{ fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.8)' }}>
+                Cinco dimensiones que deben alinearse
               </span>
             </h2>
           </AnimatedSection>
@@ -55,6 +51,5 @@ export default function ElProblema() {
           </AnimatedSection>
         </div>
       </section>
-    </>
-  );
+    );
 }

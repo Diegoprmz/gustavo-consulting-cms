@@ -45,25 +45,31 @@ export default function Trayectoria() {
           {/* Text */}
           <AnimatedSection delay={0.15}>
             <div style={{ maxWidth: '520px' }}>
-              <span className="label-olive" style={{ marginBottom: '20px', display: 'inline-flex' }}>
+              <p
+                className="font-serif"
+                style={{
+                  fontSize: 'clamp(28px, 3.2vw, 42px)',
+                  lineHeight: 1,
+                  color: '#243A4D',
+                  fontWeight: 700,
+                  marginBottom: '10px',
+                }}
+              >
                 Trayectoria
-              </span>
-
-              <div className="olive-divider" style={{ marginTop: '20px', marginBottom: '28px' }} />
+              </p>
 
               <h2
                 className="font-serif"
                 style={{
-                  fontSize: 'clamp(28px, 3.2vw, 42px)',
-                  lineHeight: 1.18,
-                  color: '#243A4D',
-                  fontWeight: 700,
-                  marginBottom: '24px',
+                  fontSize: 'clamp(18px, 2vw, 26px)',
+                  lineHeight: 1.5,
+                  color: '#6A8F7B',
+                  fontWeight: 400,
+                  fontStyle: 'italic',
+                  marginBottom: '32px',
                 }}
               >
-                Más de tres décadas conectando
-                <span style={{ color: '#6A8F7B', fontStyle: 'italic', fontWeight: 400 }}> estrategia </span>
-                con ejecución.
+                Más de tres décadas conectando estrategia con ejecución.
               </h2>
 
               <p

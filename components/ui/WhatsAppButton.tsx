@@ -1,18 +1,34 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function WhatsAppButton() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <motion.a
-      href="https://wa.me/521XXXXXXXXXX?text=Hola%20Gustavo%2C%20me%20gustaría%20agendar%20una%20conversación."
+      href="https://wa.me/5255540632656?text=Hola%20Gustavo%2C%20me%20gustaría%20agendar%20una%20conversación."
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float"
       aria-label="Contactar por WhatsApp"
       initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 2.5, duration: 0.4, ease: 'easeOut' }}
+      animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8, pointerEvents: 'none' }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
       whileHover={{ scale: 1.1, boxShadow: '0 12px 32px rgba(37,211,102,0.35)' }}
       whileTap={{ scale: 0.95 }}
       style={{

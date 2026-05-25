@@ -7,18 +7,15 @@ import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export default function Libro() {
   const [rotation, setRotation] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const isPausedRef = useRef(isPaused);
-  isPausedRef.current = isPaused;
+  const [isFlipped, setIsFlipped] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isPausedRef.current) {
-        setRotation((prev) => prev + 180);
-      }
-    }, 4600);
-    return () => clearInterval(interval);
-  }, []);
+  const handleFlip = () => {
+    setRotation((prev) => {
+      const newRotation = (prev + 180) % 360;
+      setIsFlipped(!isFlipped);
+      return newRotation;
+    });
+  };
 
   return (
     <section
@@ -32,15 +29,14 @@ export default function Libro() {
           <AnimatedSection>
             <div className="flex justify-center md:justify-start">
               <div
-                style={{ perspective: '1400px', cursor: 'default' }}
-                onMouseEnter={() => setIsPaused(true)}
-                onMouseLeave={() => setIsPaused(false)}
+                style={{ perspective: '1400px', cursor: 'pointer' }}
+                onClick={handleFlip}
               >
                 <motion.div
                   className="relative preserve-3d"
                   animate={{ rotateY: rotation }}
-                  transition={{ duration: 0.65, ease: 'easeInOut' }}
-                  whileHover={{ scale: 1.04, transition: { duration: 0.3 } }}
+                  transition={{ duration: 0.28, ease: 'easeInOut' }}
+                  whileHover={{ scale: 1.06, transition: { duration: 0.25 } }}
                   style={{
                     width: '260px',
                     height: '364px',

@@ -93,9 +93,9 @@ export default function Hero() {
                 marginBottom: '44px',
               }}
             >
-              Consejero Corporativo&nbsp;&nbsp;·&nbsp;&nbsp;Consultor Empresarial
+              Consejero empresarial&nbsp;&nbsp;·&nbsp;&nbsp;Consultor
               <br />
-              Profesor Ejecutivo
+              Educación ejecutiva
             </motion.p>
 
             {/* Tagline */}
@@ -292,7 +292,7 @@ export default function Hero() {
             className="font-sans"
             style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', lineHeight: 1.9, marginBottom: '28px' }}
           >
-            Consejero Corporativo · Consultor · Profesor Ejecutivo
+            Consejero empresarial · Consultor · Educación ejecutiva
           </motion.p>
 
           <motion.p

@@ -90,47 +90,60 @@ export default function Concepto() {
           </AnimatedSection>
         </div>
 
-        {/* No es / Es / Se mide columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {columns.map((col, i) => (
-            <AnimatedSection key={col.label} delay={i * 0.12}>
-              <motion.div
-                whileHover={{ translateY: -6, boxShadow: '0 20px 48px rgba(36,58,77,0.1)' }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                style={{
-                  backgroundColor: '#ffffff',
-                  padding: '36px 28px',
-                  height: '100%',
-                  cursor: 'default',
-                  borderBottom: `3px solid ${col.color}`,
-                  boxShadow: '0 2px 16px rgba(36,58,77,0.05)',
-                }}
-              >
-                <p
-                  className="font-serif"
-                  style={{
-                    fontSize: '28px',
-                    fontWeight: 700,
-                    color: col.color,
-                    marginBottom: '28px',
-                    lineHeight: 1,
-                    fontStyle: 'italic',
-                  }}
-                >
-                  {col.label}
-                </p>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  {col.items.map((item) => (
-                    <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                      <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: col.color, marginTop: '9px', flexShrink: 0 }} />
-                      <span className="font-sans" style={{ fontSize: '15px', color: '#4A5568', lineHeight: 1.65 }}>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            </AnimatedSection>
-          ))}
-        </div>
+        {/* Gold dots accent — large / small / large */}
+        <AnimatedSection delay={0.25}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '32px',
+            marginTop: '72px',
+            paddingTop: '48px',
+          }}>
+            {/* Large dot */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0 }}
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: '#C9A84C',
+                boxShadow: '0 0 24px rgba(201,168,76,0.5)',
+              }}
+            />
+            {/* Small dot */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: '#C9A84C',
+                boxShadow: '0 0 16px rgba(201,168,76,0.4)',
+              }}
+            />
+            {/* Large dot */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: '#C9A84C',
+                boxShadow: '0 0 24px rgba(201,168,76,0.5)',
+              }}
+            />
+          </div>
+        </AnimatedSection>
       </div>
     </section>
   );

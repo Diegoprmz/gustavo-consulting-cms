@@ -113,7 +113,7 @@ export default function Clientes() {
 
         {/* Marquee — desktop */}
         <div className="hidden md:block overflow-hidden" style={{ marginBottom: '52px' }}>
-          <div className="marquee-track-slow" style={{ width: 'max-content' }}>
+          <div style={{ animation: 'marquee 36.8s linear infinite', display: 'flex', width: 'max-content' }}>
             {doubled.map((logo, i) => (
               <LogoItem key={`${logo.name}-${i}`} logo={logo} />
             ))}

@@ -65,22 +65,27 @@ export default function Universidades() {
 
       {/* Full-width marquee */}
       <div className="overflow-hidden" style={{ marginBottom: '0' }}>
-        <div className="marquee-track" style={{ width: 'max-content', gap: '0' }}>
+        <div style={{ animation: 'marquee 36.8s linear infinite', display: 'flex', width: 'max-content' }}>
           {doubled.map((uni, i) => (
             <motion.div
               key={`${uni.name}-${i}`}
-              whileHover={{ scale: 1.08 }}
+              whileHover={{ scale: 1.1 }}
               transition={{ duration: 0.25 }}
-              className="logo-item flex items-center justify-center flex-shrink-0"
-              style={{ width: '140px', height: '80px', marginRight: '48px' }}
+              className="flex items-center justify-center flex-shrink-0"
+              style={{
+                width: '180px',
+                height: '90px',
+                marginRight: '64px',
+                cursor: 'pointer'
+              }}
             >
               <Image
                 src={uni.src}
                 alt={uni.name}
-                width={110}
-                height={55}
+                width={140}
+                height={70}
                 className="object-contain"
-                style={{ maxWidth: '110px', maxHeight: '55px' }}
+                style={{ maxWidth: '140px', maxHeight: '70px' }}
               />
             </motion.div>
           ))}

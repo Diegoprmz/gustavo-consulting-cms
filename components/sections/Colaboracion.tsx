@@ -33,8 +33,6 @@ export default function Colaboracion() {
       <div className="max-w-[1000px] mx-auto px-5 md:px-8">
 
         <AnimatedSection>
-          <span className="label-olive-light" style={{ marginBottom: '20px', display: 'inline-flex' }} />
-          <div style={{ width: '28px', height: '1.5px', background: 'rgba(201,168,76,0.6)', marginBottom: '20px' }} />
           <h2
             className="font-serif text-white"
             style={{
@@ -42,7 +40,7 @@ export default function Colaboracion() {
               fontWeight: 700,
               lineHeight: 0.95,
               letterSpacing: '-0.02em',
-              marginBottom: '8px',
+              marginBottom: '2px',
             }}
           >
             Formas de
@@ -70,11 +68,9 @@ export default function Colaboracion() {
           {formas.map((f, i) => (
             <AnimatedSection key={f.num} delay={i * 0.12}>
               <motion.div
-                whileHover={{ backgroundColor: 'rgba(255,255,255,0.05)', paddingLeft: '12px' }}
+                whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)', paddingLeft: '12px' }}
                 transition={{ duration: 0.25 }}
                 style={{
-                  borderTop: '1px solid rgba(201,168,76,0.2)',
-                  borderBottom: i === formas.length - 1 ? '1px solid rgba(201,168,76,0.2)' : 'none',
                   paddingTop: '36px',
                   paddingBottom: '36px',
                   borderRadius: '4px',

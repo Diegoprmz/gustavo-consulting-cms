@@ -5,17 +5,17 @@ import AnimatedSection from '@/components/ui/AnimatedSection';
 
 const roles = [
   {
-    label: 'CONSEJERO CORPORATIVO',
+    label: 'CONSEJERO EMPRESARIAL',
     description:
       'Acompañamiento a consejos de administración y comités directivos en la toma de decisiones estratégicas. Integro la perspectiva del cliente en la agenda del consejo, asegurando que las decisiones de alto nivel estén alineadas con la realidad del mercado.',
   },
   {
-    label: 'CONSULTOR EMPRESARIAL',
+    label: 'CONSULTOR',
     description:
       'Diagnóstico y rediseño de la propuesta de valor, modelo de negocio y estrategia comercial. Trabajo directamente con equipos directivos en procesos de transformación, aportando metodología y perspectiva externa para acelerar resultados.',
   },
   {
-    label: 'PROFESOR EJECUTIVO',
+    label: 'EDUCACIÓN EJECUTIVA',
     description:
       'Diseño e impartición de programas de alta dirección en estrategia centrada en el cliente, liderazgo y transformación organizacional. Colaboro con la Universidad Anáhuac para desarrollar directivos con visión estratégica integrada.',
   },
