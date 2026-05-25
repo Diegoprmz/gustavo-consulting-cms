@@ -5,6 +5,7 @@ import Trayectoria from '@/components/sections/Trayectoria';
 import Universidades from '@/components/sections/Universidades';
 import Clientes from '@/components/sections/Clientes';
 import Libro from '@/components/sections/Libro';
+import GradientTransition from '@/components/sections/GradientTransition';
 import Colaboracion from '@/components/sections/Colaboracion';
 import Concepto from '@/components/sections/Concepto';
 import ElProblema from '@/components/sections/ElProblema';
@@ -27,6 +28,7 @@ export default function Home() {
         <Universidades />
         <Clientes />
         <Libro />
+        <GradientTransition />
         <Colaboracion />
         <Concepto />
         <ElProblema />
