@@ -186,12 +186,7 @@ body {
   font-family: var(--font-source-sans), Arial, sans-serif;
 }
 .label-olive::before {
-  content: '';
-  display: inline-block;
-  width: 28px;
-  height: 1.5px;
-  background: #6A8F7B;
-  flex-shrink: 0;
+  display: none;
 }
 
 /* Label variant for dark backgrounds */
@@ -207,12 +202,7 @@ body {
   font-family: var(--font-source-sans), Arial, sans-serif;
 }
 .label-olive-light::before {
-  content: '';
-  display: inline-block;
-  width: 28px;
-  height: 1.5px;
-  background: rgba(106,143,123,0.9);
-  flex-shrink: 0;
+  display: none;
 }
 
 /* ─── Card hover lift ────────────────────────────────── */
