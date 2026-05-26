@@ -36,9 +36,6 @@ export default function Articulos() {
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
 
         <AnimatedSection>
-          <span className="label-olive" style={{ marginBottom: '16px', display: 'inline-flex' }}>
-            Artículos
-          </span>
           <h2
             className="font-serif"
             style={{ fontSize: 'clamp(28px, 3.2vw, 40px)', color: '#243A4D', fontWeight: 700, lineHeight: 1.2, marginBottom: '10px' }}

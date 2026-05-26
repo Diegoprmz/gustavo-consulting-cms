@@ -276,14 +276,9 @@ body {
   animation: fadeInUp 0.7s ease-out both;
 }
 
-/* ─── Logos grayscale → color on hover ──────────────── */
+/* ─── Logos in full color ──────────────── */
 .logo-item {
-  filter: grayscale(80%) opacity(0.65);
-  transition: filter 0.35s ease, transform 0.3s ease, opacity 0.3s ease;
-}
-.logo-item:hover {
   filter: grayscale(0%) opacity(1);
-  transform: scale(1.07);
 }
 
 /* ─── Number highlight (big numbers) ────────────────── */

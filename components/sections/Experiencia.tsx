@@ -5,7 +5,7 @@ import AnimatedSection from '@/components/ui/AnimatedSection';
 
 const roles = [
   {
-    label: 'CONSEJERO EMPRESARIAL',
+    label: 'CONSEJERO',
     description:
       'Acompañamiento a consejos de administración y comités directivos en la toma de decisiones estratégicas. Integro la perspectiva del cliente en la agenda del consejo, asegurando que las decisiones de alto nivel estén alineadas con la realidad del mercado.',
   },
@@ -35,9 +35,6 @@ export default function Experiencia() {
 
         <AnimatedSection>
           <div style={{ marginBottom: '72px' }}>
-            <span className="label-olive" style={{ marginBottom: '20px', display: 'inline-flex' }}>
-              Trayectoria profesional
-            </span>
             <h2
               className="font-serif"
               style={{

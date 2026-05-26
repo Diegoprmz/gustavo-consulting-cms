@@ -3,39 +3,6 @@
 import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
-const columns = [
-  {
-    label: 'No es',
-    color: '#6B7280',
-    items: [
-      'Un programa de servicio al cliente',
-      'Una campaña de marketing',
-      'Un slogan corporativo',
-      'Una iniciativa aislada',
-    ],
-  },
-  {
-    label: 'Es',
-    color: '#6A8F7B',
-    items: [
-      'Una decisión estratégica',
-      'Un modelo de negocio completo',
-      'Una cultura organizacional',
-      'El motor de la rentabilidad',
-    ],
-  },
-  {
-    label: 'Se mide',
-    color: '#C9A84C',
-    items: [
-      'En retención de clientes',
-      'En rentabilidad por cliente',
-      'En crecimiento sostenible',
-      'En coherencia de la propuesta',
-    ],
-  },
-];
-
 export default function Concepto() {
   return (
     <section
@@ -46,12 +13,6 @@ export default function Concepto() {
 
         {/* Header */}
         <div style={{ maxWidth: '820px', marginBottom: '80px' }}>
-          <AnimatedSection>
-            <span className="label-olive" style={{ marginBottom: '32px', display: 'inline-flex' }}>
-              El concepto
-            </span>
-          </AnimatedSection>
-
           <AnimatedSection delay={0.1}>
             <h2 className="font-serif" style={{ lineHeight: 1.2, marginBottom: '24px' }}>
               <span
@@ -89,17 +50,15 @@ export default function Concepto() {
           </AnimatedSection>
         </div>
 
-        {/* Gold dots accent — large / small / large */}
+        {/* Gold dots accent */}
         <AnimatedSection delay={0.25}>
           <div style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             gap: '32px',
-            marginTop: '72px',
             paddingTop: '48px',
           }}>
-            {/* Large dot */}
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -113,7 +72,6 @@ export default function Concepto() {
                 boxShadow: '0 0 24px rgba(201,168,76,0.5)',
               }}
             />
-            {/* Small dot */}
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -127,7 +85,6 @@ export default function Concepto() {
                 boxShadow: '0 0 16px rgba(201,168,76,0.4)',
               }}
             />
-            {/* Large dot */}
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -143,6 +100,7 @@ export default function Concepto() {
             />
           </div>
         </AnimatedSection>
+
       </div>
     </section>
   );

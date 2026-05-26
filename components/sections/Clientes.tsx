@@ -40,10 +40,8 @@ const doubled = [...logos, ...logos];
 function LogoItem({ logo }: { logo: typeof logos[0] }) {
   return (
     <motion.div
-      whileHover={{ scale: 1.08, filter: 'grayscale(0%) opacity(1)' }}
-      transition={{ duration: 0.28 }}
       className="logo-item flex items-center justify-center flex-shrink-0"
-      style={{ width: '160px', height: '90px', marginRight: '64px' }}
+      style={{ width: '220px', height: '120px', marginRight: '80px' }}
     >
       <Image
         src={logo.src}
@@ -51,7 +49,7 @@ function LogoItem({ logo }: { logo: typeof logos[0] }) {
         width={logo.w}
         height={60}
         className="object-contain"
-        style={{ maxWidth: '150px', maxHeight: '80px' }}
+        style={{ maxWidth: '200px', maxHeight: '100px' }}
       />
     </motion.div>
   );
@@ -67,12 +65,6 @@ export default function Clientes() {
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
 
         {/* Heading */}
-        <AnimatedSection>
-          <div style={{ marginBottom: '12px' }}>
-            <span className="label-olive">Empresas que han confiado en este enfoque</span>
-          </div>
-        </AnimatedSection>
-
         <AnimatedSection delay={0.1}>
           <h2
             className="font-serif"
@@ -111,23 +103,13 @@ export default function Clientes() {
         {/* Separator line */}
         <div style={{ width: '100%', height: '1px', backgroundColor: 'rgba(106,143,123,0.15)', marginBottom: '52px' }} />
 
-        {/* Marquee — desktop */}
-        <div className="hidden md:block overflow-hidden" style={{ marginBottom: '52px' }}>
+        {/* Marquee — all devices */}
+        <div className="overflow-hidden" style={{ marginBottom: '52px' }}>
           <div style={{ animation: 'marquee 36.8s linear infinite', display: 'flex', width: 'max-content' }}>
             {doubled.map((logo, i) => (
               <LogoItem key={`${logo.name}-${i}`} logo={logo} />
             ))}
           </div>
-        </div>
-
-        {/* Grid — mobile */}
-        <div className="grid grid-cols-3 gap-6 md:hidden" style={{ marginBottom: '48px' }}>
-          {mobileGrid.map((logo) => (
-            <div key={logo.name} className="logo-item flex items-center justify-center" style={{ height: '64px' }}>
-              <Image src={logo.src} alt={logo.name} width={logo.w} height={50}
-                className="object-contain" style={{ maxWidth: '90px', maxHeight: '48px' }} />
-            </div>
-          ))}
         </div>
 
         {/* Separator line */}

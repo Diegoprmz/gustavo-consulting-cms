@@ -9,7 +9,6 @@ import GradientTransition from '@/components/sections/GradientTransition';
 import Colaboracion from '@/components/sections/Colaboracion';
 import Concepto from '@/components/sections/Concepto';
 import ElProblema from '@/components/sections/ElProblema';
-import ElEnfoque from '@/components/sections/ElEnfoque';
 import Articulos from '@/components/sections/Articulos';
 import Conversemos from '@/components/sections/Conversemos';
 import Footer from '@/components/sections/Footer';
@@ -32,7 +31,6 @@ export default function Home() {
         <Colaboracion />
         <Concepto />
         <ElProblema />
-        <ElEnfoque />
         <Articulos />
         <Conversemos />
       </main>

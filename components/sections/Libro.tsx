@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export default function Libro() {
@@ -20,54 +20,81 @@ export default function Libro() {
   return (
     <section
       id="libro"
-      style={{ backgroundColor: '#243A4D', paddingTop: '110px', paddingBottom: '110px' }}
+      style={{ background: 'linear-gradient(to bottom, #243A4D 0%, #243A4D 85%, #3D5C4A 100%)', paddingTop: '110px', paddingBottom: '110px' }}
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
 
           {/* Left: Animated Book */}
           <AnimatedSection>
             <div className="flex justify-center md:justify-start">
+              {/* Perspective wrapper */}
               <div
                 style={{ perspective: '1400px', cursor: 'pointer' }}
                 onClick={handleFlip}
               >
+                {/* Rotating book */}
                 <motion.div
-                  className="relative preserve-3d"
+                  className="preserve-3d"
                   animate={{ rotateY: rotation }}
                   transition={{ duration: 0.28, ease: 'easeInOut' }}
-                  whileHover={{ scale: 1.06, transition: { duration: 0.25 } }}
+                  whileHover={{ scale: 1.04, transition: { duration: 0.25 } }}
                   style={{
-                    width: '260px',
-                    height: '364px',
+                    width: '280px',
+                    height: '394px',
                     transformStyle: 'preserve-3d',
-                    boxShadow: '0 30px 70px rgba(0,0,0,0.35)',
-                    borderRadius: '4px',
+                    position: 'relative',
+                    boxShadow: '0 24px 60px rgba(0,0,0,0.45)',
+                    borderRadius: '6px',
                   }}
                 >
+                  {/* Front face — frame + floating image */}
                   <div
                     className="backface-hidden absolute inset-0"
-                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', borderRadius: '4px', overflow: 'hidden' }}
+                    style={{
+                      backfaceVisibility: 'hidden',
+                      WebkitBackfaceVisibility: 'hidden',
+                      borderRadius: '6px',
+                      backgroundColor: '#111827',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '16px',
+                    }}
                   >
                     <Image
-                      src="/images/libro/portada.png"
+                      src="/assets/libro_portada.jpg"
                       alt="Customer Centricity — portada"
-                      width={260}
-                      height={364}
-                      className="block w-full h-full object-cover"
+                      width={248}
+                      height={350}
+                      className="block"
+                      style={{ borderRadius: '3px', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
                       priority
                     />
                   </div>
+
+                  {/* Back face — frame + floating image */}
                   <div
                     className="absolute inset-0"
-                    style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)', borderRadius: '4px', overflow: 'hidden' }}
+                    style={{
+                      backfaceVisibility: 'hidden',
+                      WebkitBackfaceVisibility: 'hidden',
+                      transform: 'rotateY(180deg)',
+                      borderRadius: '6px',
+                      backgroundColor: '#111827',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '16px',
+                    }}
                   >
                     <Image
-                      src="/images/libro/portada.png"
+                      src="/assets/libro_contraportada.jpg"
                       alt="Customer Centricity — contraportada"
-                      width={260}
-                      height={364}
-                      className="block w-full h-full object-cover"
+                      width={248}
+                      height={350}
+                      className="block"
+                      style={{ borderRadius: '3px', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
                     />
                   </div>
                 </motion.div>
@@ -78,26 +105,18 @@ export default function Libro() {
           {/* Right: Text with hierarchy */}
           <AnimatedSection delay={0.15}>
 
-            {/* Section kicker */}
-            <p
-              className="font-sans font-semibold"
-              style={{ fontSize: '11px', color: '#6A8F7B', letterSpacing: '0.28em', textTransform: 'uppercase', opacity: 0.85, marginBottom: '20px' }}
-            >
-              — Libro
-            </p>
-
             {/* Gold title */}
             <h2
               className="font-serif gold-shimmer"
               style={{
-                fontSize: 'clamp(48px, 6vw, 76px)',
+                fontSize: 'clamp(54px, 7vw, 88px)',
                 fontWeight: 700,
-                lineHeight: 0.95,
+                lineHeight: 1.1,
                 letterSpacing: '-0.02em',
                 marginBottom: '24px',
               }}
             >
-              Customer<br />Centricity
+              Customer<br /><span style={{ fontStyle: 'italic' }}>Centricity</span>
             </h2>
 
             {/* Gold divider */}

@@ -28,7 +28,7 @@ export default function Colaboracion() {
   return (
     <section
       id="colaboracion"
-      style={{ backgroundColor: '#3D5C4A', paddingTop: '110px', paddingBottom: '110px' }}
+      style={{ backgroundColor: '#3D5C4A', paddingTop: '110px', paddingBottom: '110px', marginTop: '-2px', position: 'relative', zIndex: 1 }}
     >
       <div className="max-w-[1000px] mx-auto px-5 md:px-8">
 
@@ -43,9 +43,9 @@ export default function Colaboracion() {
               marginBottom: '2px',
             }}
           >
-            Formas de colaboración
+            Formas de <span style={{ color: '#C9A84C' }}>colaboración</span>
           </h2>
-          <p className="font-sans" style={{ fontSize: '16px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginBottom: '56px', maxWidth: '520px' }}>
+          <p className="font-sans text-white" style={{ fontSize: '16px', lineHeight: 1.6, marginBottom: '56px', maxWidth: '520px', opacity: 0.8 }}>
             Cada intervención se diseña en función del contexto del negocio.
           </p>
         </AnimatedSection>
@@ -54,30 +54,41 @@ export default function Colaboracion() {
           {formas.map((f, i) => (
             <AnimatedSection key={f.num} delay={i * 0.12}>
               <motion.div
-                whileHover={{ backgroundColor: 'rgba(255,255,255,0.04)', paddingLeft: '12px' }}
-                transition={{ duration: 0.25 }}
+                whileHover={{
+                  scale: 1.08,
+                  backgroundColor: '#1F3630',
+                  boxShadow: '0 12px 28px rgba(36,58,77,0.15)',
+                  y: -2,
+                  paddingTop: '48px',
+                  paddingBottom: '48px',
+                  paddingLeft: '28px',
+                  paddingRight: '28px',
+                }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
                 style={{
                   paddingTop: '36px',
                   paddingBottom: '36px',
-                  borderRadius: '4px',
-                  transition: 'all 0.25s ease',
+                  paddingLeft: '16px',
+                  paddingRight: '16px',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
                 }}
               >
                 <div className="flex items-start gap-7 md:gap-10">
                   <span
                     className="font-serif font-bold flex-shrink-0"
-                    style={{ fontSize: '24px', color: '#C9A84C', minWidth: '36px', lineHeight: 1 }}
+                    style={{ fontSize: '32px', color: '#C9A84C', minWidth: '48px', lineHeight: 1, fontWeight: 800 }}
                   >
                     {f.num}
                   </span>
                   <div>
                     <h3
-                      className="font-serif text-white"
-                      style={{ fontSize: 'clamp(20px, 2vw, 24px)', lineHeight: 1.25, fontWeight: 600, marginBottom: '12px' }}
+                      className="font-serif"
+                      style={{ fontSize: 'clamp(22px, 2.2vw, 28px)', lineHeight: 1.3, fontWeight: 700, marginBottom: '14px', color: '#C9A84C' }}
                     >
                       {f.titulo}
                     </h3>
-                    <p className="font-sans" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.78 }}>
+                    <p className="font-sans text-white" style={{ fontSize: '16px', lineHeight: 1.8, fontWeight: 500, opacity: 0.9 }}>
                       {f.descripcion}
                     </p>
                   </div>
@@ -102,6 +113,7 @@ export default function Colaboracion() {
                 letterSpacing: '0.1em',
                 textDecoration: 'none',
                 textTransform: 'uppercase',
+                backgroundColor: '#243A4D',
               }}
             >
               Hablemos de tu caso →

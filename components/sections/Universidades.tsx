@@ -39,9 +39,6 @@ export default function Universidades() {
 
         <AnimatedSection>
           <div style={{ textAlign: 'center', marginBottom: '52px' }}>
-            <span className="label-olive" style={{ justifyContent: 'center', marginBottom: '16px', display: 'inline-flex' }}>
-              Educación Ejecutiva
-            </span>
             <h2
               className="font-serif"
               style={{
