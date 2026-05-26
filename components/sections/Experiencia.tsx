@@ -50,10 +50,10 @@ export default function Experiencia() {
                 letterSpacing: '-0.02em',
               }}
             >
-              Experiencia aplicada
+              Áreas de 
               <br />
               <span style={{ fontWeight: 400, fontStyle: 'italic', color: '#6A8F7B' }}>
-                en decisiones reales.
+                Especialización.
               </span>
             </h2>
           </div>
@@ -64,17 +64,10 @@ export default function Experiencia() {
             <AnimatedSection key={role.label} delay={i * 0.12}>
               <motion.div
                 className="relative md:px-8"
-                whileHover={{ backgroundColor: 'rgba(36,58,77,0.04)', translateY: -4 }}
+                whileHover={{ backgroundColor: 'rgba(36,58,77,0.08)', translateY: -4, color: '#C9A84C' }}
                 transition={{ duration: 0.25 }}
                 style={{ padding: '24px 16px', cursor: 'default' }}
               >
-                {i > 0 && (
-                  <div
-                    className="hidden md:block absolute left-0 top-0 h-full"
-                    style={{ width: '1px', background: 'linear-gradient(to bottom, transparent, rgba(106,143,123,0.3), transparent)' }}
-                  />
-                )}
-                <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg, #C9A84C, rgba(201,168,76,0.2))', marginBottom: '20px' }} />
                 <p
                   className="font-sans font-semibold"
                   style={{ fontSize: '11px', color: '#C9A84C', letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: '16px' }}

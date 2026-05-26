@@ -47,10 +47,9 @@ export default function Concepto() {
         {/* Header */}
         <div style={{ maxWidth: '820px', marginBottom: '80px' }}>
           <AnimatedSection>
-            <span className="label-olive" style={{ marginBottom: '20px', display: 'inline-flex' }}>
+            <span className="label-olive" style={{ marginBottom: '32px', display: 'inline-flex' }}>
               El concepto
             </span>
-            <div className="gold-divider" style={{ marginTop: '20px', marginBottom: '32px' }} />
           </AnimatedSection>
 
           <AnimatedSection delay={0.1}>

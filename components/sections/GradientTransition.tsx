@@ -10,9 +10,6 @@ export default function GradientTransition() {
     offset: ['start center', 'end center'],
   });
 
-  // Gradient background from navy (#243A4D) to olive (#3D5C4A)
-  const backgroundOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
   return (
     <section
       ref={sectionRef}
@@ -20,17 +17,9 @@ export default function GradientTransition() {
         position: 'relative',
         height: '400px',
         overflow: 'hidden',
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#243A4D',
       }}
     >
-      <motion.div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(180deg, #243A4D 0%, #2F495A 50%, #3D5C4A 100%)',
-          opacity: backgroundOpacity,
-        }}
-      />
 
       {/* Animated scroll line indicator */}
       <motion.div

@@ -103,41 +103,6 @@ export default function Trayectoria() {
           </AnimatedSection>
         </div>
       </div>
-
-      {/* Company logo marquee strip */}
-      <div
-        style={{
-          borderTop: '1px solid rgba(106,143,123,0.15)',
-          borderBottom: '1px solid rgba(106,143,123,0.15)',
-          backgroundColor: '#EBEBEB',
-          padding: '20px 0',
-          overflow: 'hidden',
-        }}
-      >
-        <div className="marquee-track-slow" style={{ gap: '0' }}>
-          {[...companies, ...companies].map((name, i) => (
-            <div
-              key={i}
-              className="font-sans font-semibold"
-              style={{
-                flexShrink: 0,
-                padding: '0 40px',
-                fontSize: '12px',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'rgba(36,58,77,0.35)',
-                whiteSpace: 'nowrap',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '40px',
-              }}
-            >
-              {name}
-              <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(201,168,76,0.4)', flexShrink: 0 }} />
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }

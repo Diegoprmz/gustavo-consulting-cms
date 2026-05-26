@@ -43,21 +43,7 @@ export default function Colaboracion() {
               marginBottom: '2px',
             }}
           >
-            Formas de
-          </h2>
-          <h2
-            className="font-serif"
-            style={{
-              fontSize: 'clamp(40px, 5vw, 62px)',
-              fontWeight: 300,
-              fontStyle: 'italic',
-              lineHeight: 0.95,
-              letterSpacing: '-0.02em',
-              color: '#C9A84C',
-              marginBottom: '20px',
-            }}
-          >
-            trabajo
+            Formas de colaboración
           </h2>
           <p className="font-sans" style={{ fontSize: '16px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginBottom: '56px', maxWidth: '520px' }}>
             Cada intervención se diseña en función del contexto del negocio.

@@ -90,26 +90,14 @@ export default function Libro() {
             <h2
               className="font-serif gold-shimmer"
               style={{
-                fontSize: 'clamp(36px, 4.5vw, 58px)',
-                fontWeight: 700,
-                lineHeight: 0.95,
-                letterSpacing: '-0.02em',
-                marginBottom: '8px',
-              }}
-            >
-              Customer
-            </h2>
-            <h2
-              className="font-serif gold-shimmer"
-              style={{
-                fontSize: 'clamp(36px, 4.5vw, 58px)',
+                fontSize: 'clamp(48px, 6vw, 76px)',
                 fontWeight: 700,
                 lineHeight: 0.95,
                 letterSpacing: '-0.02em',
                 marginBottom: '24px',
               }}
             >
-              Centricity
+              Customer<br />Centricity
             </h2>
 
             {/* Gold divider */}

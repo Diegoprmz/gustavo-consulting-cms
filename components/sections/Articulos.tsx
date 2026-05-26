@@ -54,7 +54,7 @@ export default function Articulos() {
           {articulos.map((a, i) => (
             <AnimatedSection key={a.slug} delay={i * 0.1}>
               <motion.article
-                whileHover={{ y: -6, boxShadow: '0 16px 40px rgba(36,58,77,0.12)' }}
+                whileHover={{ y: -6, boxShadow: '0 16px 40px rgba(36,58,77,0.12)', color: '#C9A84C' }}
                 transition={{ duration: 0.28 }}
                 className="bg-white rounded-xl overflow-hidden"
                 style={{ boxShadow: '0 2px 12px rgba(36,58,77,0.06)', height: '100%', display: 'flex', flexDirection: 'column' }}
