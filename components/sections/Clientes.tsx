@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/ui/AnimatedSection';
+import GoldDots from '@/components/ui/GoldDots';
 
 const logos = [
   { name: 'ADO',       src: '/images/logos/ADO.webp',          w: 120 },
@@ -34,86 +36,65 @@ const logos = [
   { name: 'ILP',       src: '/images/logos/ilp.webp',          w: 110 },
 ];
 
-const mobileGrid = logos.slice(0, 12);
 const doubled = [...logos, ...logos];
 
-function LogoItem({ logo }: { logo: typeof logos[0] }) {
-  return (
-    <motion.div
-      className="logo-item flex items-center justify-center flex-shrink-0"
-      style={{ width: '220px', height: '120px', marginRight: '80px' }}
-    >
-      <Image
-        src={logo.src}
-        alt={logo.name}
-        width={logo.w}
-        height={60}
-        className="object-contain"
-        style={{ maxWidth: '200px', maxHeight: '100px' }}
-      />
-    </motion.div>
-  );
-}
-
 export default function Clientes() {
+  const [paused, setPaused] = useState(false);
   return (
     <section
       id="clientes"
-      className="bg-white overflow-hidden"
-      style={{ paddingTop: '110px', paddingBottom: '110px' }}
+      style={{ backgroundColor: '#ffffff', paddingTop: '40px', paddingBottom: '60px', overflow: 'hidden' }}
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
 
-        {/* Heading */}
         <AnimatedSection delay={0.1}>
-          <h2
-            className="font-serif"
-            style={{
-              fontSize: 'clamp(52px, 7vw, 88px)',
-              fontWeight: 700,
-              color: '#243A4D',
-              lineHeight: 0.92,
-              letterSpacing: '-0.02em',
-              marginBottom: '16px',
-            }}
-          >
-            Clientes
-          </h2>
-        </AnimatedSection>
-
-        <AnimatedSection delay={0.15}>
-          <p
-            className="font-serif"
-            style={{
-              fontSize: 'clamp(17px, 2vw, 22px)',
-              color: '#6B7280',
-              fontStyle: 'italic',
-              fontWeight: 400,
-              marginBottom: '72px',
-              maxWidth: '600px',
-              lineHeight: 1.5,
-            }}
-          >
-            Resultados generados enfocándose en{' '}
-            <span style={{ color: '#C9A84C' }}>el cliente</span>{' '}
-            como eje de la estrategia.
-          </p>
-        </AnimatedSection>
-
-        {/* Separator line */}
-        <div style={{ width: '100%', height: '1px', backgroundColor: 'rgba(106,143,123,0.15)', marginBottom: '52px' }} />
-
-        {/* Marquee — all devices */}
-        <div className="overflow-hidden" style={{ marginBottom: '52px' }}>
-          <div style={{ animation: 'marquee 36.8s linear infinite', display: 'flex', width: 'max-content' }}>
-            {doubled.map((logo, i) => (
-              <LogoItem key={`${logo.name}-${i}`} logo={logo} />
-            ))}
+          <div style={{ textAlign: 'center', marginBottom: '52px' }}>
+            <h2
+              className="font-serif"
+              style={{ fontSize: 'clamp(42px, 5.5vw, 72px)', fontWeight: 700, color: '#243A4D', lineHeight: 1, marginBottom: '10px' }}
+            >
+              Clientes
+            </h2>
+            <p
+              className="font-serif"
+              style={{ fontSize: 'clamp(17px, 2vw, 22px)', fontStyle: 'italic', fontWeight: 400, color: '#6A8F7B' }}
+            >
+              con los que he trabajado
+            </p>
           </div>
-        </div>
+        </AnimatedSection>
 
-        {/* Separator line */}
-        <div style={{ width: '100%', height: '1px', backgroundColor: 'rgba(106,143,123,0.15)', marginBottom: '52px' }} />
+      </div>
+
+      {/* Marquee full-width — sin marcos */}
+      <div
+        className="overflow-hidden"
+        style={{ marginBottom: '0', cursor: paused ? 'default' : 'grab' }}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        <div style={{ animation: 'marquee 50s linear infinite', animationPlayState: paused ? 'paused' : 'running', display: 'flex', width: 'max-content' }}>
+          {doubled.map((logo, i) => (
+            <div
+              key={`${logo.name}-${i}`}
+              className="flex items-center justify-center flex-shrink-0"
+              style={{ width: '200px', height: '105px', marginRight: '60px' }}
+            >
+              <Image
+                src={logo.src}
+                alt={logo.name}
+                width={logo.w}
+                height={60}
+                className="object-contain"
+                style={{ maxWidth: '180px', maxHeight: '80px' }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-[1200px] mx-auto px-5 md:px-8">
+        <GoldDots my="40px" />
 
         <AnimatedSection delay={0.2}>
           <div className="text-center">

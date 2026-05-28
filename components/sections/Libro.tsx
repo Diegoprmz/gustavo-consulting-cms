@@ -20,7 +20,7 @@ export default function Libro() {
   return (
     <section
       id="libro"
-      style={{ background: 'linear-gradient(to bottom, #243A4D 0%, #243A4D 85%, #3D5C4A 100%)', paddingTop: '110px', paddingBottom: '110px' }}
+      style={{ backgroundColor: '#243A4D', paddingTop: '110px', paddingBottom: '110px' }}
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -127,9 +127,9 @@ export default function Libro() {
               className="font-serif text-white"
               style={{ fontSize: 'clamp(20px, 2.2vw, 26px)', fontWeight: 400, fontStyle: 'italic', lineHeight: 1.4, marginBottom: '24px' }}
             >
-              Un enfoque estructurado para integrar al{' '}
-              <span style={{ color: '#C9A84C' }}>cliente</span>{' '}
-              en la estrategia.
+              Comprender al cliente para construir{' '}
+              <span style={{ color: '#C9A84C' }}>valor, experiencias memorables</span>{' '}
+              y crecimiento sostenible.
             </h3>
 
             {/* Description */}
@@ -137,19 +137,11 @@ export default function Libro() {
               className="font-sans text-white"
               style={{ fontSize: '15px', lineHeight: 1.82, opacity: 0.88, marginBottom: '14px' }}
             >
-              Este libro nace de más de treinta años de trabajo con empresas que buscaban
-              crecer, pero que no lograban conectar genuinamente con sus clientes.
-              Es una guía estructurada y práctica para directivos que quieren llevar al
-              <span style={{ color: '#C9A84C', fontStyle: 'italic' }}> cliente al centro de la estrategia</span>,
-              no como discurso, sino como transformación real.
-            </p>
-            <p
-              className="font-sans text-white"
-              style={{ fontSize: '15px', lineHeight: 1.82, opacity: 0.85, marginBottom: '36px' }}
-            >
-              A través de cinco dimensiones —
-              <span style={{ color: '#C9A84C', fontStyle: 'italic' }}> estrategia, cultura, operación, experiencia y métricas</span>{' '}
-              — el libro ofrece un marco integrador que permite alinear toda la organización.
+              Este libro reúne{' '}
+              <span style={{ color: '#C9A84C', fontStyle: 'italic' }}>experiencia, reflexión estratégica y aplicación práctica</span>{' '}
+              para ayudar a las organizaciones a construir una verdadera orientación al cliente, alineando{' '}
+              <span style={{ color: '#C9A84C', fontStyle: 'italic' }}>estrategia, cultura, operación y experiencia</span>{' '}
+              como base del crecimiento sostenible.
             </p>
 
             {/* CTA */}

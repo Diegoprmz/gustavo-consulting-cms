@@ -2,22 +2,23 @@
 
 import { motion } from 'framer-motion';
 import AnimatedSection from '@/components/ui/AnimatedSection';
+import GoldDots from '@/components/ui/GoldDots';
 
 const roles = [
   {
     label: 'CONSEJERO',
     description:
-      'Acompañamiento a consejos de administración y comités directivos en la toma de decisiones estratégicas. Integro la perspectiva del cliente en la agenda del consejo, asegurando que las decisiones de alto nivel estén alineadas con la realidad del mercado.',
+      'Las decisiones más importantes de una empresa no deberían tomarse lejos del cliente. Acompaño a consejos y alta dirección a convertir la visión estratégica del cliente en una ventaja competitiva, crecimiento sostenible y rentabilidad.',
   },
   {
     label: 'CONSULTOR',
     description:
-      'Diagnóstico y rediseño de la propuesta de valor, modelo de negocio y estrategia comercial. Trabajo directamente con equipos directivos en procesos de transformación, aportando metodología y perspectiva externa para acelerar resultados.',
+      'Trabajo con equipos directivos en procesos de transformación estratégica que convierten la orientación al cliente en creación de valor, crecimiento sostenible y mayor rentabilidad.',
   },
   {
     label: 'EDUCACIÓN EJECUTIVA',
     description:
-      'Diseño e impartición de programas de alta dirección en estrategia centrada en el cliente, liderazgo y transformación organizacional. Colaboro con la Universidad Anáhuac para desarrollar directivos con visión estratégica integrada.',
+      'La transformación de una empresa comienza por la transformación de sus líderes. Diseño programas de educación ejecutiva para desarrollar directivos con visión estratégica, orientación al cliente y capacidad de transformación.',
   },
 ];
 
@@ -26,15 +27,15 @@ export default function Experiencia() {
     <section
       id="experiencia"
       style={{
-        backgroundColor: '#ECECEC',
-        paddingTop: '110px',
-        paddingBottom: '110px',
+        backgroundColor: '#ffffff',
+        paddingTop: '60px',
+        paddingBottom: '40px',
       }}
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
 
         <AnimatedSection>
-          <div style={{ marginBottom: '72px' }}>
+          <div style={{ marginBottom: '36px' }}>
             <h2
               className="font-serif"
               style={{
@@ -56,7 +57,9 @@ export default function Experiencia() {
           </div>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-0">
+        <GoldDots my="0px" />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-0" style={{ marginTop: '8px' }}>
           {roles.map((role, i) => (
             <AnimatedSection key={role.label} delay={i * 0.12}>
               <motion.div
@@ -67,17 +70,18 @@ export default function Experiencia() {
               >
                 <p
                   className="font-sans font-semibold"
-                  style={{ fontSize: '11px', color: '#C9A84C', letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: '16px' }}
+                  style={{ fontSize: '13px', color: '#C9A84C', letterSpacing: '0.24em', textTransform: 'uppercase', marginBottom: '16px' }}
                 >
                   {role.label}
                 </p>
-                <p className="font-sans" style={{ fontSize: '15px', lineHeight: 1.82, color: '#4A5568' }}>
+                <p className="font-sans" style={{ fontSize: '17px', lineHeight: 1.82, color: '#4A5568' }}>
                   {role.description}
                 </p>
               </motion.div>
             </AnimatedSection>
           ))}
         </div>
+        <GoldDots />
       </div>
     </section>
   );

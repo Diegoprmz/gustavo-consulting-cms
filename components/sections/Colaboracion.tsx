@@ -55,21 +55,13 @@ export default function Colaboracion() {
             <AnimatedSection key={f.num} delay={i * 0.12}>
               <motion.div
                 whileHover={{
-                  scale: 1.08,
                   backgroundColor: '#1F3630',
-                  boxShadow: '0 12px 28px rgba(36,58,77,0.15)',
-                  y: -2,
-                  paddingTop: '48px',
-                  paddingBottom: '48px',
-                  paddingLeft: '28px',
-                  paddingRight: '28px',
+                  boxShadow: '0 12px 28px rgba(0,0,0,0.25)',
+                  y: -5,
                 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
                 style={{
-                  paddingTop: '36px',
-                  paddingBottom: '36px',
-                  paddingLeft: '16px',
-                  paddingRight: '16px',
+                  padding: '36px 28px',
                   borderRadius: '12px',
                   cursor: 'pointer',
                 }}

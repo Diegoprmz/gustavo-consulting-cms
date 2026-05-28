@@ -17,7 +17,9 @@ interface FormData {
 const inputBase: React.CSSProperties = {
   width: '100%',
   backgroundColor: 'rgba(255,255,255,0.07)',
-  border: '1px solid rgba(255,255,255,0.12)',
+  borderWidth: '1px',
+  borderStyle: 'solid',
+  borderColor: 'rgba(255,255,255,0.12)',
   borderRadius: '8px',
   padding: '14px 16px',
   fontFamily: 'var(--font-source-sans), Arial, sans-serif',
@@ -148,10 +150,13 @@ export default function Conversemos() {
         reset();
         setTimeout(() => setStatus('idle'), 5000);
       } else {
+        const body = await res.json().catch(() => ({}));
+        console.error('[Conversemos] Error del servidor:', res.status, body);
         setStatus('error');
         setTimeout(() => setStatus('idle'), 4000);
       }
-    } catch {
+    } catch (err) {
+      console.error('[Conversemos] Error de red:', err);
       setStatus('error');
       setTimeout(() => setStatus('idle'), 4000);
     }
@@ -208,7 +213,9 @@ export default function Conversemos() {
             backgroundColor: '#243A4D',
             borderRadius: '16px',
             padding: '48px 40px',
-            border: '1px solid rgba(255,255,255,0.08)',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: 'rgba(255,255,255,0.08)',
           }}
         >
           <form onSubmit={handleSubmit(onSubmit)} noValidate>

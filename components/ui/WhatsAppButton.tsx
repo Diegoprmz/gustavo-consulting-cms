@@ -21,7 +21,7 @@ export default function WhatsAppButton() {
 
   return (
     <motion.a
-      href="https://wa.me/5255540632656?text=Hola%20Gustavo%2C%20me%20gustaría%20agendar%20una%20conversación."
+      href="https://wa.me/525554063265?text=Hola%2C%20buen%20d%C3%ADa.%20Me%20gustar%C3%ADa%20agendar%20una%20charla%20estrat%C3%A9gica%20con%20usted"
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float"

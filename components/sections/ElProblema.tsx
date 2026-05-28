@@ -24,8 +24,9 @@ function DimensionCard({ num, titulo, descripcion }: { num: string; titulo: stri
         cursor: 'pointer',
         display: 'flex',
         flexDirection: 'column',
+        height: '100%',
         backgroundColor: hovered ? '#0D2E5C' : 'rgba(255,255,255,0.06)',
-        transform: hovered ? 'scale(1.08)' : 'scale(1)',
+        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
         transition: 'background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
         boxShadow: hovered ? '0 16px 40px rgba(0,0,0,0.35)' : '0 1px 3px rgba(0,0,0,0.2)',
       }}
@@ -111,9 +112,9 @@ export default function ElProblema() {
         </AnimatedSection>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 items-stretch">
           {dimensiones.map((d, i) => (
-            <AnimatedSection key={d.num} delay={0.1 + i * 0.08}>
+            <AnimatedSection key={d.num} delay={0.1 + i * 0.08} className="h-full">
               <DimensionCard {...d} />
             </AnimatedSection>
           ))}

@@ -14,7 +14,7 @@ export default function Trayectoria() {
   return (
     <section
       id="trayectoria"
-      style={{ backgroundColor: '#F5F5F5', paddingTop: '120px', paddingBottom: '0' }}
+      style={{ backgroundColor: '#ffffff', paddingTop: '120px', paddingBottom: '0' }}
     >
       <div className="max-w-[1200px] mx-auto px-5 md:px-8" style={{ paddingBottom: '80px' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
@@ -69,17 +69,14 @@ export default function Trayectoria() {
                   marginBottom: '32px',
                 }}
               >
-                Más de tres décadas conectando estrategia con ejecución.
+                Más de tres décadas acompañando decisiones estratégicas, transformación organizacional y desarrollo directivo.
               </h2>
 
               <p
                 className="font-sans"
                 style={{ fontSize: '16px', lineHeight: 1.82, color: '#4A5568', marginBottom: '36px' }}
               >
-                Trabajo con empresas en México y Latinoamérica desde tres perspectivas
-                complementarias: como consejero corporativo en decisiones estratégicas,
-                como consultor empresarial en procesos de transformación, y como profesor
-                en programas de educación ejecutiva.
+                A lo largo de mi trayectoria he trabajado junto a empresas, consejos de administración y líderes en México y Latinoamérica, acompañando procesos de transformación estratégica, crecimiento organizacional y desarrollo de liderazgo ejecutivo.
               </p>
 
               <motion.a
