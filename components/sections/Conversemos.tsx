@@ -6,11 +6,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
 interface FormData {
-  nombre: string;
+  name: string;
   email: string;
-  empresa: string;
-  telefono: string;
-  mensaje: string;
+  company: string;
+  phone: string;
+  message: string;
 }
 
 /* ── Input styles ─────────────────────────────────────── */
@@ -220,13 +220,13 @@ export default function Conversemos() {
         >
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-              <FormField label="Nombre" error={errors.nombre?.message} delay={0.05}>
+              <FormField label="Nombre" error={errors.name?.message} delay={0.05}>
                 <StyledInput
                   type="text"
                   placeholder="Tu nombre"
-                  hasError={!!errors.nombre}
+                  hasError={!!errors.name}
                   onFocusChange={(f) => { if (f) setFormActive(true); }}
-                  {...register('nombre', {
+                  {...register('name', {
                     required: 'Este campo es requerido',
                     minLength: { value: 2, message: 'Mínimo 2 caracteres' },
                   })}
@@ -249,35 +249,35 @@ export default function Conversemos() {
                 />
               </FormField>
 
-              <FormField label="Empresa" error={errors.empresa?.message} delay={0.15}>
+              <FormField label="Empresa" error={errors.company?.message} delay={0.15}>
                 <StyledInput
                   type="text"
                   placeholder="Nombre de tu empresa"
-                  hasError={!!errors.empresa}
+                  hasError={!!errors.company}
                   onFocusChange={(f) => { if (f) setFormActive(true); }}
-                  {...register('empresa')}
+                  {...register('company')}
                 />
               </FormField>
 
-              <FormField label="Teléfono" error={errors.telefono?.message} delay={0.2}>
+              <FormField label="Teléfono" error={errors.phone?.message} delay={0.2}>
                 <StyledInput
                   type="tel"
                   placeholder="+52 (opcional)"
-                  hasError={!!errors.telefono}
+                  hasError={!!errors.phone}
                   onFocusChange={(f) => { if (f) setFormActive(true); }}
-                  {...register('telefono')}
+                  {...register('phone')}
                 />
               </FormField>
             </div>
 
             <div className="mb-6">
-              <FormField label="Tu mensaje" error={errors.mensaje?.message} delay={0.25}>
+              <FormField label="Tu mensaje" error={errors.message?.message} delay={0.25}>
                 <StyledTextarea
                   placeholder="Cuéntame brevemente tu reto"
                   rows={4}
-                  hasError={!!errors.mensaje}
+                  hasError={!!errors.message}
                   onFocusChange={(f) => { if (f) setFormActive(true); }}
-                  {...register('mensaje', {
+                  {...register('message', {
                     required: 'Este campo es requerido',
                     minLength: { value: 10, message: 'Mínimo 10 caracteres' },
                   })}

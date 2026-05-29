@@ -4,6 +4,7 @@ interface ContactPayload {
   name?: string;
   company?: string;
   email?: string;
+  phone?: string;
   service?: string;
   message?: string;
 }
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
 
     console.log('[contact] body recibido:', body);
 
-    const { name, company, email, service, message } = body;
+    const { name, company, email, phone, service, message } = body;
 
     if (!name || name.trim().length < 2) {
       return Response.json({ error: 'Nombre inválido' }, { status: 400 });
@@ -52,6 +53,7 @@ export async function POST(request: Request) {
     const safeName = escapeHtml(name.trim());
     const safeEmail = escapeHtml(email.trim());
     const safeCompany = company ? escapeHtml(company.trim()) : '';
+    const safePhone = phone ? escapeHtml(phone.trim()) : '';
     const safeService = service ? escapeHtml(SERVICE_LABELS[service] ?? service) : '';
     const safeMessage = escapeHtml(message.trim());
 
@@ -77,6 +79,7 @@ export async function POST(request: Request) {
                   <td style="padding: 8px 0; color: #243A4D; font-size: 14px;">${safeEmail}</td>
                 </tr>
                 ${safeCompany ? `<tr><td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Empresa</td><td style="padding: 8px 0; color: #333333; font-size: 14px;">${safeCompany}</td></tr>` : ''}
+                ${safePhone ? `<tr><td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Teléfono</td><td style="padding: 8px 0; color: #333333; font-size: 14px;">${safePhone}</td></tr>` : ''}
                 ${safeService ? `<tr><td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Tipo de servicio</td><td style="padding: 8px 0; color: #333333; font-size: 14px;">${safeService}</td></tr>` : ''}
               </table>
               <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 20px 0;" />
@@ -108,7 +111,7 @@ export async function POST(request: Request) {
       }
     } else {
       console.log('[contact] Modo desarrollo — datos recibidos:');
-      console.log({ name, company, email, service, message });
+      console.log({ name, company, email, phone, service, message });
     }
 
     return Response.json({ success: true });
