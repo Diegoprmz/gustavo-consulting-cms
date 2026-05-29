@@ -1,11 +1,29 @@
 export const dynamic = 'force-dynamic';
 
 interface ContactPayload {
-  nombre?: string;
+  name?: string;
+  company?: string;
   email?: string;
-  empresa?: string;
-  telefono?: string;
-  mensaje?: string;
+  phone?: string;
+  service?: string;
+  message?: string;
+}
+
+const SERVICE_LABELS: Record<string, string> = {
+  consultoria: 'Consultoría Estratégica',
+  conferencia: 'Conferencia / Keynote',
+  educacion: 'Educación Ejecutiva',
+  advisory: 'Advisory Board',
+  otro: 'Otro',
+};
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 export async function POST(request: Request) {
@@ -20,17 +38,24 @@ export async function POST(request: Request) {
 
     console.log('[contact] body recibido:', body);
 
-    const { nombre, email, empresa, telefono, mensaje } = body;
+    const { name, company, email, phone, service, message } = body;
 
-    if (!nombre || nombre.length < 2) {
+    if (!name || name.trim().length < 2) {
       return Response.json({ error: 'Nombre inválido' }, { status: 400 });
     }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return Response.json({ error: 'Email inválido' }, { status: 400 });
     }
-    if (!mensaje || mensaje.length < 10) {
+    if (!message || message.trim().length < 10) {
       return Response.json({ error: 'Mensaje muy corto' }, { status: 400 });
     }
+
+    const safeName = escapeHtml(name.trim());
+    const safeEmail = escapeHtml(email.trim());
+    const safeCompany = company ? escapeHtml(company.trim()) : '';
+    const safePhone = phone ? escapeHtml(phone.trim()) : '';
+    const safeService = service ? escapeHtml(SERVICE_LABELS[service] ?? service) : '';
+    const safeMessage = escapeHtml(message.trim());
 
     const resendApiKey = process.env.RESEND_API_KEY;
     const isProduction = process.env.NODE_ENV === 'production';
@@ -39,29 +64,30 @@ export async function POST(request: Request) {
       const emailPayload = {
         from: 'Formulario Web <noreply@gustavo.consulting>',
         to: ['contacto@gustavo.consulting'],
-        subject: `Nuevo mensaje de ${nombre} — gustavo.consulting`,
+        subject: `Nuevo mensaje de ${safeName} — gustavo.consulting`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #f5f5f5;">
             <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
               <h2 style="color: #243A4D; font-size: 22px; margin-bottom: 24px;">Nuevo mensaje de contacto</h2>
               <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                  <td style="padding: 8px 0; color: #6B7280; font-size: 13px; width: 120px;">Nombre</td>
-                  <td style="padding: 8px 0; color: #333333; font-size: 14px; font-weight: 600;">${nombre}</td>
+                  <td style="padding: 8px 0; color: #6B7280; font-size: 13px; width: 140px;">Nombre</td>
+                  <td style="padding: 8px 0; color: #333333; font-size: 14px; font-weight: 600;">${safeName}</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Email</td>
-                  <td style="padding: 8px 0; color: #243A4D; font-size: 14px;">${email}</td>
+                  <td style="padding: 8px 0; color: #243A4D; font-size: 14px;">${safeEmail}</td>
                 </tr>
-                ${empresa ? `<tr><td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Empresa</td><td style="padding: 8px 0; color: #333333; font-size: 14px;">${empresa}</td></tr>` : ''}
-                ${telefono ? `<tr><td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Teléfono</td><td style="padding: 8px 0; color: #333333; font-size: 14px;">${telefono}</td></tr>` : ''}
+                ${safeCompany ? `<tr><td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Empresa</td><td style="padding: 8px 0; color: #333333; font-size: 14px;">${safeCompany}</td></tr>` : ''}
+                ${safePhone ? `<tr><td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Teléfono</td><td style="padding: 8px 0; color: #333333; font-size: 14px;">${safePhone}</td></tr>` : ''}
+                ${safeService ? `<tr><td style="padding: 8px 0; color: #6B7280; font-size: 13px;">Tipo de servicio</td><td style="padding: 8px 0; color: #333333; font-size: 14px;">${safeService}</td></tr>` : ''}
               </table>
               <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 20px 0;" />
               <p style="color: #6B7280; font-size: 13px; margin-bottom: 8px;">Mensaje</p>
-              <p style="color: #333333; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${mensaje}</p>
+              <p style="color: #333333; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${safeMessage}</p>
               <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #f0f0f0;">
-                <a href="mailto:${email}" style="background: #243A4D; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">
-                  Responder a ${nombre}
+                <a href="mailto:${safeEmail}" style="background: #243A4D; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">
+                  Responder a ${safeName}
                 </a>
               </div>
             </div>
@@ -85,12 +111,12 @@ export async function POST(request: Request) {
       }
     } else {
       console.log('[contact] Modo desarrollo — datos recibidos:');
-      console.log({ nombre, email, empresa, telefono, mensaje });
+      console.log({ name, company, email, phone, service, message });
     }
 
     return Response.json({ success: true });
   } catch (err) {
     console.error('[contact] Error inesperado:', err);
-    return Response.json({ error: 'Error interno', detail: String(err) }, { status: 500 });
+    return Response.json({ error: 'Error interno' }, { status: 500 });
   }
 }
