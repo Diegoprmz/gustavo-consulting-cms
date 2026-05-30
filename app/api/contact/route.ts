@@ -58,9 +58,8 @@ export async function POST(request: Request) {
     const safeMessage = escapeHtml(message.trim());
 
     const resendApiKey = process.env.RESEND_API_KEY;
-    const isProduction = process.env.NODE_ENV === 'production';
 
-    if (isProduction && resendApiKey) {
+    if (resendApiKey) {
       const emailPayload = {
         from: 'Formulario Web <onboarding@resend.dev>',
         to: ['contacto@gustavo.consulting'],
@@ -110,7 +109,7 @@ export async function POST(request: Request) {
         return Response.json({ error: 'Error al enviar email' }, { status: 500 });
       }
     } else {
-      console.log('[contact] Modo desarrollo — datos recibidos:');
+      console.warn('[contact] RESEND_API_KEY no configurada — email no enviado');
       console.log({ name, company, email, phone, service, message });
     }
 
