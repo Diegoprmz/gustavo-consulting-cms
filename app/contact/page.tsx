@@ -117,7 +117,7 @@ export default function ContactPage() {
                       LinkedIn
                     </p>
                     <a
-                      href="https://www.linkedin.com/in/gustavo-martinez-pellon/"
+                      href="https://www.linkedin.com/in/gustavo-mart%C3%ADnez-pell%C3%B3n-19a44238/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-sans"

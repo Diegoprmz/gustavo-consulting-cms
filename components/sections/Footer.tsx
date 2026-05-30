@@ -80,7 +80,7 @@ export default function Footer() {
               contacto@gustavo.consulting
             </motion.a>
             <motion.a
-              href="https://www.linkedin.com/in/gustavo-martinez-pellon/"
+              href="https://www.linkedin.com/in/gustavo-mart%C3%ADnez-pell%C3%B3n-19a44238/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ color: '#6A8F7B' }}
