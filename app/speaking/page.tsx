@@ -4,6 +4,11 @@ import Footer from '@/components/sections/Footer';
 export const metadata = {
   title: 'Conferencias | Gustavo Martínez Business Consulting',
   description: 'Conferencias y keynotes diseñados para generar impacto real en organizaciones y eventos corporativos.',
+  openGraph: {
+    title: 'Conferencias | Gustavo Martínez Business Consulting',
+    description: 'Conferencias y keynotes diseñados para generar impacto real en organizaciones y eventos corporativos.',
+    url: 'https://gustavo.consulting/speaking',
+  },
 };
 
 const topics = [

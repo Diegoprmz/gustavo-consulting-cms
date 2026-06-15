@@ -5,6 +5,11 @@ import Image from 'next/image';
 export const metadata = {
   title: 'Trayectoria | Gustavo Martínez Business Consulting',
   description: 'Más de tres décadas conectando estrategia con ejecución en empresas de México y Latinoamérica.',
+  openGraph: {
+    title: 'Trayectoria | Gustavo Martínez Business Consulting',
+    description: 'Más de tres décadas conectando estrategia con ejecución en empresas de México y Latinoamérica.',
+    url: 'https://gustavo.consulting/about',
+  },
 };
 
 const timeline = [
