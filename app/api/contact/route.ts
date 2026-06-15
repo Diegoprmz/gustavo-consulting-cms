@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 
     if (resendApiKey) {
       const emailPayload = {
-        from: 'Formulario Web <onboarding@resend.dev>',
+        from: 'Formulario Web <noreply@gustavo.consulting>',
         to: ['contacto@gustavo.consulting'],
         subject: `Nuevo mensaje de ${safeName} — gustavo.consulting`,
         html: `
