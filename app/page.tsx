@@ -26,6 +26,7 @@ import Conversemos from '@/components/sections/Conversemos';
 import Footer from '@/components/sections/Footer';
 import LoadingScreen from '@/components/ui/LoadingScreen';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
+import BackToTop from '@/components/ui/BackToTop';
 
 export default function Home() {
   return (
@@ -47,6 +48,7 @@ export default function Home() {
       </main>
       <Footer />
       <WhatsAppButton />
+      <BackToTop />
     </>
   );
 }
