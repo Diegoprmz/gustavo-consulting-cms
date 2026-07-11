@@ -15,7 +15,6 @@ import Navbar from '@/components/sections/Navbar';
 import Hero from '@/components/sections/Hero';
 import Experiencia from '@/components/sections/Experiencia';
 import Trayectoria from '@/components/sections/Trayectoria';
-import Universidades from '@/components/sections/Universidades';
 import Clientes from '@/components/sections/Clientes';
 import Libro from '@/components/sections/Libro';
 import Colaboracion from '@/components/sections/Colaboracion';
@@ -35,11 +34,13 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <Clientes />
+        <Trayectoria />
+        <div aria-hidden="true" style={{ backgroundColor: '#ffffff', padding: '0 40px' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', height: '3px', background: 'linear-gradient(to right, transparent, #C9A84C55, #C9A84C, #C9A84C55, transparent)' }} />
+        </div>
         <Experiencia />
         <Colaboracion />
-        <Trayectoria />
-        <Universidades />
-        <Clientes />
         <Libro />
         <Concepto />
         <ElProblema />

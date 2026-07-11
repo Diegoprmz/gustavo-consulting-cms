@@ -7,33 +7,37 @@ import AnimatedSection from '@/components/ui/AnimatedSection';
 import GoldDots from '@/components/ui/GoldDots';
 
 const logos = [
-  { name: 'ADO',       src: '/images/logos/ADO.webp',          w: 120 },
-  { name: 'HSBC',      src: '/images/logos/HSBC.webp',         w: 110 },
-  { name: 'Ford',      src: '/images/logos/ford.webp',         w: 100 },
-  { name: 'Coppel',    src: '/images/logos/coppel.webp',       w: 130 },
-  { name: 'Fandeli',   src: '/images/logos/fandeli.webp',      w: 130 },
-  { name: 'Alimás',    src: '/images/logos/alimas.webp',       w: 140 },
-  { name: 'The Anglo', src: '/images/logos/anglo.webp',        w: 130 },
-  { name: 'Ammmec',    src: '/images/logos/ammmec.webp',       w: 140 },
-  { name: 'Fonatur',   src: '/images/logos/fonatur.webp',      w: 130 },
-  { name: 'Bühler',    src: '/images/logos/buhler.webp',       w: 130 },
-  { name: 'Prendamex', src: '/images/logos/prendamex.webp',   w: 130 },
-  { name: 'Poliflex',  src: '/images/logos/poliflex.webp',     w: 130 },
-  { name: 'Noviagro',  src: '/images/logos/logonoviagro.webp', w: 140 },
-  { name: 'MEGAPRO',   src: '/images/logos/MEGAPRO.webp',      w: 130 },
-  { name: 'Cenapyme',  src: '/images/logos/cenapyme.webp',     w: 140 },
-  { name: 'Express',   src: '/images/logos/express.webp',      w: 130 },
-  { name: 'GMDZ',      src: '/images/logos/GMDZ.webp',         w: 120 },
-  { name: 'Cana',      src: '/images/logos/cana.webp',         w: 120 },
-  { name: 'ITD',       src: '/images/logos/ITD.webp',          w: 110 },
-  { name: 'LBA',       src: '/images/logos/LBA.webp',          w: 110 },
-  { name: 'MHS',       src: '/images/logos/MHS.webp',          w: 110 },
-  { name: 'CB',        src: '/images/logos/CB.webp',           w: 100 },
-  { name: 'TID',       src: '/images/logos/TID.webp',          w: 110 },
-  { name: 'SC',        src: '/images/logos/SC.webp',           w: 100 },
-  { name: 'PDH',       src: '/images/logos/PDH.webp',          w: 110 },
-  { name: 'Guerr',     src: '/images/logos/Guerr.webp',        w: 130 },
-  { name: 'ILP',       src: '/images/logos/ilp.webp',          w: 110 },
+  { name: 'ADO',              src: '/images/logos/ADO.webp',          w: 110 },
+  { name: 'HSBC',             src: '/images/logos/HSBC.webp',         w: 150 },
+  { name: 'Ford',             src: '/images/logos/ford.webp',         w: 120 },
+  { name: 'Coppel',           src: '/images/logos/coppel.webp',       w: 130 },
+  { name: 'FEMSA',            src: '/images/logos/1-23.webp',         w: 150 },
+  { name: 'Fandeli',          src: '/images/logos/fandeli.webp',      w: 160 },
+  { name: 'Alimás',           src: '/images/logos/alimas.webp',       w: 90  },
+  { name: 'The Anglo',        src: '/images/logos/anglo.webp',        w: 150 },
+  { name: 'Ammmec',           src: '/images/logos/ammmec.webp',       w: 200 },
+  { name: 'Fonatur',          src: '/images/logos/fonatur.webp',      w: 170 },
+  { name: 'Bühler',           src: '/images/logos/buhler.webp',       w: 200 },
+  { name: 'Prendamex',        src: '/images/logos/prendamex.webp',   w: 90  },
+  { name: 'Poliflex',         src: '/images/logos/poliflex.webp',     w: 90  },
+  { name: 'Noviagro',         src: '/images/logos/logonoviagro.webp', w: 130 },
+  { name: 'Megaprocesos',     src: '/images/logos/MEGAPRO.webp',      w: 170 },
+  { name: 'Cenapyme',         src: '/images/logos/cenapyme.webp',     w: 100 },
+  { name: 'Express',          src: '/images/logos/express.webp',      w:  70 },
+  { name: 'Canacintra',       src: '/images/logos/cana.webp',         w: 130 },
+  { name: 'Intedya',          src: '/images/logos/ITD.webp',          w: 200 },
+  { name: 'Bueso Arias',      src: '/images/logos/LBA.webp',          w: 140 },
+  { name: 'MHS',              src: '/images/logos/MHS.webp',          w: 130 },
+  { name: 'Compartamos',      src: '/images/logos/CB.webp',           w: 150 },
+  { name: 'TEDISA',           src: '/images/logos/TID.webp',          w: 90  },
+  { name: 'Santiago',         src: '/images/logos/SC.webp',           w:  80 },
+  { name: 'Palacio de Hierro',src: '/images/logos/PDH.webp',          w: 150 },
+  { name: 'Guerrero',         src: '/images/logos/Guerr.webp',        w:  60 },
+  { name: 'ILP',              src: '/images/logos/ilp.webp',          w:  80 },
+  { name: 'Comex',            src: '/images/logos/download.webp',     w: 110 },
+  { name: 'People & Business',src: '/images/logos/P&B.webp',          w: 150 },
+  { name: 'CenaCCE',          src: '/images/logos/cen1_edited.webp',  w: 140 },
+  { name: 'Asociarse',        src: '/images/logos/asociarse.webp',    w: 130 },
 ];
 
 const doubled = [...logos, ...logos];
@@ -78,15 +82,15 @@ export default function Clientes() {
             <div
               key={`${logo.name}-${i}`}
               className="flex items-center justify-center flex-shrink-0"
-              style={{ width: '200px', height: '105px', marginRight: '60px' }}
+              style={{ width: '220px', height: '110px', marginRight: '36px' }}
             >
               <Image
                 src={logo.src}
                 alt={logo.name}
                 width={logo.w}
-                height={60}
+                height={90}
                 className="object-contain"
-                style={{ maxWidth: '180px', maxHeight: '80px' }}
+                style={{ maxWidth: '210px', maxHeight: '90px' }}
               />
             </div>
           ))}

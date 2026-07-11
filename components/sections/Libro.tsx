@@ -1,19 +1,32 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, useAnimationControls } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export default function Libro() {
-  const [rotation, setRotation] = useState(0);
+  const controls = useAnimationControls();
+  const rotationRef = useRef(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  // Hint animation: tilts every 5s while the book hasn't been flipped
+  useEffect(() => {
+    const hint = async () => {
+      if (rotationRef.current !== 0) return;
+      await controls.start({ rotateY: 28, transition: { duration: 0.55, ease: 'easeOut' } });
+      await controls.start({ rotateY: 0, transition: { duration: 0.45, ease: 'easeIn' } });
+    };
+    const timer = setTimeout(hint, 2000);
+    const interval = setInterval(hint, 5000);
+    return () => { clearTimeout(timer); clearInterval(interval); };
+  }, [controls]);
 
-  const handleFlip = () => {
-    setRotation((prev) => {
-      const newRotation = (prev + 180) % 360;
-      setIsFlipped(!isFlipped);
-      return newRotation;
+  const handleFlip = async () => {
+    rotationRef.current = rotationRef.current === 0 ? 180 : 0;
+    setIsFlipped((f) => !f);
+    await controls.start({
+      rotateY: rotationRef.current,
+      transition: { duration: 0.28, ease: 'easeInOut' },
     });
   };
 
@@ -30,14 +43,13 @@ export default function Libro() {
             <div className="flex justify-center md:justify-start">
               {/* Perspective wrapper */}
               <div
-                style={{ perspective: '1400px', cursor: 'pointer' }}
+                style={{ perspective: '1400px', cursor: 'pointer', position: 'relative', display: 'inline-block' }}
                 onClick={handleFlip}
               >
                 {/* Rotating book */}
                 <motion.div
                   className="preserve-3d"
-                  animate={{ rotateY: rotation }}
-                  transition={{ duration: 0.28, ease: 'easeInOut' }}
+                  animate={controls}
                   whileHover={{ scale: 1.04, transition: { duration: 0.25 } }}
                   style={{
                     width: '280px',
@@ -98,6 +110,7 @@ export default function Libro() {
                     />
                   </div>
                 </motion.div>
+
               </div>
             </div>
           </AnimatedSection>

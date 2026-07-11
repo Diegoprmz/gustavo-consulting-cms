@@ -13,7 +13,8 @@
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-hook-form": "^7.76.0"
+    "react-hook-form": "^7.76.0",
+    "react-pageflip": "^2.0.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -22,6 +23,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "playwright": "^1.61.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
