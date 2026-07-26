@@ -14,8 +14,7 @@ const PREVIEW_FIELDS = `
   mainImage
 `;
 
-const POSTS_LIST_QUERY = `*[_type == "post" && defined(slug.current)
-  && ($category == "" || category == $category)]
+const POSTS_LIST_QUERY = `*[_type == "post" && defined(slug.current)]
   | order(publishedAt desc) { ${PREVIEW_FIELDS} }`;
 
 const POSTS_PREVIEW_QUERY = `*[_type == "post" && defined(slug.current)]
@@ -34,8 +33,6 @@ const POST_SLUGS_QUERY = `*[_type == "post" && defined(slug.current)] {
   publishedAt
 }`;
 
-const CATEGORIES_QUERY = `array::unique(*[_type == "post" && defined(category)].category)`;
-
 const AUTHOR_QUERY = `*[_type == "author" && _id == $id][0] { name, title, photo }`;
 
 const options = { next: { revalidate: REVALIDATE } };
@@ -44,8 +41,8 @@ export function getPostsPreview(limit = 3) {
   return client.fetch<PostPreview[]>(POSTS_PREVIEW_QUERY, { limit }, options);
 }
 
-export function getPostsList(category?: string) {
-  return client.fetch<PostPreview[]>(POSTS_LIST_QUERY, { category: category ?? '' }, options);
+export function getPostsList() {
+  return client.fetch<PostPreview[]>(POSTS_LIST_QUERY, {}, options);
 }
 
 export function getPostBySlug(slug: string) {
@@ -54,10 +51,6 @@ export function getPostBySlug(slug: string) {
 
 export function getPostSlugs() {
   return client.fetch<{ slug: string; publishedAt: string }[]>(POST_SLUGS_QUERY, {}, options);
-}
-
-export function getCategories() {
-  return client.fetch<string[]>(CATEGORIES_QUERY, {}, options);
 }
 
 export function getAuthor() {

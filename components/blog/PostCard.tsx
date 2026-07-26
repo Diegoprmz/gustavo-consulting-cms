@@ -15,47 +15,33 @@ const FALLBACK = { text: '#3D5C4A', tint: 'rgba(106,143,123,0.12)', solid: '#6A8
 
 export default function PostCard({ post }: { post: PostPreview }) {
   const style = CATEGORY_STYLES[post.category] ?? FALLBACK;
-  const image = post.mainImage
-    ? urlFor(post.mainImage).width(800).height(500).fit('crop').auto('format').url()
-    : null;
+
+  // Las imágenes son gráficos 16:9 con el título y el logo incrustados en una
+  // banda inferior: se sirven completas, sin recorte, o se pierde ese texto.
+  const image = post.mainImage ? urlFor(post.mainImage).width(900).auto('format').url() : null;
 
   return (
     <Link href={`/blog/${post.slug}`} className="block no-underline h-full">
       <article
-        className="card-hover bg-white h-full flex flex-row sm:flex-col overflow-hidden rounded-lg"
+        className="card-hover bg-white h-full flex flex-col overflow-hidden rounded-lg"
         style={{ boxShadow: '0 2px 16px rgba(36,58,77,0.07)', borderTop: `2px solid ${style.solid}` }}
       >
         {image && (
-          <div className="relative shrink-0 self-start w-28 sm:w-full aspect-square sm:aspect-[16/10]">
+          <div className="relative w-full aspect-[16/9] bg-[#F5F5F5]">
             <Image
               src={image}
               alt={post.mainImage?.alt ?? post.title}
               fill
-              sizes="(max-width: 640px) 112px, (max-width: 1024px) 50vw, 360px"
-              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
+              style={{ objectFit: 'contain' }}
             />
-            {/* En móvil la etiqueta se monta sobre la miniatura; en desktop vive en el cuerpo. */}
-            <span
-              className="sm:hidden absolute top-0 left-0 font-sans font-bold"
-              style={{
-                fontSize: '8px',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: '#ffffff',
-                backgroundColor: style.solid,
-                padding: '4px 7px',
-                borderBottomRightRadius: '4px',
-              }}
-            >
-              {post.category}
-            </span>
           </div>
         )}
 
-        <div className="flex-1 min-w-0 flex flex-col p-4 sm:p-7">
-          <div className="flex items-center gap-3 flex-wrap mb-2 sm:mb-4">
+        <div className="flex-1 min-w-0 flex flex-col p-5 sm:p-7">
+          <div className="flex items-center gap-3 flex-wrap mb-3 sm:mb-4">
             <span
-              className="hidden sm:inline-flex font-sans font-bold"
+              className="inline-flex font-sans font-bold"
               style={{
                 fontSize: '10px',
                 letterSpacing: '0.12em',
@@ -68,11 +54,7 @@ export default function PostCard({ post }: { post: PostPreview }) {
             >
               {post.category}
             </span>
-            <time
-              dateTime={post.publishedAt}
-              className="font-sans"
-              style={{ fontSize: '13px', color: '#6B7280' }}
-            >
+            <time dateTime={post.publishedAt} className="font-sans" style={{ fontSize: '13px', color: '#6B7280' }}>
               {formatLongDate(post.publishedAt)}
             </time>
           </div>
