@@ -6,7 +6,7 @@ import Image from 'next/image';
 const navLinks = [
   { label: 'Trayectoria',   href: '/about' },
   { label: 'Servicios',     href: '/services' },
-  { label: 'Blog',          href: '#articulos' },
+  { label: 'Foro',          href: '/blog' },
   { label: 'Conferencias',  href: '/speaking' },
   { label: 'Contacto',      href: '/contact' },
 ];
@@ -27,7 +27,7 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: '#243A4D' }}>
+    <footer className="no-print" style={{ backgroundColor: '#243A4D' }}>
       {/* Olive top accent bar */}
       <div style={{ height: '4px', background: 'linear-gradient(90deg, #6A8F7B 0%, rgba(106,143,123,0.3) 100%)' }} />
 
@@ -103,7 +103,7 @@ export default function Footer() {
             © 2026 Gustavo Martínez Business Consulting. Todos los derechos reservados.
           </p>
           <motion.a
-            href="/admin"
+            href="/studio"
             whileHover={{ opacity: 1, color: '#6A8F7B' }}
             transition={{ duration: 0.18 }}
             className="font-sans"
