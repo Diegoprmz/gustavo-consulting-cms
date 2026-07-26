@@ -42,3 +42,9 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# sanity
+.sanity
+
+# contenido fuente sin procesar (PDFs, PPTX, mockups)
+/content-raw/

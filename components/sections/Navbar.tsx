@@ -7,7 +7,7 @@ import Image from 'next/image';
 const links = [
   { label: 'Trayectoria',  href: '/about' },
   { label: 'Servicios',    href: '/services' },
-  { label: 'Blog',         href: '#articulos' },
+  { label: 'Foro',         href: '/blog' },
   { label: 'Conferencias', href: '/speaking' },
   { label: 'Contacto',     href: '/contact' },
 ];
@@ -26,6 +26,7 @@ export default function Navbar() {
 
   return (
     <header
+      className="no-print"
       style={{
         position: 'fixed',
         top: 0,

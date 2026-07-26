@@ -1,5 +1,12 @@
 # CMS Architecture — Gustavo Consulting
 
+> ⚠️ **DOCUMENTO OBSOLETO — no implementar.**
+> Este plan basado en Supabase nunca se construyó. El CMS del sitio se implementó con
+> **Sanity** (julio 2026): schema en `sanity/schemaTypes/`, Studio en `/studio`,
+> autenticación mediante la cuenta Sanity de Gustavo (no hay tablas `admin_users` ni
+> rutas `/admin`, `/login`, `/signup` — fueron eliminadas).
+> Se conserva este archivo solo como registro histórico de la decisión.
+
 ## 📋 Overview
 
 Este documento describe la arquitectura CMS completa y preparada para futuras iteraciones. Actualmente está **DESACTIVADA** enfocando 100% en frontend perfecto.
