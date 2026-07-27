@@ -16,8 +16,6 @@ const FALLBACK = { text: '#3D5C4A', tint: 'rgba(106,143,123,0.12)', solid: '#6A8
 export default function PostCard({ post }: { post: PostPreview }) {
   const style = CATEGORY_STYLES[post.category] ?? FALLBACK;
 
-  // Las imágenes son gráficos 16:9 con el título y el logo incrustados en una
-  // banda inferior: se sirven completas, sin recorte, o se pierde ese texto.
   const image = post.mainImage ? urlFor(post.mainImage).width(900).auto('format').url() : null;
 
   return (
@@ -26,14 +24,17 @@ export default function PostCard({ post }: { post: PostPreview }) {
         className="card-hover bg-white h-full flex flex-col overflow-hidden rounded-lg"
         style={{ boxShadow: '0 2px 16px rgba(36,58,77,0.07)', borderTop: `2px solid ${style.solid}` }}
       >
+        {/* Los recortes del PPTX rondan 2.45–2.54:1; se fija 2.5 y se usa
+            `cover` para que todas las tarjetas midan igual. El desajuste
+            máximo es de un 2 %, imperceptible. */}
         {image && (
-          <div className="relative w-full aspect-[16/9] bg-[#F5F5F5]">
+          <div className="relative w-full aspect-[5/2] bg-[#F5F5F5]">
             <Image
               src={image}
               alt={post.mainImage?.alt ?? post.title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
-              style={{ objectFit: 'contain' }}
+              style={{ objectFit: 'cover' }}
             />
           </div>
         )}
