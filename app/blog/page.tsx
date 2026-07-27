@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
-import ForoBrowser from '@/components/blog/ForoBrowser';
+import BlogBrowser from '@/components/blog/BlogBrowser';
 import Footer from '@/components/sections/Footer';
 import Navbar from '@/components/sections/Navbar';
 import { getPostsList } from '@/sanity/lib/queries';
 
 export const metadata: Metadata = {
-  title: 'Foro',
+  title: 'Blog',
   description:
     'Reflexiones sobre estrategia, cultura y transformación centrada en el cliente, por Gustavo Martínez Pellón.',
 };
@@ -22,25 +22,37 @@ export default async function BlogPage() {
       <main>
         <section style={{ backgroundColor: '#243A4D', paddingTop: '140px', paddingBottom: '80px' }}>
           <div className="max-w-[1100px] mx-auto px-5 md:px-8">
-            <span
-              className="font-sans font-semibold"
-              style={{ fontSize: '11px', letterSpacing: '0.28em', textTransform: 'uppercase', color: '#6A8F7B', display: 'block', marginBottom: '20px' }}
-            >
-              Foro
-            </span>
             <h1
               className="font-serif text-white"
-              style={{ fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, lineHeight: 0.95, letterSpacing: '-0.02em' }}
+              style={{ fontSize: 'clamp(52px, 8vw, 96px)', fontWeight: 700, lineHeight: 0.95, letterSpacing: '-0.03em' }}
             >
-              Reflexiones para
-              <br />
-              <span style={{ fontWeight: 400, fontStyle: 'italic', color: '#6A8F7B' }}>tu organización</span>
+              Blog
             </h1>
             <p
-              className="font-sans"
-              style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', marginTop: '24px', maxWidth: '520px', lineHeight: 1.6 }}
+              className="font-serif"
+              style={{
+                fontSize: 'clamp(22px, 3vw, 34px)',
+                fontWeight: 400,
+                fontStyle: 'italic',
+                color: '#6A8F7B',
+                marginTop: '18px',
+                lineHeight: 1.25,
+                maxWidth: '620px',
+              }}
             >
-              Patient Centricity y Customer Centricity.
+              Reflexiones para tu organización
+            </p>
+            <p
+              className="font-sans font-semibold"
+              style={{
+                fontSize: '12px',
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.5)',
+                marginTop: '28px',
+              }}
+            >
+              Patient Centricity y Customer Centricity
             </p>
           </div>
         </section>
@@ -52,7 +64,7 @@ export default async function BlogPage() {
                 Aún no hay artículos publicados.
               </p>
             ) : (
-              <ForoBrowser posts={posts} />
+              <BlogBrowser posts={posts} />
             )}
           </div>
         </section>

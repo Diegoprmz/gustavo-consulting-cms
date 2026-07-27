@@ -10,14 +10,14 @@ export default async function Articulos() {
   if (posts.length === 0) return null;
 
   return (
-    <section id="foro" style={{ backgroundColor: '#F5F5F5', paddingTop: '100px', paddingBottom: '100px' }}>
+    <section id="blog" style={{ backgroundColor: '#F5F5F5', paddingTop: '100px', paddingBottom: '100px' }}>
       <div className="max-w-[1200px] mx-auto px-5 md:px-8">
         <AnimatedSection>
           <h2
             className="font-serif"
             style={{ fontSize: 'clamp(32px, 3.6vw, 48px)', color: '#243A4D', fontWeight: 700, lineHeight: 1.1, marginBottom: '12px' }}
           >
-            Foro
+            Blog
           </h2>
           <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.6, marginBottom: '48px' }}>
             Patient Centricity y Customer Centricity: reflexiones para tu organización.

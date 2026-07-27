@@ -14,7 +14,7 @@ function normalize(value: string) {
   return value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
 }
 
-export default function ForoBrowser({ posts }: { posts: PostPreview[] }) {
+export default function BlogBrowser({ posts }: { posts: PostPreview[] }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<string | null>(null);
   const [sort, setSort] = useState<Sort>('reciente');
@@ -39,11 +39,11 @@ export default function ForoBrowser({ posts }: { posts: PostPreview[] }) {
   return (
     <>
       <div style={{ marginBottom: '40px' }}>
-        <label htmlFor="foro-buscar" className="sr-only">
+        <label htmlFor="blog-buscar" className="sr-only">
           Buscar artículos
         </label>
         <input
-          id="foro-buscar"
+          id="blog-buscar"
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
