@@ -3,6 +3,13 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
+
+/**
+ * Se define fuera del componente: crearlo en cada render desmontaría y volvería
+ * a montar el enlace, perdiendo el estado de la animación.
+ */
+const MotionLink = motion.create(Link);
 
 const links = [
   { label: 'Trayectoria',  href: '/about' },
@@ -46,7 +53,7 @@ export default function Navbar() {
       }}
     >
       {/* Logo */}
-      <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+      <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
         <Image
           src="/assets/gustavo_firma.png"
           alt="Gustavo Martínez Business Consulting"
@@ -62,12 +69,12 @@ export default function Navbar() {
           }}
           priority
         />
-      </a>
+      </Link>
 
       {/* Desktop links */}
       <nav className="hidden md:flex items-center gap-8">
         {links.map((l) => (
-          <motion.a
+          <MotionLink
             key={l.label}
             href={l.href}
             whileHover={{ color: '#6A8F7B' }}
@@ -83,11 +90,11 @@ export default function Navbar() {
             }}
           >
             {l.label}
-          </motion.a>
+          </MotionLink>
         ))}
 
         {/* CTA */}
-        <motion.a
+        <MotionLink
           href="/contact"
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.97 }}
@@ -106,7 +113,7 @@ export default function Navbar() {
           }}
         >
           Agendar conversación
-        </motion.a>
+        </MotionLink>
       </nav>
 
       {/* Hamburger — mobile */}
@@ -153,7 +160,7 @@ export default function Navbar() {
             }}
           >
             {links.map((l) => (
-              <a
+              <Link
                 key={l.label}
                 href={l.href}
                 onClick={() => setMenuOpen(false)}
@@ -166,9 +173,9 @@ export default function Navbar() {
                 }}
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
-            <a
+            <Link
               href="/contact"
               onClick={() => setMenuOpen(false)}
               className="font-sans font-semibold text-white text-center"
@@ -181,7 +188,7 @@ export default function Navbar() {
               }}
             >
               Agendar conversación
-            </a>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
