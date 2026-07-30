@@ -17,7 +17,7 @@ export const authorType = defineType({
       title: 'Cargo',
       type: 'string',
       description: 'Línea de firma que aparece al pie de cada artículo.',
-      initialValue: 'Consejero Corporativo · Consultor Empresarial · Profesor Ejecutivo',
+      initialValue: 'Consejero · Consultor · Educación ejecutiva',
       validation: (rule) => rule.required(),
     }),
     defineField({

@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Gustavo Martínez — Consultoría Estratégica Internacional';
+export const alt = 'Gustavo Martínez — Estrategia centrada en las personas';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -29,10 +29,10 @@ export default function OGImage() {
           Gustavo Martínez
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '28px', margin: 0, fontFamily: 'sans-serif', lineHeight: 1.4 }}>
-          Consultoría Estratégica Internacional
+          Estrategia centrada en las personas
         </p>
         <p style={{ color: '#C9A84C', fontSize: '20px', margin: '24px 0 0', fontFamily: 'sans-serif' }}>
-          Customer Centricity · Estrategia · LATAM
+          Consejero · Consultor · Educación ejecutiva
         </p>
       </div>
     ),

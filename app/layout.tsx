@@ -20,11 +20,11 @@ const sourceSans = Source_Sans_3({
 export const metadata: Metadata = {
   metadataBase: new URL('https://gustavo.consulting'),
   title: {
-    default: "Gustavo Martínez — Consultoría Estratégica Internacional",
+    default: "Gustavo Martínez — Estrategia centrada en las personas",
     template: "%s | Gustavo Martínez Business Consulting",
   },
   description:
-    "Consejero corporativo, consultor empresarial y profesor ejecutivo con más de 30 años de experiencia. Estrategia centrada en el cliente para empresas en LATAM.",
+    "Consejero, consultor y formador en educación ejecutiva con más de 30 años de experiencia. Estrategia centrada en las personas para empresas en LATAM.",
   keywords: ["consultoría estratégica", "customer centricity", "estrategia empresarial", "LATAM", "dirección ejecutiva", "Gustavo Martínez"],
   authors: [{ name: "Gustavo Martínez Pellón", url: "https://gustavo.consulting" }],
   openGraph: {
@@ -32,14 +32,14 @@ export const metadata: Metadata = {
     locale: "es_MX",
     url: "https://gustavo.consulting",
     siteName: "Gustavo Martínez Business Consulting",
-    title: "Gustavo Martínez — Consultoría Estratégica Internacional",
-    description: "Consejero corporativo y profesor ejecutivo con 30+ años de experiencia. Customer centricity y estrategia para empresas en LATAM.",
-    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: "Gustavo Martínez — Consultoría Estratégica Internacional" }],
+    title: "Gustavo Martínez — Estrategia centrada en las personas",
+    description: "Consejero, consultor y formador en educación ejecutiva con 30+ años de experiencia. Estrategia centrada en las personas para empresas en LATAM.",
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: "Gustavo Martínez — Estrategia centrada en las personas" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gustavo Martínez — Consultoría Estratégica Internacional",
-    description: "Consejero corporativo y profesor ejecutivo con 30+ años de experiencia. Customer centricity y estrategia para empresas en LATAM.",
+    title: "Gustavo Martínez — Estrategia centrada en las personas",
+    description: "Consejero, consultor y formador en educación ejecutiva con 30+ años de experiencia. Estrategia centrada en las personas para empresas en LATAM.",
     images: ['/opengraph-image'],
   },
   robots: { index: true, follow: true },

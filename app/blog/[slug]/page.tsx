@@ -107,7 +107,7 @@ export default async function PostPage({ params }: Params) {
                     {author?.name ?? 'Gustavo Martínez Pellón'}
                   </p>
                   <p className="font-sans" style={{ fontSize: '13px', color: '#6B7280' }}>
-                    {author?.title ?? 'Consejero Corporativo · Consultor Empresarial · Profesor Ejecutivo'}
+                    {author?.title ?? 'Consejero · Consultor · Educación ejecutiva'}
                   </p>
                 </div>
                 {post.videoMode === 'none' && <DownloadPdfButton />}

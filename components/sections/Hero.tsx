@@ -93,7 +93,7 @@ export default function Hero() {
                 marginBottom: '44px',
               }}
             >
-              Consejero empresarial&nbsp;&nbsp;·&nbsp;&nbsp;Consultor
+              Consejero&nbsp;&nbsp;·&nbsp;&nbsp;Consultor
               <br />
               Educación ejecutiva
             </motion.p>
@@ -292,7 +292,7 @@ export default function Hero() {
             className="font-sans"
             style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', lineHeight: 1.9, marginBottom: '28px' }}
           >
-            Consejero empresarial · Consultor · Educación ejecutiva
+            Consejero · Consultor · Educación ejecutiva
           </motion.p>
 
           <motion.p

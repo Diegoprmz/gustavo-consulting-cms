@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Gustavo Martínez — Consultoría Estratégica Internacional',
-  description: 'Consejero corporativo y profesor ejecutivo con más de 30 años de experiencia en México y LATAM. Estrategia centrada en el cliente para empresas en crecimiento.',
+  title: 'Gustavo Martínez — Estrategia centrada en las personas',
+  description: 'Consejero, consultor y formador en educación ejecutiva con más de 30 años de experiencia en México y LATAM. Estrategia centrada en las personas para empresas en crecimiento.',
   openGraph: {
-    title: 'Gustavo Martínez — Consultoría Estratégica Internacional',
-    description: 'Consejero corporativo y profesor ejecutivo con más de 30 años de experiencia en México y LATAM.',
+    title: 'Gustavo Martínez — Estrategia centrada en las personas',
+    description: 'Consejero, consultor y formador en educación ejecutiva con más de 30 años de experiencia en México y LATAM.',
     url: 'https://gustavo.consulting',
     type: 'profile',
   },
