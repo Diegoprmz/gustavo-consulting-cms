@@ -2,7 +2,7 @@ import Navbar from '@/components/sections/Navbar';
 import Footer from '@/components/sections/Footer';
 
 export const metadata = {
-  title: 'Servicios | Gustavo Martínez Business Consulting',
+  title: 'Servicios',
   description: 'Consultoría estratégica, educación ejecutiva, conferencias y advisory board para empresas en crecimiento.',
   openGraph: {
     title: 'Servicios | Gustavo Martínez Business Consulting',

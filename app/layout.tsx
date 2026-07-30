@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Gustavo Martínez Business Consulting",
   },
   description:
-    "Consejero, consultor y formador en educación ejecutiva con más de 30 años de experiencia. Estrategia centrada en las personas para empresas en LATAM.",
+    "Consejero · Consultor · Educación ejecutiva. Más de 30 años de experiencia en México y LATAM.",
   keywords: ["consultoría estratégica", "customer centricity", "estrategia empresarial", "LATAM", "dirección ejecutiva", "Gustavo Martínez"],
   authors: [{ name: "Gustavo Martínez Pellón", url: "https://gustavo.consulting" }],
   openGraph: {
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     url: "https://gustavo.consulting",
     siteName: "Gustavo Martínez Business Consulting",
     title: "Gustavo Martínez — Estrategia centrada en las personas",
-    description: "Consejero, consultor y formador en educación ejecutiva con 30+ años de experiencia. Estrategia centrada en las personas para empresas en LATAM.",
+    description: "Consejero · Consultor · Educación ejecutiva. Más de 30 años de experiencia en México y LATAM.",
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: "Gustavo Martínez — Estrategia centrada en las personas" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Gustavo Martínez — Estrategia centrada en las personas",
-    description: "Consejero, consultor y formador en educación ejecutiva con 30+ años de experiencia. Estrategia centrada en las personas para empresas en LATAM.",
+    description: "Consejero · Consultor · Educación ejecutiva. Más de 30 años de experiencia en México y LATAM.",
     images: ['/opengraph-image'],
   },
   robots: { index: true, follow: true },
@@ -49,7 +49,7 @@ const schemaOrg = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Gustavo Martínez Pellón',
-  jobTitle: 'Consultor Estratégico Internacional',
+  jobTitle: 'Consejero, Consultor y Formador en Educación Ejecutiva',
   url: 'https://gustavo.consulting',
   email: 'contacto@gustavo.consulting',
   sameAs: ['https://www.linkedin.com/in/gustavo-mart%C3%ADnez-pell%C3%B3n-19a44238/'],

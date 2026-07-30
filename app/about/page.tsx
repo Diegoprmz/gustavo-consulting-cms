@@ -3,7 +3,7 @@ import Footer from '@/components/sections/Footer';
 import Image from 'next/image';
 
 export const metadata = {
-  title: 'Trayectoria | Gustavo Martínez Business Consulting',
+  title: 'Trayectoria',
   description: 'Más de tres décadas conectando estrategia con ejecución en empresas de México y Latinoamérica.',
   openGraph: {
     title: 'Trayectoria | Gustavo Martínez Business Consulting',
@@ -92,7 +92,7 @@ export default function AboutPage() {
                   Más de tres décadas formando líderes y asesorando empresas en la intersección de estrategia, marketing y orientación al cliente.
                 </p>
                 <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.8, marginBottom: '36px' }}>
-                  Con experiencia en distintos roles — consultor, consejero, académico y conferencista — mi trabajo se concentra en un punto: conectar al cliente con la estrategia, no como discurso, sino como transformación real.
+                  Con experiencia en distintos roles — consejero, consultor y formador en educación ejecutiva — mi trabajo se concentra en un punto: conectar al cliente con la estrategia, no como discurso, sino como transformación real.
                 </p>
                 <a
                   href="/contact"

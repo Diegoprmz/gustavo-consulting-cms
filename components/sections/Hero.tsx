@@ -216,7 +216,7 @@ export default function Hero() {
           >
             <Image
               src="/assets/gustavo-25.jpeg"
-              alt="Gustavo Martínez Pellón — Consultor Estratégico Internacional"
+              alt="Gustavo Martínez Pellón — Consejero, consultor y formador en educación ejecutiva"
               fill
               className="object-cover object-center"
               priority

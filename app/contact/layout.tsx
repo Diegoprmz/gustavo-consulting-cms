@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Contacto | Gustavo Martínez Business Consulting',
+  title: 'Contacto',
   description: 'Escríbele a Gustavo Martínez para consultoría estratégica, conferencias o educación ejecutiva.',
   openGraph: {
     title: 'Contacto | Gustavo Martínez Business Consulting',
