@@ -46,7 +46,14 @@ type ManifestEntry = {
 
 // ─── Lectura posicional del PDF ───────────────────────────────────────
 
-type Line = { text: string; size: number; font: string; gap: number; pageStart: boolean };
+/** Un tramo contiguo de texto con un único peso (negrita o no). */
+type Seg = { text: string; bold: boolean };
+type Line = { segs: Seg[]; size: number; gap: number; pageStart: boolean; allBold: boolean; italic: boolean };
+
+/** Colapsa espacios y elimina el hueco espurio que el kerning deja antes de un
+ *  signo de puntuación ("Centric ." → "Centric."). */
+const tidy = (s: string) => s.replace(/\s+/g, ' ').replace(/\s+([.,;:!?)”»…])/g, '$1').trim();
+const plain = (l: Line) => tidy(l.segs.map((s) => s.text).join(''));
 
 async function readPdfLines(file: string): Promise<Line[]> {
   const task = pdfjs.getDocument({ data: new Uint8Array(await readFile(file)), verbosity: 0 });
@@ -55,9 +62,22 @@ async function readPdfLines(file: string): Promise<Line[]> {
 
   try {
     for (let p = 1; p <= doc.numPages; p++) {
-      const content = await (await doc.getPage(p)).getTextContent();
+      const page = await doc.getPage(p);
+      await page.getOperatorList(); // fuerza la resolución de las fuentes embebidas
+      const content = await page.getTextContent();
 
-      // Los items llegan sueltos: se agrupan por coordenada vertical para formar líneas.
+      // El peso se lee del nombre real de la fuente (p.ej. "Calibri-Bold"), no
+      // por comparación con la del cuerpo: el cuerpo normal a veces usa dos
+      // subconjuntos distintos y una heurística por nombre-de-subconjunto falla.
+      const weight = (fontName: string) => {
+        try {
+          const real: string = (page.commonObjs.get(fontName) as { name?: string } | undefined)?.name ?? '';
+          return { bold: /bold|black|heavy/i.test(real), italic: /italic|oblique/i.test(real) };
+        } catch {
+          return { bold: false, italic: false };
+        }
+      };
+
       type TextItem = { str: string; transform: number[]; width: number; fontName: string };
       const byY = new Map<number, TextItem[]>();
       for (const raw of content.items) {
@@ -73,27 +93,38 @@ async function readPdfLines(file: string): Promise<Line[]> {
 
       for (const [y, group] of ordered) {
         const items = [...group].sort((a, b) => a.transform[4] - b.transform[4]);
-        const first = items[0];
-        const size = Math.abs(first.transform[0]);
+        const size = Math.abs(items[0].transform[0]);
 
-        // El PDF parte la línea en fragmentos por kerning. Sin mirar el hueco
-        // horizontal las palabras quedarían pegadas ("algonoterminade...").
-        let text = '';
+        // El PDF parte la línea en fragmentos por kerning. Se reconstruye
+        // insertando el espacio donde hay hueco horizontal, y se fusionan los
+        // fragmentos contiguos del mismo peso en un solo tramo.
+        const segs: Seg[] = [];
         let prevEnd: number | null = null;
+        let italChars = 0;
+        let totalChars = 0;
         for (const item of items) {
+          const { bold, italic } = weight(item.fontName);
           const x = item.transform[4];
-          const separated = prevEnd !== null && x - prevEnd > size * 0.14;
-          if (separated && !/\s$/.test(text) && !/^\s/.test(item.str)) text += ' ';
-          text += item.str;
+          const spacer = prevEnd !== null && x - prevEnd > size * 0.14 ? ' ' : '';
+          const last = segs[segs.length - 1];
+          if (last && last.bold === bold) last.text += spacer + item.str;
+          else segs.push({ text: spacer + item.str, bold });
           prevEnd = x + (item.width ?? 0);
+          totalChars += item.str.length;
+          if (italic) italChars += item.str.length;
         }
 
+        // "Todo en negrita" mira solo los tramos con letras o números: un signo
+        // de puntuación suelto en fuente normal (p.ej. el punto final) no debe
+        // descalificar una línea que por lo demás está entera en negrita.
+        const wordSegs = segs.filter((s) => /[\p{L}\p{N}]/u.test(s.text));
         lines.push({
-          text: text.replace(/\s+/g, ' ').trim(),
+          segs,
           size: Math.round(size * 10) / 10,
-          font: first.fontName,
           gap: prevY === null ? Infinity : Math.round((prevY - y) * 10) / 10,
           pageStart: prevY === null,
+          allBold: wordSegs.length > 0 && wordSegs.every((s) => s.bold),
+          italic: totalChars > 0 && italChars / totalChars > 0.5,
         });
         prevY = y;
       }
@@ -102,7 +133,7 @@ async function readPdfLines(file: string): Promise<Line[]> {
     await task.destroy();
   }
 
-  return lines.filter((l) => l.text);
+  return lines.filter((l) => plain(l));
 }
 
 // ─── PDF -> bloques marcados ──────────────────────────────────────────
@@ -145,20 +176,46 @@ function mostCommon(values: number[], fallback: number) {
 
 type Parsed = { title: string; publishedAt: string | null; blocks: string[] };
 
+/** Une los tramos de un grupo de líneas y los emite con `**negrita**`, dejando
+ *  los espacios fuera de los marcadores. */
+function inline(group: Line[]): string {
+  const segs: Seg[] = [];
+  for (const line of group) {
+    for (const s of line.segs) {
+      const last = segs[segs.length - 1];
+      const spacer = last && !/\s$/.test(last.text) && !/^\s/.test(s.text) ? ' ' : '';
+      if (last && last.bold === s.bold) last.text += spacer + s.text;
+      else segs.push({ text: (last ? spacer : '') + s.text, bold: s.bold });
+    }
+  }
+  return tidy(
+    segs
+      .map((s) => {
+        if (!s.bold || !s.text.trim()) return s.text;
+        const m = s.text.match(/^(\s*)([\s\S]*?)(\s*)$/)!;
+        return `${m[1]}**${m[2]}**${m[3]}`;
+      })
+      .join('')
+  );
+}
+
+const quoted = (t: string) => /^["“]/.test(t) && /["”]\.?$/.test(t);
+const unquote = (t: string) => t.replace(/^["“]\s*/, '').replace(/\s*["”]\.?$/, '');
+
 function parsePdf(lines: Line[]): Parsed {
   // El título ocupa todo lo que precede a la firma del autor: puede abarcar
   // varias líneas y, si es largo, el documento lo encoge, así que el tamaño
   // tipográfico no sirve como criterio.
-  const authorIdx = lines.findIndex((l) => l.text === AUTHOR_LINE);
+  const authorIdx = lines.findIndex((l) => plain(l) === AUTHOR_LINE);
   const maxSize = Math.max(...lines.map((l) => l.size));
   const titleLines = authorIdx > 0 ? lines.slice(0, authorIdx) : lines.filter((l) => l.size === maxSize);
-  const title = titleLines.map((l) => l.text).join(' ').replace(/\s+/g, ' ').trim();
+  const title = titleLines.map(plain).join(' ').replace(/\s+/g, ' ').trim();
 
   let cursor = authorIdx >= 0 ? authorIdx + 1 : titleLines.length;
-  while (cursor < lines.length && BIO_PREFIXES.some((p) => lines[cursor].text.startsWith(p))) cursor++;
+  while (cursor < lines.length && BIO_PREFIXES.some((p) => plain(lines[cursor]).startsWith(p))) cursor++;
 
   let publishedAt: string | null = null;
-  const date = lines[cursor]?.text.match(/^(\d{1,2})\s+de\s+([a-záéíóú]+)\s+del?\s+(\d{4})$/i);
+  const date = (lines[cursor] ? plain(lines[cursor]) : '').match(/^(\d{1,2})\s+de\s+([a-záéíóú]+)\s+del?\s+(\d{4})$/i);
   if (date && MESES[date[2].toLowerCase()] !== undefined) {
     publishedAt = new Date(Date.UTC(+date[3], MESES[date[2].toLowerCase()], +date[1], 12)).toISOString();
     cursor++;
@@ -166,54 +223,83 @@ function parsePdf(lines: Line[]): Parsed {
 
   const body = lines.slice(cursor);
   const lineGap = mostCommon(body.map((l) => l.gap).filter((g) => Number.isFinite(g) && g > 0), 15);
-  const bodyFont = mostCommon(
-    body.map((l) => Number(l.font.replace(/\D/g, ''))).filter((n) => !Number.isNaN(n)),
-    1
-  );
+  const bodySize = mostCommon(body.map((l) => l.size), 11);
 
   // Un salto claramente mayor al interlineado abre un párrafo nuevo. En el
   // cambio de página no hay distancia que medir, así que ahí la señal es si la
   // frase anterior quedó sin cerrar: en ese caso el párrafo continúa.
   const groups: Line[][] = [];
   for (const line of body) {
-    const isBullet = /^[•·]/.test(line.text) || /^\d+\.\s/.test(line.text);
+    const t = plain(line);
+    const isBullet = /^[•·]/.test(t) || /^\d+[.)]\s/.test(t);
     const previous = groups[groups.length - 1];
+    const prevLine = previous ? previous[previous.length - 1] : null;
     const continuesSentence =
-      line.pageStart && previous && !/[.?!:;…]["”']?$/.test(previous[previous.length - 1].text);
+      line.pageStart && prevLine && !/[.?!:;…]["”']?$/.test(plain(prevLine));
 
-    if (!groups.length || isBullet || (!continuesSentence && line.gap > lineGap * 1.35)) groups.push([line]);
-    else previous.push(line);
+    // Un encabezado va todo en negrita y su párrafo no: el cambio de peso entre
+    // líneas contiguas separa el encabezado aunque no haya un salto vertical
+    // grande (el PDF a veces los pega). Sin esto quedan como negrita inline.
+    const boldChange = prevLine ? prevLine.allBold !== line.allBold : false;
+
+    if (!groups.length || isBullet || boldChange || (!continuesSentence && line.gap > lineGap * 1.35)) {
+      groups.push([line]);
+    } else {
+      previous!.push(line);
+    }
   }
 
-  const blocks = groups.map((group) => {
-    const text = group.map((l) => l.text).join(' ').replace(/\s+/g, ' ').trim();
-    const head = group[0];
+  const n = groups.length;
+  const blocks: string[] = [];
+  groups.forEach((group, i) => {
+    const text = tidy(group.map(plain).join(' '));
+    const allBold = group.every((l) => l.allBold);
+    const italic = group.some((l) => l.italic);
+    const isFirst = i === 0;
+    const isLast = i === n - 1;
 
-    const bullet = text.match(/^[•·]\s*(.*)$/);
-    if (bullet) return `- ${bullet[1]}`;
-    if (/^\d+\.\s/.test(text)) return text;
-
-    // Subtítulo de sección: una sola línea, corta, en fuente distinta a la del
-    // cuerpo o formulada como pregunta. Se excluyen las que introducen una lista.
-    const distinctFont = Number(head.font.replace(/\D/g, '')) !== bodyFont;
-    if (group.length === 1 && text.length < 90 && !text.endsWith(':') && (distinctFont || text.endsWith('?'))) {
-      return `# ${text}`;
+    if (/^[•·]\s*/.test(text)) {
+      blocks.push(`- ${inline(group).replace(/^[•·]\s*/, '')}`);
+      return;
+    }
+    // Ítem de lista numerada — salvo que vaya todo en negrita: entonces es un
+    // subtítulo tipo "1. Escuchar", que se trata como encabezado más abajo.
+    if (/^\d+[.)]\s/.test(text) && !allBold) {
+      blocks.push(inline(group).replace(/^(\d+)\)\s/, '$1. '));
+      return;
     }
 
-    return text;
+    // Epígrafe de apertura: la cita va como tal, y la atribución (que en el PDF
+    // sigue en negrita-itálica) queda como línea propia sin marcas.
+    if (isFirst && /^["“]/.test(text)) {
+      const m = text.match(/^(["“][\s\S]*?["”]\.?)\s*([\s\S]*)$/);
+      if (m) {
+        blocks.push(`> ${unquote(m[1])}`);
+        if (m[2].trim()) blocks.push(m[2].replace(/\*\*/g, '').trim());
+        return;
+      }
+    }
+
+    // Cierre de impacto: la última línea que el autor pone aparte —sea por ir
+    // entrecomillada, en negrita, en itálica o en cuerpo mayor— se convierte en
+    // cita, sin marcas internas, para que respire.
+    const bigger = group.every((l) => l.size > bodySize * 1.1);
+    if (isLast && (quoted(text) || allBold || italic || bigger)) {
+      blocks.push(`> ${unquote(text)}`);
+      return;
+    }
+
+    // Encabezado de sección: línea propia, corta, toda en negrita o formulada
+    // como pregunta. Se excluyen la atribución en itálica y las que abren lista.
+    if (group.length <= 2 && text.length < 110 && !isFirst && !italic && !text.endsWith(':') && (allBold || text.endsWith('?'))) {
+      blocks.push(`# ${text}`);
+      return;
+    }
+
+    blocks.push(inline(group));
   });
 
-  // El epígrafe inicial y la frase de cierre vienen entrecomillados: son citas.
-  return {
-    title,
-    publishedAt,
-    blocks: blocks.map((b, i) => {
-      const isEdge = i === 0 || i === blocks.length - 1;
-      return isEdge && /^["“][\s\S]*["”]\.?$/.test(b)
-        ? `> ${b.replace(/^["“]\s*/, '').replace(/\s*["”]\.?$/, '')}`
-        : b;
-    }),
-  };
+  return { title, publishedAt, blocks };
 }
 
 // ─── PPTX -> imágenes recortadas ──────────────────────────────────────
@@ -376,7 +462,10 @@ async function extract() {
 
     await writeFile(path.join(DIRS.ready, readyName), parsed.blocks.join('\n'), 'utf8');
 
-    const lead = parsed.blocks.find((b) => !b.startsWith('#') && !b.startsWith('>') && !b.startsWith('-')) ?? '';
+    // El resumen es texto plano: se le quitan los marcadores de negrita.
+    const lead = (parsed.blocks.find((b) => !b.startsWith('#') && !b.startsWith('>') && !b.startsWith('-')) ?? '')
+      .replace(/\*\*/g, '')
+      .replace(/^\d+\.\s+/, '');
     const image = `${stem}.png`;
 
     manifest.push({
@@ -412,6 +501,24 @@ type Block = {
   children: Span[];
 };
 
+/** Convierte `texto con **negrita**` en spans de Portable Text, marcando en
+ *  negrita (`strong`) los tramos entre `**`. */
+function toSpans(text: string): Span[] {
+  const spans = text
+    .split(/(\*\*[^*]+\*\*)/g)
+    .filter((part) => part !== '')
+    .map((part) => {
+      const bold = /^\*\*[^*]+\*\*$/.test(part);
+      return {
+        _type: 'span' as const,
+        _key: randomUUID().slice(0, 12),
+        text: bold ? part.slice(2, -2) : part,
+        marks: bold ? ['strong'] : [],
+      };
+    });
+  return spans.length ? spans : [{ _type: 'span', _key: randomUUID().slice(0, 12), text: '', marks: [] }];
+}
+
 function toBlock(style: string, text: string, listItem?: 'bullet' | 'number'): Block {
   return {
     _type: 'block',
@@ -419,7 +526,7 @@ function toBlock(style: string, text: string, listItem?: 'bullet' | 'number'): B
     style,
     ...(listItem ? { listItem, level: 1 } : {}),
     markDefs: [],
-    children: [{ _type: 'span', _key: randomUUID().slice(0, 12), text, marks: [] }],
+    children: toSpans(text),
   };
 }
 
@@ -554,12 +661,37 @@ async function imagesOnly() {
   console.log(`\n${pending.length} imagen(es) reemplazadas. El texto quedó intacto.`);
 }
 
+// ─── Paso 3b: reemplazo de solo el cuerpo ─────────────────────────────
+
+/**
+ * Actualiza solo `body` (y `excerpt`) con un patch. No toca `mainImage`, que
+ * puede tener correcciones aún no reflejadas en el manifest, ni ningún otro
+ * campo que se haya editado desde el Studio.
+ */
+async function textOnly() {
+  const client = await sanityWriteClient();
+  const manifest: ManifestEntry[] = JSON.parse(await readFile(MANIFEST, 'utf8'));
+  const only = process.argv.slice(2).find((a) => a.startsWith('--only='))?.split('=')[1];
+  const pending = only ? manifest.filter((e) => e.file === only || e.slug === only) : manifest;
+
+  if (!pending.length) throw new Error(`Sin coincidencias para --only=${only}`);
+
+  for (const entry of pending) {
+    const body = parseToPortableText(await readFile(path.join(DIRS.ready, entry.file), 'utf8'));
+    await client.patch(`post-${entry.slug}`).set({ body, excerpt: entry.excerpt }).commit();
+    console.log(`  texto      ${entry.slug}`);
+  }
+
+  console.log(`\n${pending.length} cuerpo(s) actualizados. Imágenes y demás campos intactos.`);
+}
+
 // ─── CLI ──────────────────────────────────────────────────────────────
 
 const MODES = {
   '--extract': { label: 'Extrayendo', run: extract },
   '--publish': { label: 'Publicando', run: publish },
   '--images-only': { label: 'Reemplazando imágenes', run: imagesOnly },
+  '--text-only': { label: 'Actualizando texto', run: textOnly },
 } as const;
 
 const mode = process.argv.slice(2).find((a): a is keyof typeof MODES => a in MODES);
