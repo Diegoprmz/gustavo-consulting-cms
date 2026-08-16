@@ -2,66 +2,42 @@ import Navbar from '@/components/sections/Navbar';
 import Footer from '@/components/sections/Footer';
 import Image from 'next/image';
 
+import CredentialsAccordion from '@/components/about/CredentialsAccordion';
+import InstitutionLogos from '@/components/about/InstitutionLogos';
+
 export const metadata = {
   title: 'Trayectoria',
-  description: 'Más de tres décadas conectando estrategia con ejecución en empresas de México y Latinoamérica.',
+  description:
+    'Estudios, certificaciones y trayectoria de Gustavo Martínez Pellón: formación en Stanford, Kellogg, Notre Dame, Georgetown, ITAM y Anáhuac.',
   openGraph: {
     title: 'Trayectoria | Gustavo Martínez Business Consulting',
-    description: 'Más de tres décadas conectando estrategia con ejecución en empresas de México y Latinoamérica.',
+    description:
+      'Estudios, certificaciones y trayectoria de Gustavo Martínez Pellón: formación en las principales escuelas de negocio del mundo.',
     url: 'https://gustavo.consulting/about',
   },
 };
 
-const timeline = [
-  {
-    category: 'Formación Académica',
-    items: [
-      'Licenciatura en Administración de Empresas — ITAM',
-      'MBA — Universidad Anáhuac México',
-      'Programas ejecutivos internacionales de estrategia y liderazgo',
-    ],
-  },
-  {
-    category: 'Experiencia Profesional',
-    items: [
-      'Director de programas ejecutivos en instituciones de alto nivel',
-      'Consultor estratégico en procesos de transformación organizacional',
-      'Consejero independiente en consejos de administración',
-      'Más de 30 años asesorando a empresas en México y Latinoamérica',
-    ],
-  },
-  {
-    category: 'Participación Internacional',
-    items: [
-      'Conferencista en foros de estrategia y Customer Centricity',
-      'Asesor de empresas multinacionales en LATAM',
-      'Autor del libro "Customer Centricity — El Foco en el Cliente"',
-    ],
-  },
-];
-
-const impactAreas = [
-  {
-    number: '01',
-    title: 'Dirección Académica',
-    description: 'Liderazgo de programas ejecutivos en instituciones de alto nivel, formando directivos con visión estratégica y orientación al cliente.',
-  },
-  {
-    number: '02',
-    title: 'Asesoría Estratégica',
-    description: 'Acompañamiento en procesos de transformación empresarial, conectando estrategia con ejecución real en empresas de distintos sectores.',
-  },
-  {
-    number: '03',
-    title: 'Consejero Independiente',
-    description: 'Participación en consejos de administración aportando perspectiva externa, rigor analítico y enfoque en la creación de valor sostenible.',
-  },
-  {
-    number: '04',
-    title: 'Alcance Internacional',
-    description: 'Conferencias, asesorías y programas formativos con alcance en México, Centroamérica y Sudamérica, adaptados a cada contexto de negocio.',
-  },
-];
+/** Marca de sección aún sin contenido definitivo (visible en el PR para revisión). */
+function Placeholder({ nota }: { nota: string }) {
+  return (
+    <div
+      style={{
+        border: '1px dashed rgba(106,143,123,0.5)',
+        borderRadius: '12px',
+        padding: '40px',
+        textAlign: 'center',
+        backgroundColor: 'rgba(106,143,123,0.04)',
+      }}
+    >
+      <p className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px' }}>
+        Contenido en preparación
+      </p>
+      <p className="font-sans" style={{ fontSize: '15px', color: '#6B7280', lineHeight: 1.7, maxWidth: '520px', margin: '0 auto' }}>
+        {nota}
+      </p>
+    </div>
+  );
+}
 
 export default function AboutPage() {
   return (
@@ -69,10 +45,7 @@ export default function AboutPage() {
       <Navbar />
       <main>
         {/* Hero */}
-        <section
-          className="bg-white flex items-center"
-          style={{ paddingTop: '140px', paddingBottom: '100px' }}
-        >
+        <section className="bg-white flex items-center" style={{ paddingTop: '140px', paddingBottom: '100px' }}>
           <div className="max-w-[1200px] mx-auto px-5 md:px-8 w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <div>
@@ -123,14 +96,7 @@ export default function AboutPage() {
                     borderRadius: '16px',
                   }}
                 />
-                <div
-                  style={{
-                    position: 'relative',
-                    borderRadius: '14px',
-                    overflow: 'hidden',
-                    boxShadow: '0 16px 48px rgba(36,58,77,0.14)',
-                  }}
-                >
+                <div style={{ position: 'relative', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 16px 48px rgba(36,58,77,0.14)' }}>
                   <Image
                     src="/assets/gustavo-arizona-CeKj84jk.jpg"
                     alt="Gustavo Martínez Pellón"
@@ -152,7 +118,7 @@ export default function AboutPage() {
                     boxShadow: '0 8px 24px rgba(36,58,77,0.25)',
                   }}
                 >
-                  <p className="font-sans font-bold" style={{ fontSize: '22px', lineHeight: 1 }}>20+</p>
+                  <p className="font-sans font-bold" style={{ fontSize: '22px', lineHeight: 1 }}>30+</p>
                   <p className="font-sans" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.75)', letterSpacing: '0.06em', marginTop: '4px' }}>
                     AÑOS DE EXPERIENCIA
                   </p>
@@ -162,99 +128,77 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Áreas de Impacto */}
+        {/* 1. Trayectoria personal — Estudios y certificaciones */}
         <section style={{ backgroundColor: '#F5F5F5', paddingTop: '100px', paddingBottom: '100px' }}>
           <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-            <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '56px' }}>
               <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                Especialización
+                Trayectoria personal
               </span>
-              <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(28px, 3vw, 38px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.25 }}>
-                Áreas de impacto
+              <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(28px, 3vw, 40px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.25 }}>
+                Estudios y certificaciones
               </h2>
+              <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.7, maxWidth: '620px', margin: '18px auto 0' }}>
+                Formación continua durante más de tres décadas en las principales escuelas de negocio del mundo y con referentes globales del pensamiento estratégico.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {impactAreas.map((area) => (
-                <div
-                  key={area.number}
-                  style={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '12px',
-                    padding: '36px',
-                    boxShadow: '0 2px 16px rgba(36,58,77,0.06)',
-                  }}
-                >
-                  <p className="font-sans font-bold" style={{ fontSize: '13px', color: '#6A8F7B', marginBottom: '14px' }}>
-                    {area.number}
-                  </p>
-                  <h3 className="font-serif font-bold" style={{ fontSize: '22px', color: '#243A4D', marginBottom: '12px' }}>
-                    {area.title}
-                  </h3>
-                  <p className="font-sans" style={{ fontSize: '15px', color: '#333333', lineHeight: 1.75 }}>
-                    {area.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <CredentialsAccordion />
+            <InstitutionLogos />
           </div>
         </section>
 
-        {/* Timeline */}
-        <section style={{ backgroundColor: '#243A4D', paddingTop: '100px', paddingBottom: '100px' }}>
-          <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-            <div style={{ marginBottom: '64px' }}>
+        {/* 2. Trayectoria empresarial — PENDIENTE DE CONTENIDO */}
+        <section style={{ backgroundColor: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
+          <div className="max-w-[1000px] mx-auto px-5 md:px-8">
+            <div style={{ marginBottom: '40px' }}>
               <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                Recorrido profesional
+                Trayectoria empresarial
               </span>
-              <h2 className="font-serif font-bold text-white" style={{ fontSize: 'clamp(28px, 3vw, 38px)', marginTop: '16px', lineHeight: 1.25 }}>
-                Formación y experiencia
+              <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(28px, 3vw, 40px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.25 }}>
+                Recorrido en empresas y consejos
               </h2>
             </div>
+            <Placeholder nota="Aquí irá la carrera empresarial de Gustavo: empresas, cargos directivos, consejos de administración y años. Pendiente de recibir el CV / listado." />
+          </div>
+        </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {timeline.map((block, i) => (
-                <div key={i}>
-                  <div style={{ borderTop: '2px solid #6A8F7B', paddingTop: '24px' }}>
-                    <h3 className="font-sans font-semibold" style={{ fontSize: '14px', color: '#6A8F7B', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '20px' }}>
-                      {block.category}
-                    </h3>
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                      {block.items.map((item, j) => (
-                        <li key={j} className="font-sans" style={{ fontSize: '15px', color: 'rgba(255,255,255,0.85)', lineHeight: 1.7, marginBottom: '12px', paddingLeft: '16px', position: 'relative' }}>
-                          <span style={{ position: 'absolute', left: 0, color: '#6A8F7B' }}>·</span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
+        {/* 3. Gustos y hobbies — PENDIENTE DE CONTENIDO */}
+        <section style={{ backgroundColor: '#F5F5F5', paddingTop: '100px', paddingBottom: '100px' }}>
+          <div className="max-w-[1000px] mx-auto px-5 md:px-8">
+            <div style={{ marginBottom: '40px' }}>
+              <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                En lo personal
+              </span>
+              <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(28px, 3vw, 40px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.25 }}>
+                Gustos y pasatiempos
+              </h2>
             </div>
+            <Placeholder nota="Aquí irá el lado personal de Gustavo: familia, deportes, viajes, lecturas o aficiones. Pendiente de definir el contenido." />
           </div>
         </section>
 
         {/* CTA */}
-        <section style={{ backgroundColor: '#ffffff', paddingTop: '100px', paddingBottom: '100px', textAlign: 'center' }}>
+        <section style={{ backgroundColor: '#243A4D', paddingTop: '100px', paddingBottom: '100px', textAlign: 'center' }}>
           <div className="max-w-[720px] mx-auto px-5 md:px-8">
             <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               ¿Trabajamos juntos?
             </span>
-            <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(28px, 3vw, 40px)', color: '#243A4D', marginTop: '16px', marginBottom: '20px', lineHeight: 1.25 }}>
+            <h2 className="font-serif font-bold text-white" style={{ fontSize: 'clamp(28px, 3vw, 40px)', marginTop: '16px', marginBottom: '28px', lineHeight: 1.25 }}>
               Si este enfoque resuena con los retos de tu organización, podemos conversar.
             </h2>
             <a
               href="/contact"
-              className="inline-block font-sans font-semibold text-white"
+              className="inline-block font-sans font-semibold"
               style={{
-                backgroundColor: '#243A4D',
+                backgroundColor: '#C9A84C',
+                color: '#243A4D',
                 padding: '16px 36px',
                 borderRadius: '8px',
                 fontSize: '13px',
                 letterSpacing: '0.08em',
                 textDecoration: 'none',
                 textTransform: 'uppercase',
-                marginTop: '12px',
               }}
             >
               Solicitar asesoría →
