@@ -11,7 +11,7 @@ const CATEGORIES: Category[] = [
     label: 'Formación académica',
     count: '3 grados',
     items: [
-      { title: 'Licenciatura en Administración' },
+      { title: 'Licenciatura en Administración de Empresas', detail: 'ITAM' },
       { title: 'Maestría en Administración', detail: 'ITAM · especialidad en Dirección General' },
       {
         title: 'Doctorado en Innovación en Responsabilidad Social y Sostenibilidad',
