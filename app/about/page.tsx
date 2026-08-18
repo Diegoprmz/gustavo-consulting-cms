@@ -2,7 +2,7 @@ import Navbar from '@/components/sections/Navbar';
 import Footer from '@/components/sections/Footer';
 import Image from 'next/image';
 
-import CredentialsAccordion from '@/components/about/CredentialsAccordion';
+import CertificateSlider from '@/components/about/CertificateSlider';
 import InstitutionLogos from '@/components/about/InstitutionLogos';
 
 export const metadata = {
@@ -143,7 +143,20 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <CredentialsAccordion />
+            <CertificateSlider />
+
+            <p
+              className="font-sans"
+              style={{ textAlign: 'center', fontSize: '15px', color: '#6B7280', lineHeight: 1.8, maxWidth: '760px', margin: '64px auto 0' }}
+            >
+              Además, seminarios internacionales en Stanford, Kellogg, Notre Dame, Georgetown, McGill y Deusto, y
+              programas ejecutivos con referentes globales como <strong style={{ color: '#243A4D', fontWeight: 600 }}>Gary Hamel</strong>,{' '}
+              <strong style={{ color: '#243A4D', fontWeight: 600 }}>Seth Godin</strong>,{' '}
+              <strong style={{ color: '#243A4D', fontWeight: 600 }}>Guy Kawasaki</strong>,{' '}
+              <strong style={{ color: '#243A4D', fontWeight: 600 }}>Daniel Goleman</strong> y{' '}
+              <strong style={{ color: '#243A4D', fontWeight: 600 }}>Marshall Goldsmith</strong>.
+            </p>
+
             <InstitutionLogos />
           </div>
         </section>
