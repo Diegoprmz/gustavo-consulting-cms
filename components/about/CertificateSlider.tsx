@@ -2,18 +2,19 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Navigation, Keyboard, Zoom } from 'swiper/modules';
+import type { Swiper as SwiperClass } from 'swiper';
+import { Navigation, Keyboard, Zoom } from 'swiper/modules';
 
 import InstitutionLogos from '@/components/about/InstitutionLogos';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/effect-coverflow';
 import 'swiper/css/zoom';
 
 type Tag = 'Grado académico' | 'Diplomado' | 'Seminario internacional' | 'Certificación' | 'Coaching' | 'Consejería';
 type Doc = { src: string; title: string; tag: Tag };
-type Row = Doc | { sep: string };
+type Sep = { sep: string; logo?: string };
+type Row = Doc | Sep;
 
 const D = (src: string, title: string, tag: Tag): Doc => ({ src, title, tag });
 
@@ -67,8 +68,8 @@ const COACHING: Doc[] = [
 const CONSEJERIA: Doc[] = [D('consejeria-cncpie', 'Consejero Profesional Independiente', 'Consejería')];
 
 const SEMINARIOS: Row[] = [
-  { sep: 'SEMINARIUM' }, ...SEMINARIUM,
-  { sep: 'WOBI' }, ...WOBI,
+  { sep: 'Seminarium', logo: 'seminarium' }, ...SEMINARIUM,
+  { sep: 'WOBI', logo: 'wobi' }, ...WOBI,
   { sep: 'Otros programas' }, ...OTROS,
 ];
 
@@ -84,8 +85,11 @@ const TAG_STYLE: Record<Tag, { text: string; tint: string; dot: string }> = {
   Consejería: { text: '#3E5871', tint: 'rgba(91,123,154,0.16)', dot: '#5B7B9A' },
 };
 
-const url = (src: string) => `/assets/certificados/${src}.jpg`;
-const isSep = (r: Row): r is { sep: string } => 'sep' in r;
+const V = '3'; // cache-bust tras re-recorte de certificados
+const url = (src: string) => `/assets/certificados/${src}.jpg?v=${V}`;
+const isSep = (r: Row): r is Sep => 'sep' in r;
+
+type NavItem = { label: string; tag: Tag; target: string };
 
 function TagBadge({ tag }: { tag: Tag }) {
   const s = TAG_STYLE[tag];
@@ -100,15 +104,35 @@ function TagBadge({ tag }: { tag: Tag }) {
   );
 }
 
+/** Navegación de la cabecera: chips por tag que saltan a cada carrusel. */
+function SectionNav({ items }: { items: NavItem[] }) {
+  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  return (
+    <div className="secnav">
+      {items.map((it) => {
+        const s = TAG_STYLE[it.tag];
+        return (
+          <button key={it.target} type="button" onClick={() => go(it.target)} className="secnav-chip font-sans" style={{ color: s.text, backgroundColor: s.tint }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: s.dot }} />
+            {it.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 /** Marco negro con bisel plateado, pegado a los bordes reales de la imagen. */
 function FramedSlide({ doc, onOpen }: { doc: Doc; onOpen: (src: string) => void }) {
   return (
     <button type="button" onClick={() => onOpen(doc.src)} aria-label={`Ampliar: ${doc.title}`} className="fslide">
-      <span className="bframe">
-        <span className="bevel">
-          <span className="blackmat">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={url(doc.src)} alt={doc.title} loading="lazy" />
+      <span className="fimg">
+        <span className="bframe">
+          <span className="bevel">
+            <span className="blackmat">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={url(doc.src)} alt={doc.title} loading="lazy" />
+            </span>
           </span>
         </span>
       </span>
@@ -122,38 +146,47 @@ function FramedSlide({ doc, onOpen }: { doc: Doc; onOpen: (src: string) => void 
   );
 }
 
-function Separator({ label }: { label: string }) {
+/** Panel-separador de marca (logo real) que divide los grupos dentro del carrusel. */
+function SepPanel({ sep }: { sep: Sep }) {
   return (
-    <span className="sep">
-      <span className="sep-line" />
-      <span className="font-serif sep-txt">{label}</span>
-      <span className="sep-line" />
+    <span className="seppanel">
+      {sep.logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={`/assets/credenciales/${sep.logo}.png`} alt={sep.sep} className="seplogo" />
+      ) : (
+        <span className="sepbig font-serif">{sep.sep}</span>
+      )}
+      <span className="sepcap font-sans">{sep.logo ? 'Programas' : 'Escuelas de negocio'}</span>
     </span>
   );
 }
 
-function Carousel({ title, rows, onOpen }: { title: string; rows: Row[]; onOpen: (src: string) => void }) {
+function Carousel({ id, title, rows, onOpen }: { id: string; title: string; rows: Row[]; onOpen: (src: string) => void }) {
+  const [sw, setSw] = useState<SwiperClass | null>(null);
+  const [pos, setPos] = useState({ beg: true, end: false });
+  const upd = (s: SwiperClass) => setPos({ beg: s.isBeginning, end: s.isEnd });
+  const canNav = rows.length > 1;
+
   return (
-    <div style={{ marginBottom: '72px' }}>
-      <h3 className="font-serif" style={{ fontSize: 'clamp(20px, 2.2vw, 26px)', fontWeight: 700, color: '#243A4D', textAlign: 'center', marginBottom: '32px' }}>
+    <div id={id} style={{ marginBottom: '84px', scrollMarginTop: '96px' }}>
+      <h3 className="font-serif" style={{ fontSize: 'clamp(20px, 2.2vw, 26px)', fontWeight: 700, color: '#243A4D', textAlign: 'center', marginBottom: '30px' }}>
         {title}
       </h3>
       <Swiper
-        modules={[EffectCoverflow, Navigation, Keyboard]}
-        effect="coverflow"
+        modules={[Keyboard]}
+        onSwiper={(s) => { setSw(s); upd(s); }}
+        onSlideChange={upd}
         centeredSlides
         slidesPerView="auto"
-        spaceBetween={28}
+        spaceBetween={40}
         grabCursor
         keyboard={{ enabled: true }}
-        navigation
-        coverflowEffect={{ rotate: 0, stretch: 0, depth: 110, modifier: 2, slideShadows: false }}
-        style={{ padding: '10px 0' }}
+        className="credsw"
       >
         {rows.map((r, i) =>
           isSep(r) ? (
             <SwiperSlide key={`sep-${i}`} style={{ width: 'auto' }}>
-              <Separator label={r.sep} />
+              <SepPanel sep={r} />
             </SwiperSlide>
           ) : (
             <SwiperSlide key={r.src} style={{ width: 'auto' }}>
@@ -162,6 +195,12 @@ function Carousel({ title, rows, onOpen }: { title: string; rows: Row[]; onOpen:
           )
         )}
       </Swiper>
+      {canNav && (
+        <div className="creds-nav">
+          <button type="button" onClick={() => sw?.slidePrev()} disabled={pos.beg} aria-label="Anterior">‹</button>
+          <button type="button" onClick={() => sw?.slideNext()} disabled={pos.end} aria-label="Siguiente">›</button>
+        </div>
+      )}
     </div>
   );
 }
@@ -187,29 +226,43 @@ export default function CertificateSlider() {
     <div className="cred">
       <section style={{ backgroundColor: '#F5F5F5', paddingTop: '100px', paddingBottom: '100px' }}>
         <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
             <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Trayectoria personal</span>
             <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.2 }}>Estudios</h2>
             <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.7, maxWidth: '640px', margin: '18px auto 0' }}>
               Formación continua durante más de tres décadas en las principales escuelas de negocio del mundo.
             </p>
+            <SectionNav
+              items={[
+                { label: 'Formación académica', tag: 'Grado académico', target: 'c-academico' },
+                { label: 'Diplomados', tag: 'Diplomado', target: 'c-diplomados' },
+                { label: 'Seminarios internacionales', tag: 'Seminario internacional', target: 'c-seminarios' },
+              ]}
+            />
           </div>
-          <Carousel title="Formación académica" rows={ACADEMICO} onOpen={setOpenSrc} />
-          <Carousel title="Diplomados" rows={DIPLOMADOS} onOpen={setOpenSrc} />
-          <Carousel title="Seminarios internacionales" rows={SEMINARIOS} onOpen={setOpenSrc} />
+          <Carousel id="c-academico" title="Formación académica" rows={ACADEMICO} onOpen={setOpenSrc} />
+          <Carousel id="c-diplomados" title="Diplomados" rows={DIPLOMADOS} onOpen={setOpenSrc} />
+          <Carousel id="c-seminarios" title="Seminarios internacionales" rows={SEMINARIOS} onOpen={setOpenSrc} />
           <InstitutionLogos />
         </div>
       </section>
 
       <section style={{ backgroundColor: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
         <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-          <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
             <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Acreditaciones profesionales</span>
             <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.2 }}>Certificaciones</h2>
+            <SectionNav
+              items={[
+                { label: 'Profesionales', tag: 'Certificación', target: 'c-certprof' },
+                { label: 'Coaching', tag: 'Coaching', target: 'c-coaching' },
+                { label: 'Consejería', tag: 'Consejería', target: 'c-consejeria' },
+              ]}
+            />
           </div>
-          <Carousel title="Certificaciones profesionales" rows={CERT_PROF} onOpen={setOpenSrc} />
-          <Carousel title="Coaching" rows={COACHING} onOpen={setOpenSrc} />
-          <Carousel title="Consejería" rows={CONSEJERIA} onOpen={setOpenSrc} />
+          <Carousel id="c-certprof" title="Certificaciones profesionales" rows={CERT_PROF} onOpen={setOpenSrc} />
+          <Carousel id="c-coaching" title="Coaching" rows={COACHING} onOpen={setOpenSrc} />
+          <Carousel id="c-consejeria" title="Consejería" rows={CONSEJERIA} onOpen={setOpenSrc} />
         </div>
       </section>
 
@@ -234,7 +287,20 @@ export default function CertificateSlider() {
       )}
 
       <style jsx global>{`
+        /* ---- Cabecera: navegación por tags ---- */
+        .cred .secnav { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:30px; }
+        .cred .secnav-chip { display:inline-flex; align-items:center; gap:7px; font-size:12px; font-weight:600;
+          letter-spacing:.02em; padding:8px 16px; border-radius:100px; border:none; cursor:pointer;
+          transition:transform .15s ease, box-shadow .2s ease; }
+        .cred .secnav-chip:hover { transform:translateY(-1px); box-shadow:0 8px 18px -8px rgba(36,58,77,.35); }
+
+        /* ---- Slider: foco al centro, vecinos atenuados (no “cortados”) ---- */
+        .cred .credsw { padding:16px 0 4px; overflow:hidden; }
+        .cred .credsw .swiper-slide { transition:opacity .35s ease, transform .35s ease; opacity:.4; transform:scale(.88); }
+        .cred .credsw .swiper-slide-active, .cred .credsw .swiper-slide-duplicate-active { opacity:1; transform:scale(1); }
+
         .cred .fslide { display:block; border:none; padding:0; background:none; cursor:zoom-in; }
+        .cred .fimg { display:flex; align-items:flex-end; justify-content:center; height:356px; }
         /* Marco pegado a la imagen: alto fijo, ancho según la proporción real del certificado */
         .cred .bframe { display:inline-block; padding:16px; border-radius:2px;
           background:linear-gradient(160deg,#2c2c2c,#0b0b0b 62%);
@@ -244,19 +310,32 @@ export default function CertificateSlider() {
           box-shadow: inset 0 1px 2px rgba(255,255,255,.7); }
         .cred .blackmat { display:block; padding:12px; background:#0a0a0a; box-shadow: inset 0 2px 7px rgba(0,0,0,.75); }
         .cred .blackmat img { display:block; height:290px; width:auto; box-shadow:0 1px 4px rgba(0,0,0,.5); }
-        .cred .sep { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; height:322px; width:96px; }
-        .cred .sep-line { width:1.5px; flex:1; background:linear-gradient(#C9A84C, rgba(201,168,76,0)); }
-        .cred .sep-line:last-child { background:linear-gradient(rgba(201,168,76,0), #C9A84C); }
-        .cred .sep-txt { writing-mode:vertical-rl; text-orientation:mixed; transform:rotate(180deg); font-size:15px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#8A6D1F; }
-        .cred .swiper-button-next, .cred .swiper-button-prev {
-          width:40px; height:40px; border-radius:50%; color:#243A4D;
-          background:rgba(255,255,255,.92); border:1px solid rgba(36,58,77,.14);
-          box-shadow:0 4px 14px rgba(36,58,77,.10); backdrop-filter:blur(3px);
+
+        /* ---- Panel-separador de marca ---- */
+        .cred .seppanel { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+          width:220px; height:356px; border-radius:12px; position:relative;
+          background:linear-gradient(180deg,#ffffff,#fbfaf7);
+          border:1px solid rgba(36,58,77,.08); box-shadow:0 14px 34px -20px rgba(36,58,77,.5); }
+        .cred .seppanel::before, .cred .seppanel::after { content:''; position:absolute; left:50%;
+          transform:translateX(-50%); width:36px; height:2px; background:#C9A84C; border-radius:2px; }
+        .cred .seppanel::before { top:30px; } .cred .seppanel::after { bottom:30px; }
+        .cred .seplogo { max-width:158px; max-height:76px; width:auto; height:auto; object-fit:contain; }
+        .cred .sepbig { font-size:24px; font-weight:700; color:#243A4D; text-align:center; line-height:1.25; padding:0 20px; }
+        .cred .sepcap { font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:#8A6D1F; font-weight:600; }
+
+        /* ---- Botones fuera del slider, debajo y centrados ---- */
+        .cred .creds-nav { display:flex; justify-content:center; gap:14px; margin-top:24px; }
+        .cred .creds-nav button { width:46px; height:46px; border-radius:50%; font-size:22px; line-height:1;
+          color:#243A4D; background:#fff; border:1px solid rgba(36,58,77,.16);
+          box-shadow:0 4px 14px rgba(36,58,77,.10); cursor:pointer; padding-bottom:3px;
+          display:flex; align-items:center; justify-content:center;
           transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
-        .cred .swiper-button-next:hover, .cred .swiper-button-prev:hover {
-          background:#243A4D; color:#fff; border-color:#243A4D; transform:scale(1.06); }
-        .cred .swiper-button-next::after, .cred .swiper-button-prev::after { font-size:12px; font-weight:800; }
-        .cred .swiper-button-disabled { opacity:0; pointer-events:none; }
+        .cred .creds-nav button:hover:not(:disabled) { background:#243A4D; color:#fff; border-color:#243A4D; transform:scale(1.06); }
+        .cred .creds-nav button:disabled { opacity:.28; cursor:default; }
+
+        /* ---- Lightbox: flechas nativas discretas ---- */
+        .cred .swiper-button-next, .cred .swiper-button-prev { color:rgba(255,255,255,.85); }
+        .cred .swiper-button-next::after, .cred .swiper-button-prev::after { font-size:26px; font-weight:700; }
       `}</style>
     </div>
   );
