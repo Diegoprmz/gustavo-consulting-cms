@@ -3,7 +3,6 @@ import Footer from '@/components/sections/Footer';
 import Image from 'next/image';
 
 import CertificateSlider from '@/components/about/CertificateSlider';
-import InstitutionLogos from '@/components/about/InstitutionLogos';
 
 export const metadata = {
   title: 'Trayectoria',
@@ -128,38 +127,8 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* 1. Trayectoria personal — Estudios y certificaciones */}
-        <section style={{ backgroundColor: '#F5F5F5', paddingTop: '100px', paddingBottom: '100px' }}>
-          <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-            <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                Trayectoria personal
-              </span>
-              <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(28px, 3vw, 40px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.25 }}>
-                Estudios y certificaciones
-              </h2>
-              <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.7, maxWidth: '620px', margin: '18px auto 0' }}>
-                Formación continua durante más de tres décadas en las principales escuelas de negocio del mundo y con referentes globales del pensamiento estratégico.
-              </p>
-            </div>
-
-            <CertificateSlider />
-
-            <p
-              className="font-sans"
-              style={{ textAlign: 'center', fontSize: '15px', color: '#6B7280', lineHeight: 1.8, maxWidth: '760px', margin: '64px auto 0' }}
-            >
-              Además, seminarios internacionales en Stanford, Kellogg, Notre Dame, Georgetown, McGill y Deusto, y
-              programas ejecutivos con referentes globales como <strong style={{ color: '#243A4D', fontWeight: 600 }}>Gary Hamel</strong>,{' '}
-              <strong style={{ color: '#243A4D', fontWeight: 600 }}>Seth Godin</strong>,{' '}
-              <strong style={{ color: '#243A4D', fontWeight: 600 }}>Guy Kawasaki</strong>,{' '}
-              <strong style={{ color: '#243A4D', fontWeight: 600 }}>Daniel Goleman</strong> y{' '}
-              <strong style={{ color: '#243A4D', fontWeight: 600 }}>Marshall Goldsmith</strong>.
-            </p>
-
-            <InstitutionLogos />
-          </div>
-        </section>
+        {/* 1. Trayectoria personal — Estudios y Certificaciones (dos secciones dentro del componente) */}
+        <CertificateSlider />
 
         {/* 2. Trayectoria empresarial — PENDIENTE DE CONTENIDO */}
         <section style={{ backgroundColor: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
