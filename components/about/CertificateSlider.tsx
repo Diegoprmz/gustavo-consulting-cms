@@ -248,8 +248,15 @@ export default function CertificateSlider() {
         .cred .sep-line { width:1.5px; flex:1; background:linear-gradient(#C9A84C, rgba(201,168,76,0)); }
         .cred .sep-line:last-child { background:linear-gradient(rgba(201,168,76,0), #C9A84C); }
         .cred .sep-txt { writing-mode:vertical-rl; text-orientation:mixed; transform:rotate(180deg); font-size:15px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#8A6D1F; }
-        .cred .swiper-button-next, .cred .swiper-button-prev { color:#243a4d; background:#fff; width:44px; height:44px; border-radius:50%; box-shadow:0 6px 18px rgba(36,58,77,.18); }
-        .cred .swiper-button-next::after, .cred .swiper-button-prev::after { font-size:15px; font-weight:700; }
+        .cred .swiper-button-next, .cred .swiper-button-prev {
+          width:40px; height:40px; border-radius:50%; color:#243A4D;
+          background:rgba(255,255,255,.92); border:1px solid rgba(36,58,77,.14);
+          box-shadow:0 4px 14px rgba(36,58,77,.10); backdrop-filter:blur(3px);
+          transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
+        .cred .swiper-button-next:hover, .cred .swiper-button-prev:hover {
+          background:#243A4D; color:#fff; border-color:#243A4D; transform:scale(1.06); }
+        .cred .swiper-button-next::after, .cred .swiper-button-prev::after { font-size:12px; font-weight:800; }
+        .cred .swiper-button-disabled { opacity:0; pointer-events:none; }
       `}</style>
     </div>
   );
