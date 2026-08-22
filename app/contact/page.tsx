@@ -81,7 +81,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <Navbar />
+      <Navbar lightHero />
       <main>
         {/* Hero */}
         <section style={{ backgroundColor: '#F5F5F5', paddingTop: '160px', paddingBottom: '80px' }}>

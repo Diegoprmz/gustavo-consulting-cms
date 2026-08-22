@@ -41,7 +41,7 @@ function Placeholder({ nota }: { nota: string }) {
 export default function AboutPage() {
   return (
     <>
-      <Navbar />
+      <Navbar lightHero />
       <main>
         {/* Hero */}
         <section className="bg-white flex items-center" style={{ paddingTop: '140px', paddingBottom: '100px' }}>
