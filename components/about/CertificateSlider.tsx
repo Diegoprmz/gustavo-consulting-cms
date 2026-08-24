@@ -58,7 +58,7 @@ function SingleFrame({ doc, onOpen }: { doc: Doc; onOpen: () => void }) {
     <button type="button" onClick={onOpen} aria-label={`Ampliar: ${doc.title}`} className="fslide">
       <span className="ringmat" style={{ ['--frame-c' as string]: FRAME }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={certUrl(doc.src)} alt={doc.title} style={{ height: '460px' }} />
+        <img src={certUrl(doc.src)} alt={doc.title} style={{ height: '640px' }} />
       </span>
     </button>
   );
@@ -129,7 +129,7 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
       ) : (
         <>
           <p className="font-sans" style={{ textAlign: 'center', fontSize: '13px', color: '#8A9199', marginBottom: '8px' }}>Arrastra para girar</p>
-          <div key={filter} style={{ height: '760px', position: 'relative' }}>
+          <div key={filter} style={{ height: '1060px', position: 'relative' }}>
             <ThreeDImageRing ref={ringRef} items={items} frameColor={FRAME} onActiveChange={setActive} onOpen={(i) => setOpenIndex(i)} />
           </div>
           <div className="stepnav">
@@ -192,7 +192,7 @@ export default function CertificateSlider() {
           transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
         .cred .stepnav button:hover { background: #243A4D; color: #fff; border-color: #243A4D; transform: scale(1.06); }
         .cred .fslide { display: block; border: none; padding: 0; background: none; cursor: zoom-in; }
-        .cred .ringmat { display: inline-block; padding: 6px; background: #FDFDFC; border: 4px solid var(--frame-c); box-shadow: 0 16px 32px -18px rgba(0,0,0,.5); }
+        .cred .ringmat { display: inline-block; padding: 6px; background: #FDFDFC; border: 4px solid var(--frame-c); box-shadow: 0 6px 16px -6px rgba(0,0,0,.28); }
         .cred .ringmat img { display: block; width: auto; }
       `}</style>
     </div>

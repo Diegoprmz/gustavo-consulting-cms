@@ -45,11 +45,11 @@ export interface ThreeDImageRingProps {
 }
 
 /** Ancho aproximado (px) de una cara del anillo (marco + certificado), usado para separar las caras sin que se encimen. */
-const FACE_WIDTH = 470;
+const FACE_WIDTH = 750;
 
 export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRingProps>(function ThreeDImageRing({
   items,
-  width = 580,
+  width = 900,
   perspective,
   imageDistance,
   initialRotation = 180,
@@ -86,8 +86,8 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
 
   // Radio mínimo para que las caras adyacentes no se encimen: cuerda >= ancho de cara.
   const effectiveDistance = useMemo(() => {
-    // *1.35 deja un respiro entre caras contiguas — a cuerda exacta se ven pegadas.
-    const minDistance = (FACE_WIDTH * 1.35) / (2 * Math.sin(Math.PI / items.length));
+    // *1.08 deja un respiro mínimo entre caras contiguas — a cuerda exacta se ven pegadas.
+    const minDistance = (FACE_WIDTH * 1.08) / (2 * Math.sin(Math.PI / items.length));
     return Math.max(imageDistance ?? 0, minDistance, 400);
   }, [items.length, imageDistance]);
   const effectivePerspective = perspective ?? Math.max(2000, effectiveDistance * 1.6);
@@ -274,8 +274,8 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
       <style jsx global>{`
         .ringframe { display: block; border: none; padding: 0; background: none; cursor: pointer; pointer-events: auto; }
         .ringmat { display: inline-block; padding: 6px; background: #fdfdfc; border: 4px solid var(--frame-c);
-          box-shadow: 0 16px 32px -18px rgba(0,0,0,0.55); }
-        .ringmat img { display: block; height: 400px; width: auto; max-width: 440px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+          box-shadow: 0 6px 16px -6px rgba(0,0,0,0.28); }
+        .ringmat img { display: block; height: 640px; width: auto; max-width: 700px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
       `}</style>
     </div>
   );
