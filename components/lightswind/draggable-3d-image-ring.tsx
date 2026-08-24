@@ -8,7 +8,7 @@
  */
 
 import React, { useEffect, useRef, useState, useMemo, forwardRef, useImperativeHandle } from 'react';
-import { motion, AnimatePresence, useMotionValue, easeOut, animate } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, easeOut } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 export interface RingItem {
@@ -38,9 +38,6 @@ export interface ThreeDImageRingProps {
   draggable?: boolean;
   mobileBreakpoint?: number;
   mobileScaleFactor?: number;
-  inertiaPower?: number;
-  inertiaTimeConstant?: number;
-  inertiaVelocityMultiplier?: number;
   frameColor?: string;
   onOpen?: (index: number) => void;
   onActiveChange?: (index: number) => void;
@@ -65,9 +62,6 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
   draggable = true,
   mobileBreakpoint = 768,
   mobileScaleFactor = 0.72,
-  inertiaPower = 0.8,
-  inertiaTimeConstant = 300,
-  inertiaVelocityMultiplier = 20,
   frameColor = '#3A3A3A',
   onOpen,
   onActiveChange,
@@ -159,12 +153,16 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
     document.addEventListener('touchend', handleDragEnd);
   };
 
+  // Sensibilidad del arrastre: grados de giro por px de mouse. Baja a propósito
+  // para que un gesto normal mueva uno o dos elementos, no una decena.
+  const DRAG_SENSITIVITY = 0.18;
+
   const handleDrag = (event: MouseEvent | TouchEvent) => {
     if (!draggable || !isDragging.current) return;
     const clientX = 'touches' in event ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
     const deltaX = clientX - startX.current;
-    if (Math.abs(deltaX) > 3) dragMoved.current = true;
-    velocity.current = -deltaX * 0.5;
+    if (Math.abs(deltaX) > 8) dragMoved.current = true;
+    velocity.current = -deltaX * DRAG_SENSITIVITY;
     rotationY.set(currentRotationY.current + velocity.current);
     startX.current = clientX;
   };
@@ -180,17 +178,15 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
     document.removeEventListener('touchmove', handleDrag);
     document.removeEventListener('touchend', handleDragEnd);
 
-    const initial = rotationY.get();
-    const velocityBoost = velocity.current * inertiaVelocityMultiplier;
-    animate(initial, initial + velocityBoost, {
-      type: 'inertia',
-      velocity: velocityBoost,
-      power: inertiaPower,
-      timeConstant: inertiaTimeConstant,
-      restDelta: 0.5,
-      modifyTarget: (target) => Math.round(target / angle) * angle,
-      onUpdate: (latest) => rotationY.set(latest),
-    });
+    // Sin inercia con fling: al soltar, el anillo cae al elemento más cercano a
+    // donde quedó (arrastre 1:1 durante el gesto), nunca sigue girando solo.
+    const target = Math.round(currentRotationY.current / angle) * angle;
+    if (ringRef.current) ringRef.current.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1)';
+    rotationY.set(target);
+    window.clearTimeout(stepTransitionTimeout.current);
+    stepTransitionTimeout.current = window.setTimeout(() => {
+      if (ringRef.current) ringRef.current.style.transition = '';
+    }, 370);
     velocity.current = 0;
   };
 

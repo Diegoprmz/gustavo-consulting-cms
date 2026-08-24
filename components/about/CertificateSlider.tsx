@@ -118,7 +118,7 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
 
   return (
     <div>
-      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <FilterChips tags={tags} value={filter} onChange={(v) => { setFilter(v); setActive(0); }} />
       </div>
 
@@ -129,8 +129,8 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
       ) : (
         <>
           <p className="font-sans" style={{ textAlign: 'center', fontSize: '13px', color: '#8A9199', marginBottom: '8px' }}>Arrastra para girar</p>
-          <div key={filter} style={{ height: '700px', position: 'relative' }}>
-            <ThreeDImageRing ref={ringRef} items={items} frameColor={FRAME} stageHeight={680} onActiveChange={setActive} onOpen={(i) => setOpenIndex(i)} />
+          <div key={filter} style={{ height: '676px', position: 'relative' }}>
+            <ThreeDImageRing ref={ringRef} items={items} frameColor={FRAME} stageHeight={672} onActiveChange={setActive} onOpen={(i) => setOpenIndex(i)} />
           </div>
           <div className="stepnav">
             <button type="button" onClick={() => ringRef.current?.step(-1)} aria-label="Anterior">‹</button>
@@ -140,7 +140,7 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
       )}
 
       {activeDoc && (
-        <div style={{ textAlign: 'center', marginTop: '24px' }}>
+        <div style={{ textAlign: 'center', marginTop: '14px' }}>
           <TagBadge tag={activeDoc.tag} big />
           <p className="font-serif" style={{ fontSize: '24px', fontWeight: 700, color: '#243A4D', marginTop: '14px', maxWidth: '560px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.3 }}>{activeDoc.title}</p>
         </div>
@@ -184,7 +184,7 @@ export default function CertificateSlider() {
           letter-spacing: .02em; padding: 8px 16px; border-radius: 100px; border: 1px solid transparent; cursor: pointer;
           transition: transform .15s ease, background-color .2s ease, color .2s ease; }
         .cred .chip:hover { transform: translateY(-1px); }
-        .cred .stepnav { display: flex; justify-content: center; gap: 16px; margin-top: 20px; }
+        .cred .stepnav { display: flex; justify-content: center; gap: 16px; margin-top: 10px; }
         .cred .stepnav button { width: 48px; height: 48px; border-radius: 50%; font-size: 24px; line-height: 1;
           color: #243A4D; background: #fff; border: 1px solid rgba(36,58,77,.16);
           box-shadow: 0 4px 14px rgba(36,58,77,.10); cursor: pointer; padding-bottom: 3px;
