@@ -39,11 +39,14 @@ export interface ThreeDImageRingProps {
   onActiveChange?: (index: number) => void;
 }
 
+/** Ancho aproximado (px) de una cara del anillo (marco + certificado), usado para separar las caras sin que se encimen. */
+const FACE_WIDTH = 190;
+
 export function ThreeDImageRing({
   items,
-  width = 300,
-  perspective = 2000,
-  imageDistance = 500,
+  width = 240,
+  perspective,
+  imageDistance,
   initialRotation = 180,
   animationDuration = 1.2,
   staggerDelay = 0.06,
@@ -74,6 +77,14 @@ export function ThreeDImageRing({
   const [showImages, setShowImages] = useState(false);
 
   const angle = useMemo(() => 360 / items.length, [items.length]);
+
+  // Radio mínimo para que las caras adyacentes no se encimen: cuerda >= ancho de cara.
+  const effectiveDistance = useMemo(() => {
+    // *1.35 deja un respiro entre caras contiguas — a cuerda exacta se ven pegadas.
+    const minDistance = (FACE_WIDTH * 1.35) / (2 * Math.sin(Math.PI / items.length));
+    return Math.max(imageDistance ?? 0, minDistance, 400);
+  }, [items.length, imageDistance]);
+  const effectivePerspective = perspective ?? Math.max(2000, effectiveDistance * 1.6);
 
   const reportActive = (rot: number) => {
     if (!onActiveChange) return;
@@ -171,7 +182,7 @@ export function ThreeDImageRing({
     >
       <div
         style={{
-          perspective: `${perspective}px`,
+          perspective: `${effectivePerspective}px`,
           width: `${width}px`,
           height: `${width * 1.15}px`,
           position: 'absolute',
@@ -195,8 +206,8 @@ export function ThreeDImageRing({
                     transformStyle: 'preserve-3d',
                     backfaceVisibility: 'hidden',
                     rotateY: index * -angle,
-                    z: -imageDistance * currentScale,
-                    transformOrigin: `50% 50% ${imageDistance * currentScale}px`,
+                    z: -effectiveDistance * currentScale,
+                    transformOrigin: `50% 50% ${effectiveDistance * currentScale}px`,
                   }}
                   initial="hidden"
                   animate="visible"
@@ -241,7 +252,7 @@ export function ThreeDImageRing({
         .ringframe { display: block; border: none; padding: 0; background: none; cursor: pointer; pointer-events: auto; }
         .ringmat { display: inline-block; padding: 6px; background: #fdfdfc; border: 4px solid var(--frame-c);
           box-shadow: 0 16px 32px -18px rgba(0,0,0,0.55); }
-        .ringmat img { display: block; height: min(38vw, 210px); width: auto; max-width: 60vw; user-select: none; -webkit-user-drag: none; }
+        .ringmat img { display: block; height: 150px; width: auto; max-width: 170px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
       `}</style>
     </div>
   );

@@ -1,15 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import InstitutionLogos from '@/components/about/InstitutionLogos';
 import { ThreeDImageRing } from '@/components/lightswind/draggable-3d-image-ring';
-import {
-  ACADEMICO, DIPLOMADOS, SEMINARIOS, CERT_PROF, COACHING, CONSEJERIA,
-  ALL, TAG_STYLE, certUrl, type Doc, type Tag,
-} from '@/components/about/certificates-data';
+import { ALL, TAG_STYLE, certUrl, type Doc, type Tag } from '@/components/about/certificates-data';
 
 const FRAME = '#3A3A3A';
+const FILTERS: Array<Tag | 'Todos'> = ['Todos', 'Grado académico', 'Diplomado', 'Seminario internacional', 'Certificación', 'Coaching', 'Consejería'];
 
 function TagBadge({ tag }: { tag: Tag }) {
   const s = TAG_STYLE[tag];
@@ -24,6 +22,33 @@ function TagBadge({ tag }: { tag: Tag }) {
   );
 }
 
+function FilterChips({ value, onChange }: { value: Tag | 'Todos'; onChange: (v: Tag | 'Todos') => void }) {
+  return (
+    <div className="filterchips">
+      {FILTERS.map((f) => {
+        const active = f === value;
+        const s = f === 'Todos' ? { text: '#243A4D', tint: 'rgba(36,58,77,0.08)', dot: '#243A4D' } : TAG_STYLE[f];
+        return (
+          <button
+            key={f}
+            type="button"
+            onClick={() => onChange(f)}
+            className="chip font-sans"
+            style={{
+              color: active ? '#fff' : s.text,
+              backgroundColor: active ? s.dot : s.tint,
+              borderColor: active ? s.dot : 'transparent',
+            }}
+          >
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: active ? '#fff' : s.dot }} />
+            {f}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 /** Certificado único, sin ring (no tiene sentido girar un solo elemento). */
 function SingleFrame({ doc, onOpen }: { doc: Doc; onOpen: () => void }) {
   return (
@@ -32,46 +57,7 @@ function SingleFrame({ doc, onOpen }: { doc: Doc; onOpen: () => void }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={certUrl(doc.src)} alt={doc.title} style={{ height: '220px' }} />
       </span>
-      <span style={{ display: 'block', textAlign: 'center', marginTop: '18px' }}>
-        <TagBadge tag={doc.tag} />
-        <span className="font-serif" style={{ display: 'block', fontSize: '16px', fontWeight: 700, color: '#243A4D', lineHeight: 1.3, marginTop: '10px' }}>{doc.title}</span>
-      </span>
     </button>
-  );
-}
-
-function RingGroup({ id, title, docs, height = 340 }: { id: string; title: string; docs: Doc[]; height?: number }) {
-  const [active, setActive] = useState(0);
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const items = docs.map((d) => ({ src: certUrl(d.src), alt: d.title }));
-  const activeDoc = docs[active] ?? docs[0];
-
-  if (docs.length <= 1) {
-    return (
-      <div id={id} style={{ marginBottom: '84px', scrollMarginTop: '96px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <h3 className="font-serif" style={{ fontSize: 'clamp(20px, 2.2vw, 26px)', fontWeight: 700, color: '#243A4D', textAlign: 'center', marginBottom: '30px' }}>{title}</h3>
-        <SingleFrame doc={docs[0]} onOpen={() => setOpenIndex(0)} />
-        {openIndex !== null && <Lightbox docs={docs} startIndex={openIndex} onClose={() => setOpenIndex(null)} />}
-      </div>
-    );
-  }
-
-  return (
-    <div id={id} style={{ marginBottom: '84px', scrollMarginTop: '96px' }}>
-      <h3 className="font-serif" style={{ fontSize: 'clamp(20px, 2.2vw, 26px)', fontWeight: 700, color: '#243A4D', textAlign: 'center', marginBottom: '10px' }}>{title}</h3>
-      <p className="font-sans" style={{ textAlign: 'center', fontSize: '13px', color: '#8A9199', marginBottom: '20px' }}>Arrastra para girar</p>
-      <div style={{ height, position: 'relative' }}>
-        <ThreeDImageRing items={items} width={260} frameColor={FRAME} onActiveChange={setActive} onOpen={(i) => setOpenIndex(i)} />
-      </div>
-      {activeDoc && (
-        <div style={{ textAlign: 'center', marginTop: '16px' }}>
-          <TagBadge tag={activeDoc.tag} />
-          <p className="font-serif" style={{ fontSize: '16px', fontWeight: 700, color: '#243A4D', marginTop: '10px', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto' }}>{activeDoc.title}</p>
-        </div>
-      )}
-      {openIndex !== null && <Lightbox docs={docs} startIndex={openIndex} onClose={() => setOpenIndex(null)} />}
-    </div>
   );
 }
 
@@ -80,6 +66,8 @@ function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: numb
   const doc = docs[i];
   const next = useCallback(() => setI((v) => (v + 1) % docs.length), [docs.length]);
   const prev = useCallback(() => setI((v) => (v - 1 + docs.length) % docs.length), [docs.length]);
+
+  useEffect(() => setI(startIndex), [startIndex]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -91,6 +79,8 @@ function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: numb
     document.body.style.overflow = 'hidden';
     return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
   }, [onClose, next, prev]);
+
+  if (!doc) return null;
 
   return (
     <div role="dialog" aria-modal="true" onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,30,40,0.94)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 16px' }}>
@@ -114,38 +104,59 @@ function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: numb
 }
 
 export default function CertificateSlider() {
-  void ALL; // lista completa disponible para futura búsqueda/índice global
+  const [filter, setFilter] = useState<Tag | 'Todos'>('Todos');
+  const [active, setActive] = useState(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const docs = useMemo(() => (filter === 'Todos' ? ALL : ALL.filter((d) => d.tag === filter)), [filter]);
+  const items = useMemo(() => docs.map((d) => ({ src: certUrl(d.src), alt: d.title })), [docs]);
+  const activeDoc = docs[active] ?? docs[0];
+
   return (
     <div className="cred">
       <section style={{ backgroundColor: '#F5F5F5', paddingTop: '100px', paddingBottom: '100px' }}>
         <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
             <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Trayectoria personal</span>
-            <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.2 }}>Estudios</h2>
+            <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.2 }}>Estudios y certificaciones</h2>
             <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.7, maxWidth: '640px', margin: '18px auto 0' }}>
               Formación continua durante más de tres décadas en las principales escuelas de negocio del mundo.
             </p>
+            <FilterChips value={filter} onChange={(v) => { setFilter(v); setActive(0); }} />
           </div>
-          <RingGroup id="c-academico" title="Formación académica" docs={ACADEMICO} height={300} />
-          <RingGroup id="c-diplomados" title="Diplomados" docs={DIPLOMADOS} height={320} />
-          <RingGroup id="c-seminarios" title="Seminarios internacionales" docs={SEMINARIOS} height={380} />
+
+          {docs.length <= 1 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '340px', justifyContent: 'center' }}>
+              {docs[0] && <SingleFrame doc={docs[0]} onOpen={() => setOpenIndex(0)} />}
+            </div>
+          ) : (
+            <>
+              <p className="font-sans" style={{ textAlign: 'center', fontSize: '13px', color: '#8A9199', marginBottom: '8px' }}>Arrastra para girar</p>
+              <div key={filter} style={{ height: '400px', position: 'relative' }}>
+                <ThreeDImageRing items={items} frameColor={FRAME} onActiveChange={setActive} onOpen={(i) => setOpenIndex(i)} />
+              </div>
+            </>
+          )}
+
+          {activeDoc && (
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <TagBadge tag={activeDoc.tag} />
+              <p className="font-serif" style={{ fontSize: '17px', fontWeight: 700, color: '#243A4D', marginTop: '10px', maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>{activeDoc.title}</p>
+            </div>
+          )}
+
           <InstitutionLogos />
         </div>
       </section>
 
-      <section style={{ backgroundColor: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
-        <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Acreditaciones profesionales</span>
-            <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.2 }}>Certificaciones</h2>
-          </div>
-          <RingGroup id="c-certprof" title="Certificaciones profesionales" docs={CERT_PROF} height={320} />
-          <RingGroup id="c-coaching" title="Coaching" docs={COACHING} height={300} />
-          <RingGroup id="c-consejeria" title="Consejería" docs={CONSEJERIA} />
-        </div>
-      </section>
+      {openIndex !== null && <Lightbox docs={docs} startIndex={openIndex} onClose={() => setOpenIndex(null)} />}
 
       <style jsx global>{`
+        .cred .filterchips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 28px; }
+        .cred .chip { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600;
+          letter-spacing: .02em; padding: 8px 16px; border-radius: 100px; border: 1px solid transparent; cursor: pointer;
+          transition: transform .15s ease, background-color .2s ease, color .2s ease; }
+        .cred .chip:hover { transform: translateY(-1px); }
         .cred .fslide { display: block; border: none; padding: 0; background: none; cursor: zoom-in; }
         .cred .ringmat { display: inline-block; padding: 6px; background: #FDFDFC; border: 4px solid var(--frame-c); box-shadow: 0 16px 32px -18px rgba(0,0,0,.5); }
         .cred .ringmat img { display: block; width: auto; }
