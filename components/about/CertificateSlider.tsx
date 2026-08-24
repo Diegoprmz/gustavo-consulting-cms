@@ -58,7 +58,7 @@ function SingleFrame({ doc, onOpen }: { doc: Doc; onOpen: () => void }) {
     <button type="button" onClick={onOpen} aria-label={`Ampliar: ${doc.title}`} className="fslide">
       <span className="ringmat" style={{ ['--frame-c' as string]: FRAME }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={certUrl(doc.src)} alt={doc.title} style={{ height: '260px' }} />
+        <img src={certUrl(doc.src)} alt={doc.title} style={{ height: '460px' }} />
       </span>
     </button>
   );
@@ -129,7 +129,7 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
       ) : (
         <>
           <p className="font-sans" style={{ textAlign: 'center', fontSize: '13px', color: '#8A9199', marginBottom: '8px' }}>Arrastra para girar</p>
-          <div key={filter} style={{ height: '460px', position: 'relative' }}>
+          <div key={filter} style={{ height: '760px', position: 'relative' }}>
             <ThreeDImageRing ref={ringRef} items={items} frameColor={FRAME} onActiveChange={setActive} onOpen={(i) => setOpenIndex(i)} />
           </div>
           <div className="stepnav">

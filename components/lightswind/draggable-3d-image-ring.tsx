@@ -45,11 +45,11 @@ export interface ThreeDImageRingProps {
 }
 
 /** Ancho aproximado (px) de una cara del anillo (marco + certificado), usado para separar las caras sin que se encimen. */
-const FACE_WIDTH = 260;
+const FACE_WIDTH = 470;
 
 export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRingProps>(function ThreeDImageRing({
   items,
-  width = 320,
+  width = 580,
   perspective,
   imageDistance,
   initialRotation = 180,
@@ -275,7 +275,7 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
         .ringframe { display: block; border: none; padding: 0; background: none; cursor: pointer; pointer-events: auto; }
         .ringmat { display: inline-block; padding: 6px; background: #fdfdfc; border: 4px solid var(--frame-c);
           box-shadow: 0 16px 32px -18px rgba(0,0,0,0.55); }
-        .ringmat img { display: block; height: 220px; width: auto; max-width: 240px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+        .ringmat img { display: block; height: 400px; width: auto; max-width: 440px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
       `}</style>
     </div>
   );
