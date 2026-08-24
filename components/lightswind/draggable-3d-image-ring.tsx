@@ -24,6 +24,8 @@ export interface ThreeDImageRingHandle {
 export interface ThreeDImageRingProps {
   items: RingItem[];
   width?: number;
+  /** Alto del escenario 3D en px. Por defecto width*1.15 (pensado para fotos), pero el contenido real (certificados altos y angostos) suele necesitar mucho menos — pásalo explícito para que no sobre espacio en blanco. */
+  stageHeight?: number;
   perspective?: number;
   imageDistance?: number;
   initialRotation?: number;
@@ -50,6 +52,7 @@ const FACE_WIDTH = 750;
 export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRingProps>(function ThreeDImageRing({
   items,
   width = 900,
+  stageHeight,
   perspective,
   imageDistance,
   initialRotation = 180,
@@ -207,7 +210,7 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
         style={{
           perspective: `${effectivePerspective}px`,
           width: `${width}px`,
-          height: `${width * 1.15}px`,
+          height: `${stageHeight ?? width * 1.15}px`,
           position: 'absolute',
           left: '50%',
           top: '50%',
@@ -273,8 +276,8 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
 
       <style jsx global>{`
         .ringframe { display: block; border: none; padding: 0; background: none; cursor: pointer; pointer-events: auto; }
-        .ringmat { display: inline-block; padding: 6px; background: #fdfdfc; border: 4px solid var(--frame-c);
-          box-shadow: 0 6px 16px -6px rgba(0,0,0,0.28); }
+        .ringmat { display: inline-block; padding: 6px; background: #fdfdfc; border: 8px solid var(--frame-c);
+          box-shadow: 0 10px 24px -8px rgba(0,0,0,0.4); }
         .ringmat img { display: block; height: 640px; width: auto; max-width: 700px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
       `}</style>
     </div>
