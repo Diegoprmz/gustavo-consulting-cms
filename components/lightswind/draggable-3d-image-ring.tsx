@@ -7,13 +7,18 @@
  * para no recortar certificados con proporciones y contenido variable.
  */
 
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo, forwardRef, useImperativeHandle } from 'react';
 import { motion, AnimatePresence, useMotionValue, easeOut, animate } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 export interface RingItem {
   src: string;
   alt: string;
+}
+
+export interface ThreeDImageRingHandle {
+  /** Gira una posición hacia adelante (1) o atrás (-1). */
+  step: (dir: 1 | -1) => void;
 }
 
 export interface ThreeDImageRingProps {
@@ -40,11 +45,11 @@ export interface ThreeDImageRingProps {
 }
 
 /** Ancho aproximado (px) de una cara del anillo (marco + certificado), usado para separar las caras sin que se encimen. */
-const FACE_WIDTH = 190;
+const FACE_WIDTH = 260;
 
-export function ThreeDImageRing({
+export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRingProps>(function ThreeDImageRing({
   items,
-  width = 240,
+  width = 320,
   perspective,
   imageDistance,
   initialRotation = 180,
@@ -63,7 +68,7 @@ export function ThreeDImageRing({
   frameColor = '#3A3A3A',
   onOpen,
   onActiveChange,
-}: ThreeDImageRingProps) {
+}: ThreeDImageRingProps, ref) {
   const ringRef = useRef<HTMLDivElement>(null);
 
   const rotationY = useMotionValue(initialRotation);
@@ -72,6 +77,7 @@ export function ThreeDImageRing({
   const isDragging = useRef<boolean>(false);
   const dragMoved = useRef<boolean>(false);
   const velocity = useRef<number>(0);
+  const stepTransitionTimeout = useRef<number | undefined>(undefined);
 
   const [currentScale, setCurrentScale] = useState(1);
   const [showImages, setShowImages] = useState(false);
@@ -118,6 +124,19 @@ export function ThreeDImageRing({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    step: (dir: 1 | -1) => {
+      rotationY.stop();
+      const target = Math.round(currentRotationY.current / angle) * angle + dir * angle;
+      if (ringRef.current) ringRef.current.style.transition = 'transform 0.45s cubic-bezier(0.22,1,0.36,1)';
+      rotationY.set(target);
+      window.clearTimeout(stepTransitionTimeout.current);
+      stepTransitionTimeout.current = window.setTimeout(() => {
+        if (ringRef.current) ringRef.current.style.transition = '';
+      }, 470);
+    },
+  }), [angle, rotationY]);
+
   const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
     if (!draggable) return;
     isDragging.current = true;
@@ -126,7 +145,11 @@ export function ThreeDImageRing({
     startX.current = clientX;
     rotationY.stop();
     velocity.current = 0;
-    if (ringRef.current) ringRef.current.style.cursor = 'grabbing';
+    window.clearTimeout(stepTransitionTimeout.current);
+    if (ringRef.current) {
+      ringRef.current.style.cursor = 'grabbing';
+      ringRef.current.style.transition = '';
+    }
     document.addEventListener('mousemove', handleDrag);
     document.addEventListener('mouseup', handleDragEnd);
     document.addEventListener('touchmove', handleDrag);
@@ -252,10 +275,10 @@ export function ThreeDImageRing({
         .ringframe { display: block; border: none; padding: 0; background: none; cursor: pointer; pointer-events: auto; }
         .ringmat { display: inline-block; padding: 6px; background: #fdfdfc; border: 4px solid var(--frame-c);
           box-shadow: 0 16px 32px -18px rgba(0,0,0,0.55); }
-        .ringmat img { display: block; height: 150px; width: auto; max-width: 170px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+        .ringmat img { display: block; height: 220px; width: auto; max-width: 240px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
       `}</style>
     </div>
   );
-}
+});
 
 export default ThreeDImageRing;
