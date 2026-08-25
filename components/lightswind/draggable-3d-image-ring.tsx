@@ -82,10 +82,14 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
   const angle = useMemo(() => 360 / items.length, [items.length]);
 
   // Radio mínimo para que las caras adyacentes no se encimen: cuerda >= ancho de cara.
+  // Con muchos elementos ese radio crece sin límite (con 45 llega a >5000px), y aunque
+  // el giro en grados esté controlado, un radio tan grande hace que cualquier rotación
+  // se vea/perciba como un salto violento (más radio = más recorrido en pantalla por
+  // el mismo ángulo). Se limita a un máximo razonable; con muchos elementos algunos
+  // quedan más pegados entre sí, pero el arrastre se siente controlable.
   const effectiveDistance = useMemo(() => {
-    // *1.08 deja un respiro mínimo entre caras contiguas — a cuerda exacta se ven pegadas.
     const minDistance = (FACE_WIDTH * 1.08) / (2 * Math.sin(Math.PI / items.length));
-    return Math.max(imageDistance ?? 0, minDistance, 400);
+    return Math.max(imageDistance ?? 0, Math.min(minDistance, 1400), 400);
   }, [items.length, imageDistance]);
   const effectivePerspective = perspective ?? Math.max(2000, effectiveDistance * 1.6);
 
@@ -153,16 +157,19 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
     document.addEventListener('touchend', handleDragEnd);
   };
 
-  // Sensibilidad del arrastre: grados de giro por px de mouse. Baja a propósito
-  // para que un gesto normal mueva uno o dos elementos, no una decena.
-  const DRAG_SENSITIVITY = 0.18;
+  // Sensibilidad del arrastre en grados/px, proporcional al ángulo de cada elemento:
+  // con un valor fijo, un ring de 38 piezas (ángulo chico) giraba muchas más
+  // posiciones que uno de 2 por el mismo gesto. Así, ~110px siempre mueve ~1 elemento,
+  // sin importar cuántos haya.
+  const PX_PER_ITEM = 200;
+  const dragSensitivity = angle / PX_PER_ITEM;
 
   const handleDrag = (event: MouseEvent | TouchEvent) => {
     if (!draggable || !isDragging.current) return;
     const clientX = 'touches' in event ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
     const deltaX = clientX - startX.current;
-    if (Math.abs(deltaX) > 8) dragMoved.current = true;
-    velocity.current = -deltaX * DRAG_SENSITIVITY;
+    if (Math.abs(deltaX) > 12) dragMoved.current = true;
+    velocity.current = -deltaX * dragSensitivity;
     rotationY.set(currentRotationY.current + velocity.current);
     startX.current = clientX;
   };
