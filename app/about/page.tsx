@@ -97,10 +97,10 @@ export default function AboutPage() {
                 />
                 <div style={{ position: 'relative', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 16px 48px rgba(36,58,77,0.14)' }}>
                   <Image
-                    src="/assets/gustavo-arizona-CeKj84jk.jpg"
+                    src="/assets/trayectoria-hero-photo.jpg"
                     alt="Gustavo Martínez Pellón"
                     width={520}
-                    height={600}
+                    height={934}
                     className="block w-full object-cover"
                     priority
                   />

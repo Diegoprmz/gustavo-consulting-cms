@@ -64,44 +64,111 @@ function SingleFrame({ doc, onOpen }: { doc: Doc; onOpen: () => void }) {
   );
 }
 
+const ZOOM_STEPS = [1, 1.8, 3];
+
 function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: number; onClose: () => void }) {
   const [i, setI] = useState(startIndex);
+  const [zoomStep, setZoomStep] = useState(0);
+  const pan = useRef<{ x: number; y: number; left: number; top: number } | null>(null);
   const doc = docs[i];
-  const next = useCallback(() => setI((v) => (v + 1) % docs.length), [docs.length]);
-  const prev = useCallback(() => setI((v) => (v - 1 + docs.length) % docs.length), [docs.length]);
+  const zoom = ZOOM_STEPS[zoomStep];
+  const next = useCallback(() => { setI((v) => (v + 1) % docs.length); setZoomStep(0); }, [docs.length]);
+  const prev = useCallback(() => { setI((v) => (v - 1 + docs.length) % docs.length); setZoomStep(0); }, [docs.length]);
 
-  useEffect(() => setI(startIndex), [startIndex]);
+  useEffect(() => { setI(startIndex); setZoomStep(0); }, [startIndex]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') next();
-      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight' && zoom === 1) next();
+      if (e.key === 'ArrowLeft' && zoom === 1) prev();
     };
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
-  }, [onClose, next, prev]);
+  }, [onClose, next, prev, zoom]);
 
   if (!doc) return null;
 
+  const toggleZoom = (e: React.MouseEvent<HTMLImageElement>) => {
+    e.stopPropagation();
+    if (zoomStep < ZOOM_STEPS.length - 1) {
+      // Centra el scroll aprox. en el punto donde se hizo clic al pasar al siguiente nivel de zoom.
+      const container = e.currentTarget.parentElement;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      setZoomStep((s) => s + 1);
+      requestAnimationFrame(() => {
+        if (!container) return;
+        container.scrollLeft = px * container.scrollWidth - container.clientWidth / 2;
+        container.scrollTop = py * container.scrollHeight - container.clientHeight / 2;
+      });
+    } else {
+      setZoomStep(0);
+    }
+  };
+
+  const startPan = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (zoom === 1) return;
+    const el = e.currentTarget;
+    pan.current = { x: e.clientX, y: e.clientY, left: el.scrollLeft, top: el.scrollTop };
+    el.style.cursor = 'grabbing';
+  };
+  const doPan = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!pan.current) return;
+    e.currentTarget.scrollLeft = pan.current.left - (e.clientX - pan.current.x);
+    e.currentTarget.scrollTop = pan.current.top - (e.clientY - pan.current.y);
+  };
+  const endPan = (e: React.MouseEvent<HTMLDivElement>) => {
+    pan.current = null;
+    e.currentTarget.style.cursor = '';
+  };
+
   return (
     <div role="dialog" aria-modal="true" onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,30,40,0.94)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 16px' }}>
-      <button type="button" onClick={onClose} aria-label="Cerrar" style={{ position: 'absolute', top: '20px', right: '24px', width: '44px', height: '44px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.3)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#fff', fontSize: '22px', cursor: 'pointer' }}>✕</button>
-      {docs.length > 1 && (
+      <button type="button" onClick={onClose} aria-label="Cerrar" style={{ position: 'absolute', top: '20px', right: '24px', zIndex: 1, width: '44px', height: '44px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.3)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#fff', fontSize: '22px', cursor: 'pointer' }}>✕</button>
+      {docs.length > 1 && zoom === 1 && (
         <>
           <button type="button" onClick={(e) => { e.stopPropagation(); prev(); }} aria-label="Anterior" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.25)', backgroundColor: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '22px', cursor: 'pointer' }}>‹</button>
           <button type="button" onClick={(e) => { e.stopPropagation(); next(); }} aria-label="Siguiente" style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.25)', backgroundColor: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '22px', cursor: 'pointer' }}>›</button>
         </>
       )}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <div
         onClick={(e) => e.stopPropagation()}
-        src={certUrl(doc.src)}
-        alt={doc.title}
-        style={{ maxWidth: '90vw', maxHeight: '72vh', objectFit: 'contain', boxShadow: '0 30px 60px rgba(0,0,0,0.5)' }}
-      />
-      <p className="font-sans" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center', color: 'rgba(255,255,255,0.9)', fontSize: '15px', padding: '18px 16px 0' }}>{doc.title}</p>
+        onMouseDown={startPan}
+        onMouseMove={doPan}
+        onMouseUp={endPan}
+        onMouseLeave={endPan}
+        className="lightbox-scroller"
+        style={{
+          maxWidth: '90vw',
+          maxHeight: '72vh',
+          overflow: zoom > 1 ? 'auto' : 'hidden',
+          display: 'flex',
+          alignItems: zoom > 1 ? 'flex-start' : 'center',
+          justifyContent: zoom > 1 ? 'flex-start' : 'center',
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          onClick={toggleZoom}
+          src={certUrl(doc.src)}
+          alt={doc.title}
+          style={{
+            display: 'block',
+            width: zoom > 1 ? `${zoom * 90}vw` : 'auto',
+            maxWidth: zoom > 1 ? 'none' : '90vw',
+            maxHeight: zoom > 1 ? 'none' : '72vh',
+            objectFit: 'contain',
+            boxShadow: '0 30px 60px rgba(0,0,0,0.5)',
+            cursor: zoomStep < ZOOM_STEPS.length - 1 ? 'zoom-in' : 'zoom-out',
+          }}
+        />
+      </div>
+      {zoom === 1 && (
+        <p className="font-sans" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center', color: 'rgba(255,255,255,0.9)', fontSize: '15px', padding: '18px 16px 0' }}>{doc.title}</p>
+      )}
     </div>
   );
 }
@@ -194,6 +261,10 @@ export default function CertificateSlider() {
         .cred .fslide { display: block; border: none; padding: 0; background: none; cursor: zoom-in; }
         .cred .ringmat { display: inline-block; padding: 6px; background: #FDFDFC; border: 8px solid var(--frame-c); box-shadow: 0 10px 24px -8px rgba(0,0,0,.4); }
         .cred .ringmat img { display: block; width: auto; }
+        .lightbox-scroller { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.4) transparent; }
+        .lightbox-scroller::-webkit-scrollbar { width: 8px; height: 8px; }
+        .lightbox-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,.4); border-radius: 100px; }
+        .lightbox-scroller::-webkit-scrollbar-track { background: transparent; }
       `}</style>
     </div>
   );
