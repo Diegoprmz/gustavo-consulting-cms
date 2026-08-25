@@ -82,21 +82,21 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
   const angle = useMemo(() => 360 / items.length, [items.length]);
 
   // Radio mínimo para que las caras adyacentes no se encimen: cuerda >= ancho de cara.
-  // Con muchos elementos ese radio crece sin límite (con 45 llega a >5000px), y aunque
-  // el giro en grados esté controlado, un radio tan grande hace que cualquier rotación
-  // se vea/perciba como un salto violento (más radio = más recorrido en pantalla por
-  // el mismo ángulo). Se limita a un máximo razonable; con muchos elementos algunos
-  // quedan más pegados entre sí, pero el arrastre se siente controlable.
+  // (No se limita el máximo: un radio recortado hace que muchas caras se encimen en
+  // pantalla, y entonces el clic cae en la que quedó "arriba" en vez de la visible —
+  // eso es lo que impedía ampliar certificados en los rings grandes.)
   const effectiveDistance = useMemo(() => {
     const minDistance = (FACE_WIDTH * 1.08) / (2 * Math.sin(Math.PI / items.length));
-    return Math.max(imageDistance ?? 0, Math.min(minDistance, 1400), 400);
+    return Math.max(imageDistance ?? 0, minDistance, 400);
   }, [items.length, imageDistance]);
   const effectivePerspective = perspective ?? Math.max(2000, effectiveDistance * 1.6);
 
+  // Cada cara i está fija en rotateY: -i*angle; queda de frente a cámara cuando
+  // rotationY - i*angle ≡ 0 (mod 360), es decir i ≡ rotationY/angle (mod N).
   const reportActive = (rot: number) => {
     if (!onActiveChange) return;
-    const norm = (((180 - rot) % 360) + 360) % 360;
-    const idx = Math.round(norm / angle) % items.length;
+    const n = items.length;
+    const idx = Math.round((((rot / angle) % n) + n) % n) % n;
     onActiveChange(idx);
   };
 
