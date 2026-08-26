@@ -19,7 +19,7 @@ const links = [
   { label: 'Contacto',     href: '/contact' },
 ];
 
-export default function Navbar() {
+export default function Navbar({ lightHero = false }: { lightHero?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -29,7 +29,9 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const isDark = !scrolled;
+  // El texto/logo en blanco solo tiene contraste sobre un hero oscuro (home, services, speaking, blog).
+  // Las páginas con hero claro (about, contact) deben forzar el navbar en tono navy o el logo se vuelve invisible.
+  const isDark = !scrolled && !lightHero;
 
   return (
     <header
