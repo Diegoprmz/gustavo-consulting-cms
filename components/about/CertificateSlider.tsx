@@ -145,17 +145,24 @@ function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: numb
 }
 
 /* ─── Mobile lightbox ──────────────────────────────────────────────────────── */
+const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+const touchDist = (a: React.Touch, b: React.Touch) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+
 function MobileLightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: number; onClose: () => void }) {
   const [i, setI] = useState(startIndex);
-  const [zoomed, setZoomed] = useState(false);
-  const swipeX = useRef<number | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const swipe = useRef<{ x: number; y: number } | null>(null);
+  const pinch = useRef<{ dist: number; scale: number } | null>(null);
+  const pan = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
   const doc = docs[i];
+  const zoomed = scale > 1.02;
 
-  const next = useCallback(() => { setI((v) => (v + 1) % docs.length); setZoomed(false); }, [docs.length]);
-  const prev = useCallback(() => { setI((v) => (v - 1 + docs.length) % docs.length); setZoomed(false); }, [docs.length]);
+  const resetZoom = () => { setScale(1); setTranslate({ x: 0, y: 0 }); };
+  const next = useCallback(() => { setI((v) => (v + 1) % docs.length); resetZoom(); }, [docs.length]);
+  const prev = useCallback(() => { setI((v) => (v - 1 + docs.length) % docs.length); resetZoom(); }, [docs.length]);
 
-  useEffect(() => { setI(startIndex); setZoomed(false); }, [startIndex]);
+  useEffect(() => { setI(startIndex); resetZoom(); }, [startIndex]);
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
@@ -163,20 +170,33 @@ function MobileLightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex
 
   if (!doc) return null;
 
-  const handleTouchStart = (e: React.TouchEvent) => { swipeX.current = e.touches[0].clientX; };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (swipeX.current === null || zoomed) return;
-    const dx = e.changedTouches[0].clientX - swipeX.current;
-    if (Math.abs(dx) > 48) { dx < 0 ? next() : prev(); }
-    swipeX.current = null;
+  // Un dedo: si no hay zoom, desliza a la siguiente/anterior; si hay zoom, arrastra la imagen.
+  // Dos dedos: pellizco para hacer zoom. Nunca un toque para (des)ampliar.
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      pinch.current = { dist: touchDist(e.touches[0], e.touches[1]), scale };
+      swipe.current = null;
+    } else if (e.touches.length === 1) {
+      if (zoomed) pan.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, tx: translate.x, ty: translate.y };
+      else swipe.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
   };
-
-  const toggleZoom = (e: React.TouchEvent | React.MouseEvent) => {
-    e.stopPropagation();
-    setZoomed((z) => {
-      if (z && scrollRef.current) { scrollRef.current.scrollLeft = 0; scrollRef.current.scrollTop = 0; }
-      return !z;
-    });
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && pinch.current) {
+      const ratio = touchDist(e.touches[0], e.touches[1]) / pinch.current.dist;
+      setScale(clamp(pinch.current.scale * ratio, 1, 4));
+    } else if (e.touches.length === 1 && pan.current) {
+      setTranslate({ x: pan.current.tx + (e.touches[0].clientX - pan.current.x), y: pan.current.ty + (e.touches[0].clientY - pan.current.y) });
+    }
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (pinch.current) { pinch.current = null; if (scale < 1.05) resetZoom(); }
+    if (pan.current) pan.current = null;
+    if (swipe.current && !zoomed) {
+      const dx = e.changedTouches[0].clientX - swipe.current.x;
+      if (Math.abs(dx) > 48) { dx < 0 ? next() : prev(); }
+    }
+    swipe.current = null;
   };
 
   const navBtn: React.CSSProperties = { width: '44px', height: '44px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.22)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#fff', fontSize: '22px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' };
@@ -188,33 +208,30 @@ function MobileLightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex
 
       {/* Tarjeta con la imagen */}
       <div
-        ref={scrollRef}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        style={{ overflow: zoomed ? 'auto' : 'hidden', width: '100%', maxHeight: '68vh', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: zoomed ? '0' : '6px' }}
+        style={{ overflow: 'hidden', width: '100%', maxHeight: '68vh', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', touchAction: 'none' }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={certUrl(doc.src)}
           alt={doc.title}
-          onClick={toggleZoom}
-          onTouchEnd={toggleZoom}
-          style={{ display: 'block', width: zoomed ? '200%' : '100%', maxWidth: zoomed ? 'none' : '100%', maxHeight: zoomed ? 'none' : '68vh', objectFit: 'contain', boxShadow: '0 16px 48px rgba(0,0,0,0.6)', cursor: zoomed ? 'zoom-out' : 'zoom-in', userSelect: 'none' }}
+          style={{
+            display: 'block', width: '100%', maxWidth: '100%', maxHeight: '68vh', objectFit: 'contain',
+            boxShadow: '0 16px 48px rgba(0,0,0,0.6)', userSelect: 'none',
+            transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+            transformOrigin: 'center center',
+            transition: pinch.current || pan.current ? 'none' : 'transform 0.2s ease-out',
+          }}
         />
       </div>
 
       {/* Hint de zoom */}
-      {!zoomed && (
-        <p className="font-sans" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.05em', marginTop: '-6px' }}>
-          Toca para ampliar · Desliza para cambiar
-        </p>
-      )}
-      {zoomed && (
-        <p className="font-sans" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.05em', marginTop: '-6px' }}>
-          Toca para reducir
-        </p>
-      )}
+      <p className="font-sans" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.05em', marginTop: '-6px' }}>
+        {zoomed ? 'Pellizca para reducir · Arrastra para mover' : 'Pellizca con dos dedos para ampliar · Desliza para cambiar'}
+      </p>
 
       {/* Navegación + contador */}
       <div onClick={(e) => e.stopPropagation()} style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>

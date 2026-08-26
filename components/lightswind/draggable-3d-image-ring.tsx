@@ -31,7 +31,6 @@ export interface ThreeDImageRingProps {
   initialRotation?: number;
   animationDuration?: number;
   staggerDelay?: number;
-  hoverOpacity?: number;
   containerClassName?: string;
   ringClassName?: string;
   backgroundColor?: string;
@@ -55,7 +54,6 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
   initialRotation = 180,
   animationDuration = 1.2,
   staggerDelay = 0.06,
-  hoverOpacity = 0.45,
   containerClassName,
   ringClassName,
   backgroundColor,
@@ -256,19 +254,6 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
                   exit="hidden"
                   variants={itemVariants}
                   transition={{ delay: index * staggerDelay, duration: animationDuration, ease: easeOut }}
-                  whileHover={{ opacity: 1, transition: { duration: 0.15 } }}
-                  onHoverStart={() => {
-                    if (isDragging.current || !ringRef.current) return;
-                    Array.from(ringRef.current.children).forEach((el, i) => {
-                      if (i !== index) (el as HTMLElement).style.opacity = `${hoverOpacity}`;
-                    });
-                  }}
-                  onHoverEnd={() => {
-                    if (isDragging.current || !ringRef.current) return;
-                    Array.from(ringRef.current.children).forEach((el) => {
-                      (el as HTMLElement).style.opacity = '1';
-                    });
-                  }}
                 >
                   <button
                     type="button"
