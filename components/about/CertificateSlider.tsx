@@ -66,6 +66,7 @@ function SingleFrame({ doc, onOpen }: { doc: Doc; onOpen: () => void }) {
 
 const ZOOM_STEPS = [1, 1.8, 3];
 
+/* ─── Desktop lightbox ─────────────────────────────────────────────────────── */
 function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: number; onClose: () => void }) {
   const [i, setI] = useState(startIndex);
   const [zoomStep, setZoomStep] = useState(0);
@@ -76,7 +77,6 @@ function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: numb
   const prev = useCallback(() => { setI((v) => (v - 1 + docs.length) % docs.length); setZoomStep(0); }, [docs.length]);
 
   useEffect(() => { setI(startIndex); setZoomStep(0); }, [startIndex]);
-
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -93,7 +93,6 @@ function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: numb
   const toggleZoom = (e: React.MouseEvent<HTMLImageElement>) => {
     e.stopPropagation();
     if (zoomStep < ZOOM_STEPS.length - 1) {
-      // Centra el scroll aprox. en el punto donde se hizo clic al pasar al siguiente nivel de zoom.
       const container = e.currentTarget.parentElement;
       const rect = e.currentTarget.getBoundingClientRect();
       const px = (e.clientX - rect.left) / rect.width;
@@ -104,71 +103,130 @@ function Lightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: numb
         container.scrollLeft = px * container.scrollWidth - container.clientWidth / 2;
         container.scrollTop = py * container.scrollHeight - container.clientHeight / 2;
       });
-    } else {
-      setZoomStep(0);
-    }
+    } else { setZoomStep(0); }
   };
 
   const startPan = (e: React.MouseEvent<HTMLDivElement>) => {
     if (zoom === 1) return;
-    const el = e.currentTarget;
-    pan.current = { x: e.clientX, y: e.clientY, left: el.scrollLeft, top: el.scrollTop };
-    el.style.cursor = 'grabbing';
+    pan.current = { x: e.clientX, y: e.clientY, left: e.currentTarget.scrollLeft, top: e.currentTarget.scrollTop };
+    e.currentTarget.style.cursor = 'grabbing';
   };
   const doPan = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!pan.current) return;
     e.currentTarget.scrollLeft = pan.current.left - (e.clientX - pan.current.x);
     e.currentTarget.scrollTop = pan.current.top - (e.clientY - pan.current.y);
   };
-  const endPan = (e: React.MouseEvent<HTMLDivElement>) => {
-    pan.current = null;
-    e.currentTarget.style.cursor = '';
+  const endPan = (e: React.MouseEvent<HTMLDivElement>) => { pan.current = null; e.currentTarget.style.cursor = ''; };
+
+  const arrowBtn: React.CSSProperties = {
+    position: 'absolute', top: '50%', transform: 'translateY(-50%)', zIndex: 2,
+    width: '48px', height: '48px', borderRadius: '50%',
+    border: '1px solid rgba(255,255,255,0.25)', backgroundColor: 'rgba(255,255,255,0.07)',
+    color: '#fff', fontSize: '26px', cursor: 'pointer',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
   };
 
   return (
-    <div role="dialog" aria-modal="true" onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,30,40,0.94)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 16px' }}>
-      <button type="button" onClick={onClose} aria-label="Cerrar" style={{ position: 'absolute', top: '20px', right: '24px', zIndex: 1, width: '44px', height: '44px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.3)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#fff', fontSize: '22px', cursor: 'pointer' }}>✕</button>
+    <div role="dialog" aria-modal="true" onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(20,30,40,0.95)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 72px 20px' }}>
+      <button type="button" onClick={onClose} aria-label="Cerrar" style={{ position: 'absolute', top: '16px', right: '20px', zIndex: 3, width: '44px', height: '44px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.28)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#fff', fontSize: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
       {docs.length > 1 && zoom === 1 && (
         <>
-          <button type="button" onClick={(e) => { e.stopPropagation(); prev(); }} aria-label="Anterior" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.25)', backgroundColor: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '22px', cursor: 'pointer' }}>‹</button>
-          <button type="button" onClick={(e) => { e.stopPropagation(); next(); }} aria-label="Siguiente" style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.25)', backgroundColor: 'rgba(255,255,255,0.06)', color: '#fff', fontSize: '22px', cursor: 'pointer' }}>›</button>
+          <button type="button" onClick={(e) => { e.stopPropagation(); prev(); }} aria-label="Anterior" style={{ ...arrowBtn, left: '12px' }}>‹</button>
+          <button type="button" onClick={(e) => { e.stopPropagation(); next(); }} aria-label="Siguiente" style={{ ...arrowBtn, right: '12px' }}>›</button>
         </>
       )}
+      <div onClick={(e) => e.stopPropagation()} onMouseDown={startPan} onMouseMove={doPan} onMouseUp={endPan} onMouseLeave={endPan} className="lightbox-scroller" style={{ overflow: zoom > 1 ? 'auto' : 'hidden', maxWidth: '100%', maxHeight: '100%', display: 'flex', alignItems: zoom > 1 ? 'flex-start' : 'center', justifyContent: zoom > 1 ? 'flex-start' : 'center' }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img onClick={toggleZoom} src={certUrl(doc.src)} alt={doc.title} style={{ display: 'block', maxWidth: zoom > 1 ? 'none' : '100%', maxHeight: zoom > 1 ? 'none' : '100%', width: zoom > 1 ? `${zoom * 86}vw` : 'auto', objectFit: 'contain', boxShadow: '0 24px 56px rgba(0,0,0,0.55)', cursor: zoomStep < ZOOM_STEPS.length - 1 ? 'zoom-in' : 'zoom-out' }} />
+      </div>
+      {zoom === 1 && <p className="font-sans" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center', color: 'rgba(255,255,255,0.88)', fontSize: '15px', marginTop: '14px', maxWidth: '640px' }}>{doc.title}</p>}
+    </div>
+  );
+}
+
+/* ─── Mobile lightbox ──────────────────────────────────────────────────────── */
+function MobileLightbox({ docs, startIndex, onClose }: { docs: Doc[]; startIndex: number; onClose: () => void }) {
+  const [i, setI] = useState(startIndex);
+  const [zoomed, setZoomed] = useState(false);
+  const swipeX = useRef<number | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const doc = docs[i];
+
+  const next = useCallback(() => { setI((v) => (v + 1) % docs.length); setZoomed(false); }, [docs.length]);
+  const prev = useCallback(() => { setI((v) => (v - 1 + docs.length) % docs.length); setZoomed(false); }, [docs.length]);
+
+  useEffect(() => { setI(startIndex); setZoomed(false); }, [startIndex]);
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  if (!doc) return null;
+
+  const handleTouchStart = (e: React.TouchEvent) => { swipeX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (swipeX.current === null || zoomed) return;
+    const dx = e.changedTouches[0].clientX - swipeX.current;
+    if (Math.abs(dx) > 48) { dx < 0 ? next() : prev(); }
+    swipeX.current = null;
+  };
+
+  const toggleZoom = (e: React.TouchEvent | React.MouseEvent) => {
+    e.stopPropagation();
+    setZoomed((z) => {
+      if (z && scrollRef.current) { scrollRef.current.scrollLeft = 0; scrollRef.current.scrollTop = 0; }
+      return !z;
+    });
+  };
+
+  const navBtn: React.CSSProperties = { width: '44px', height: '44px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.22)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#fff', fontSize: '22px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' };
+
+  return (
+    <div role="dialog" aria-modal="true" onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(20,30,40,0.97)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '14px', padding: '52px 12px 20px' }}>
+      {/* Cerrar */}
+      <button type="button" onClick={onClose} aria-label="Cerrar" style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 2, width: '40px', height: '40px', borderRadius: '50%', border: '1px solid rgba(255,255,255,0.28)', backgroundColor: 'rgba(255,255,255,0.09)', color: '#fff', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+
+      {/* Tarjeta con la imagen */}
       <div
+        ref={scrollRef}
         onClick={(e) => e.stopPropagation()}
-        onMouseDown={startPan}
-        onMouseMove={doPan}
-        onMouseUp={endPan}
-        onMouseLeave={endPan}
-        className="lightbox-scroller"
-        style={{
-          maxWidth: '90vw',
-          maxHeight: '72vh',
-          overflow: zoom > 1 ? 'auto' : 'hidden',
-          display: 'flex',
-          alignItems: zoom > 1 ? 'flex-start' : 'center',
-          justifyContent: zoom > 1 ? 'flex-start' : 'center',
-        }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        style={{ overflow: zoomed ? 'auto' : 'hidden', width: '100%', maxHeight: '68vh', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: zoomed ? '0' : '6px' }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          onClick={toggleZoom}
           src={certUrl(doc.src)}
           alt={doc.title}
-          style={{
-            display: 'block',
-            width: zoom > 1 ? `${zoom * 90}vw` : 'auto',
-            maxWidth: zoom > 1 ? 'none' : '90vw',
-            maxHeight: zoom > 1 ? 'none' : '72vh',
-            objectFit: 'contain',
-            boxShadow: '0 30px 60px rgba(0,0,0,0.5)',
-            cursor: zoomStep < ZOOM_STEPS.length - 1 ? 'zoom-in' : 'zoom-out',
-          }}
+          onClick={toggleZoom}
+          onTouchEnd={toggleZoom}
+          style={{ display: 'block', width: zoomed ? '200%' : '100%', maxWidth: zoomed ? 'none' : '100%', maxHeight: zoomed ? 'none' : '68vh', objectFit: 'contain', boxShadow: '0 16px 48px rgba(0,0,0,0.6)', cursor: zoomed ? 'zoom-out' : 'zoom-in', userSelect: 'none' }}
         />
       </div>
-      {zoom === 1 && (
-        <p className="font-sans" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center', color: 'rgba(255,255,255,0.9)', fontSize: '15px', padding: '18px 16px 0' }}>{doc.title}</p>
+
+      {/* Hint de zoom */}
+      {!zoomed && (
+        <p className="font-sans" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.05em', marginTop: '-6px' }}>
+          Toca para ampliar · Desliza para cambiar
+        </p>
       )}
+      {zoomed && (
+        <p className="font-sans" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', letterSpacing: '0.05em', marginTop: '-6px' }}>
+          Toca para reducir
+        </p>
+      )}
+
+      {/* Navegación + contador */}
+      <div onClick={(e) => e.stopPropagation()} style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <button type="button" onClick={prev} aria-label="Anterior" style={navBtn}>‹</button>
+        <span className="font-sans" style={{ color: 'rgba(255,255,255,0.65)', fontSize: '13px', minWidth: '48px', textAlign: 'center' }}>{i + 1} / {docs.length}</span>
+        <button type="button" onClick={next} aria-label="Siguiente" style={navBtn}>›</button>
+      </div>
+
+      {/* Título */}
+      <p className="font-sans" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center', color: 'rgba(255,255,255,0.85)', fontSize: '13px', maxWidth: '92vw', lineHeight: 1.4 }}>
+        {doc.title}
+      </p>
     </div>
   );
 }
@@ -177,7 +235,15 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
   const [filter, setFilter] = useState<Tag | 'Todos'>('Todos');
   const [active, setActive] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const ringRef = useRef<ThreeDImageRingHandle>(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const docs = useMemo(() => (filter === 'Todos' ? docsAll : docsAll.filter((d) => d.tag === filter)), [filter, docsAll]);
   const items = useMemo(() => docs.map((d) => ({ src: certUrl(d.src), alt: d.title })), [docs]);
@@ -195,9 +261,9 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
         </div>
       ) : (
         <>
-          <p className="font-sans" style={{ textAlign: 'center', fontSize: '13px', color: '#8A9199', marginBottom: '8px' }}>Arrastra para girar</p>
-          <div key={filter} style={{ height: '676px', position: 'relative' }}>
-            <ThreeDImageRing ref={ringRef} items={items} frameColor={FRAME} stageHeight={672} onActiveChange={setActive} onOpen={(i) => setOpenIndex(i)} />
+          <p className="font-sans" style={{ textAlign: 'center', fontSize: '13px', color: '#8A9199', marginBottom: '8px' }}>Arrastra para girar · Toca para ampliar</p>
+          <div key={filter} className="ring-stage" style={{ position: 'relative' }}>
+            <ThreeDImageRing ref={ringRef} items={items} frameColor={FRAME} stageHeight={610} initialRotation={0} onActiveChange={setActive} onOpen={(i) => setOpenIndex(i)} />
           </div>
           <div className="stepnav">
             <button type="button" onClick={() => ringRef.current?.step(-1)} aria-label="Anterior">‹</button>
@@ -213,7 +279,10 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
         </div>
       )}
 
-      {openIndex !== null && <Lightbox docs={docs} startIndex={openIndex} onClose={() => setOpenIndex(null)} />}
+      {openIndex !== null && (isMobile
+        ? <MobileLightbox docs={docs} startIndex={openIndex} onClose={() => setOpenIndex(null)} />
+        : <Lightbox docs={docs} startIndex={openIndex} onClose={() => setOpenIndex(null)} />
+      )}
     </div>
   );
 }
@@ -221,9 +290,9 @@ function CarouselSection({ docsAll, tags }: { docsAll: Doc[]; tags: Tag[] }) {
 export default function CertificateSlider() {
   return (
     <div className="cred">
-      <section style={{ backgroundColor: '#F5F5F5', paddingTop: '100px', paddingBottom: '100px' }}>
+      <section className="cert-section" style={{ backgroundColor: '#F5F5F5' }}>
         <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div className="cert-header" style={{ textAlign: 'center' }}>
             <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Trayectoria personal</span>
             <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.2 }}>Estudios</h2>
             <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.7, maxWidth: '640px', margin: '18px auto 0' }}>
@@ -235,9 +304,9 @@ export default function CertificateSlider() {
         </div>
       </section>
 
-      <section style={{ backgroundColor: '#ffffff', paddingTop: '100px', paddingBottom: '100px' }}>
+      <section className="cert-section" style={{ backgroundColor: '#ffffff' }}>
         <div className="max-w-[1200px] mx-auto px-5 md:px-8">
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div className="cert-header" style={{ textAlign: 'center' }}>
             <span className="font-sans font-semibold" style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Acreditaciones profesionales</span>
             <h2 className="font-serif font-bold" style={{ fontSize: 'clamp(30px, 3.4vw, 44px)', color: '#243A4D', marginTop: '16px', lineHeight: 1.2 }}>Certificaciones</h2>
           </div>
@@ -259,12 +328,20 @@ export default function CertificateSlider() {
           transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
         .cred .stepnav button:hover { background: #243A4D; color: #fff; border-color: #243A4D; transform: scale(1.06); }
         .cred .fslide { display: block; border: none; padding: 0; background: none; cursor: zoom-in; }
-        .cred .ringmat { display: inline-block; padding: 6px; background: #FDFDFC; border: 8px solid var(--frame-c); box-shadow: 0 10px 24px -8px rgba(0,0,0,.4); }
+        .cred .ringmat { display: inline-block; padding: 6px; background: #FDFDFC; border: 11px solid var(--frame-c); box-shadow: 0 18px 48px -6px rgba(0,0,0,.55), 0 6px 16px -4px rgba(0,0,0,.28); }
         .cred .ringmat img { display: block; width: auto; }
+        .cred .cert-section { padding-top: 72px; padding-bottom: 72px; }
+        .cred .cert-header { margin-bottom: 48px; }
+        .ring-stage { height: 614px; }
         .lightbox-scroller { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.4) transparent; }
         .lightbox-scroller::-webkit-scrollbar { width: 8px; height: 8px; }
         .lightbox-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,.4); border-radius: 100px; }
         .lightbox-scroller::-webkit-scrollbar-track { background: transparent; }
+        @media (max-width: 767px) {
+          .cred .cert-section { padding-top: 40px; padding-bottom: 40px; }
+          .cred .cert-header { margin-bottom: 28px; }
+          .ring-stage { height: 330px; }
+        }
       `}</style>
     </div>
   );

@@ -48,23 +48,29 @@ export default function AboutPage() {
           <div className="max-w-[1200px] mx-auto px-5 md:px-8 w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
               <div>
-                <span
-                  className="font-sans font-semibold block"
-                  style={{ fontSize: '12px', color: '#6A8F7B', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '20px' }}
-                >
-                  Trayectoria
-                </span>
                 <h1
                   className="font-serif font-bold"
                   style={{ fontSize: 'clamp(32px, 4vw, 52px)', color: '#243A4D', lineHeight: 1.2, marginBottom: '24px' }}
                 >
-                  Estrategia, educación y dirección empresarial
+                  Consultor · Consejero · Educación Ejecutiva
                 </h1>
                 <p className="font-sans" style={{ fontSize: '17px', color: '#333333', lineHeight: 1.8, marginBottom: '16px' }}>
-                  Más de tres décadas formando líderes y asesorando empresas en la intersección de estrategia, marketing y orientación al cliente.
+                  Soy consejero de empresas, asesor de negocios y profesor en educación ejecutiva, con 33 años de experiencia impulsando estrategias que transforman organizaciones y personas.
+                </p>
+                <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.8, marginBottom: '16px' }}>
+                  He dedicado mi carrera a ayudar a las empresas a evolucionar hacia un modelo Customer Centricity, donde cada decisión, proceso y cultura interna giren alrededor del cliente. Esta transformación no solo mejora la experiencia, sino que también incrementa la rentabilidad y la sostenibilidad del negocio.
+                </p>
+                <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.8, marginBottom: '16px' }}>
+                  Cuento con una Licenciatura en Administración, un MBA y soy egresado del Doctorado en Responsabilidad Social, formación que me ha permitido integrar la estrategia empresarial con el propósito social, logrando un enfoque de crecimiento rentable y responsable.
+                </p>
+                <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.8, marginBottom: '16px' }}>
+                  He colaborado con organizaciones en México, Centro y Sudamérica, diseñando e implementando estrategias centradas en el cliente, programas de capacitación ejecutiva y modelos de liderazgo orientados al servicio, la rentabilidad y la conexión humana.
+                </p>
+                <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.8, marginBottom: '16px' }}>
+                  Creo firmemente que la rentabilidad centrada en el cliente no es un mito, sino una consecuencia natural de empresas que piensan y actúan desde el valor que generan para las personas.
                 </p>
                 <p className="font-sans" style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.8, marginBottom: '36px' }}>
-                  Con experiencia en distintos roles — consejero, consultor y formador en educación ejecutiva — mi trabajo se concentra en un punto: conectar al cliente con la estrategia, no como discurso, sino como transformación real.
+                  Mi propósito es seguir acompañando a líderes y equipos que buscan crecer con sentido, servir con propósito y liderar con visión humana.
                 </p>
                 <a
                   href="/contact"
@@ -97,10 +103,10 @@ export default function AboutPage() {
                 />
                 <div style={{ position: 'relative', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 16px 48px rgba(36,58,77,0.14)' }}>
                   <Image
-                    src="/assets/trayectoria-hero-photo.jpg"
+                    src="/assets/trayectoria-photo.jpg"
                     alt="Gustavo Martínez Pellón"
                     width={520}
-                    height={934}
+                    height={780}
                     className="block w-full object-cover"
                     priority
                   />
@@ -117,7 +123,7 @@ export default function AboutPage() {
                     boxShadow: '0 8px 24px rgba(36,58,77,0.25)',
                   }}
                 >
-                  <p className="font-sans font-bold" style={{ fontSize: '22px', lineHeight: 1 }}>30+</p>
+                  <p className="font-sans font-bold" style={{ fontSize: '22px', lineHeight: 1 }}>33+</p>
                   <p className="font-sans" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.75)', letterSpacing: '0.06em', marginTop: '4px' }}>
                     AÑOS DE EXPERIENCIA
                   </p>

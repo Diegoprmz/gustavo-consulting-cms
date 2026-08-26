@@ -75,6 +75,8 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
   const dragMoved = useRef<boolean>(false);
   const velocity = useRef<number>(0);
   const stepTransitionTimeout = useRef<number | undefined>(undefined);
+  // Suppresses the synthetic click/pointerup that fires after we already opened via handleDragEnd
+  const suppressNextClick = useRef<boolean>(false);
 
   const [currentScale, setCurrentScale] = useState(1);
   const [showImages, setShowImages] = useState(false);
@@ -185,6 +187,17 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
     document.removeEventListener('touchmove', handleDrag);
     document.removeEventListener('touchend', handleDragEnd);
 
+    // Click/tap sin arrastre → abrir el certificado del frente directamente aquí,
+    // tanto para mouse como touch. Los motion.div en 3D se superponen en el plano 2D
+    // del DOM, así que el onClick del button no llega al elemento correcto. Aquí sí
+    // sabemos cuál está al frente (el más cercano a la rotación actual snapeada).
+    if (!dragMoved.current) {
+      const n = items.length;
+      const idx = ((Math.round(currentRotationY.current / angle) % n) + n) % n;
+      suppressNextClick.current = true;
+      onOpen?.(idx);
+    }
+
     // Sin inercia con fling: al soltar, el anillo cae al elemento más cercano a
     // donde quedó (arrastre 1:1 durante el gesto), nunca sigue girando solo.
     const target = Math.round(currentRotationY.current / angle) * angle;
@@ -260,7 +273,9 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
                   <button
                     type="button"
                     aria-label={`Ampliar: ${item.alt}`}
+                    data-ring-index={index}
                     onClick={() => {
+                      if (suppressNextClick.current) { suppressNextClick.current = false; return; }
                       if (!dragMoved.current) onOpen?.(index);
                     }}
                     className="ringframe"
@@ -279,9 +294,10 @@ export const ThreeDImageRing = forwardRef<ThreeDImageRingHandle, ThreeDImageRing
 
       <style jsx global>{`
         .ringframe { display: block; border: none; padding: 0; background: none; cursor: pointer; pointer-events: auto; }
-        .ringmat { display: inline-block; padding: 6px; background: #fdfdfc; border: 8px solid var(--frame-c);
-          box-shadow: 0 10px 24px -8px rgba(0,0,0,0.4); }
-        .ringmat img { display: block; height: 640px; width: auto; max-width: 700px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+        .ringmat { display: inline-block; padding: 6px; background: #fdfdfc; border: 11px solid var(--frame-c);
+          box-shadow: 0 18px 48px -6px rgba(0,0,0,0.55), 0 6px 16px -4px rgba(0,0,0,0.28); }
+        .ringmat img { display: block; height: 580px; width: auto; max-width: 700px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+        @media (max-width: 767px) { .ringmat img { height: 360px; } }
       `}</style>
     </div>
   );
